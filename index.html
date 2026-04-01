@@ -1,0 +1,1364 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CCD — Construye con Datos | Control de Obra en Tiempo Real</title>
+    <meta name="description" content="Plataforma de control de obra con IA. Información cruzada en tiempo real para que tus profesionales controlen la obra, no el Excel.">
+    <link rel="icon" type="image/png" href="logos/CCD-favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&family=Roboto+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+:root{
+    --cobalt:#0B5ED7;--cobalt-dark:#0847A8;--cobalt-deep:#063A8C;
+    --gold:#E1BA10;--gold-dark:#C4A00E;
+    --green:#16A34A;--red:#DC2626;--orange:#EA580C;
+    --ink:#1A1F2E;--ink-mid:#4B5563;--ink-muted:#6B7280;--ink-light:#9CA3AF;
+    --canvas:#F5F3EE;--canvas-alt:#EDEAE3;
+    --white:#FFF;--border:rgba(0,0,0,.08);
+    --sans:'Roboto',system-ui,sans-serif;
+    --mono:'Roboto Mono',monospace;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);color:var(--ink);background:var(--canvas);line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+
+/* ── Skip Link ── */
+.skip-link{position:absolute;top:-100px;left:0;background:var(--cobalt);color:#fff;padding:12px 24px;z-index:9999;font-weight:700;border-radius:0 0 8px 0;transition:top .2s}
+.skip-link:focus{top:0}
+/* ── Scroll Progress ── */
+.scroll-progress{position:fixed;top:0;left:0;height:3px;z-index:1001;background:var(--gold);width:0%;transition:width .05s linear}
+
+/* ── Nav ── */
+.nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0 clamp(20px,4vw,48px);height:64px;display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,.75);backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,0,0,.06);transition:box-shadow .3s}
+.nav.scrolled{background:rgba(255,255,255,.95);box-shadow:0 1px 0 rgba(0,0,0,.07),0 4px 20px rgba(0,0,0,.05)}
+.nav-logo{font-size:18px;font-weight:700;color:var(--ink);letter-spacing:-.5px;display:flex;align-items:center;gap:10px}
+.nav-logo b{color:var(--cobalt);font-weight:900}
+.nav-links{display:flex;gap:24px;align-items:center}
+.nav-links a{text-decoration:none;color:var(--ink-muted);font-size:13px;font-weight:500;transition:color .2s;letter-spacing:.2px}
+.nav-links a:hover{color:var(--ink)}
+.nav-cta{background:var(--cobalt);color:var(--white)!important;padding:9px 20px;border-radius:7px;font-weight:700!important;font-size:13px!important;transition:all .2s;box-shadow:0 1px 3px rgba(11,94,215,.2)}
+.nav-cta:hover{background:var(--cobalt-dark);transform:translateY(-1px)}
+.nav-mobile{display:none;background:none;border:none;color:var(--ink);font-size:20px;cursor:pointer}
+
+/* ── Fade Up ── */
+.fade-up{opacity:0;transform:translateY(28px);transition:all .7s cubic-bezier(.16,1,.3,1)}
+.fade-up.visible{opacity:1;transform:translateY(0)}
+
+/* ── Section Tag ── */
+.section-tag{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--cobalt);margin-bottom:16px;font-family:var(--mono)}
+.section-tag::before{content:'';width:18px;height:2px;background:var(--cobalt)}
+
+/* ── Buttons ── */
+.btn-primary{background:var(--cobalt);color:var(--white);padding:14px 28px;border-radius:8px;font-size:15px;font-weight:700;font-family:var(--sans);text-decoration:none;display:inline-flex;align-items:center;gap:10px;transition:all .22s;border:none;cursor:pointer;box-shadow:0 1px 3px rgba(11,94,215,.2),0 4px 16px rgba(11,94,215,.12)}
+.btn-primary:hover{background:var(--cobalt-dark);transform:translateY(-2px);box-shadow:0 4px 20px rgba(11,94,215,.28)}
+.btn-secondary{background:transparent;color:var(--ink-mid);padding:14px 28px;border-radius:8px;font-size:15px;font-weight:500;font-family:var(--sans);text-decoration:none;display:inline-flex;align-items:center;gap:10px;border:1px solid rgba(0,0,0,.14);transition:all .22s;cursor:pointer}
+.btn-secondary:hover{border-color:rgba(0,0,0,.28);color:var(--ink);background:rgba(0,0,0,.02)}
+.btn-gold{background:var(--gold);color:var(--ink);padding:14px 28px;border-radius:8px;font-size:15px;font-weight:700;font-family:var(--sans);text-decoration:none;display:inline-flex;align-items:center;gap:10px;transition:all .22s;border:none;cursor:pointer}
+.btn-gold:hover{background:var(--gold-dark);transform:translateY(-2px);box-shadow:0 8px 30px rgba(225,186,16,.25)}
+
+
+/* ── Highlight Terms ── */
+.hl-blue{color:var(--cobalt);font-weight:700}
+.hl-gold{color:#8B7000;font-weight:700}
+.hl-red{color:var(--red);font-weight:700}
+/* ═══════════════════════
+   1. HERO
+   ═══════════════════════ */
+.hero{min-height:100vh;display:flex;align-items:center;padding:80px clamp(20px,4vw,48px) 60px;background:#fff;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse 70% 60% at -5% 50%,rgba(11,94,215,.13),transparent 65%),radial-gradient(ellipse 50% 50% at 105% 20%,rgba(225,186,16,.10),transparent 60%),radial-gradient(ellipse 40% 40% at 55% 95%,rgba(11,94,215,.07),transparent 60%),radial-gradient(ellipse 30% 30% at 80% 60%,rgba(225,186,16,.06),transparent 55%);animation:orbDrift 12s ease-in-out infinite alternate}
+@keyframes orbDrift{0%{opacity:.7;transform:scale(1) translateX(0)}50%{opacity:1;transform:scale(1.06) translateX(12px)}100%{opacity:.8;transform:scale(.97) translateX(-8px)}}
+.hero::after{content:'';position:absolute;inset:0;z-index:0;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");background-size:200px;opacity:.6}
+.hero-inner{max-width:1200px;margin:0 auto;width:100%;position:relative;z-index:2;display:grid;grid-template-columns:1.1fr 1fr;gap:56px;align-items:center}
+.ha1{animation:su .65s cubic-bezier(.16,1,.3,1) .05s both}
+.ha2{animation:su .65s cubic-bezier(.16,1,.3,1) .18s both}
+.ha3{animation:su .65s cubic-bezier(.16,1,.3,1) .30s both}
+.ha4{animation:su .65s cubic-bezier(.16,1,.3,1) .42s both}
+.ha5{animation:su .65s cubic-bezier(.16,1,.3,1) .54s both}
+.ha6{animation:su .80s cubic-bezier(.16,1,.3,1) .22s both}
+@keyframes su{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.hero h1{font-size:clamp(28px,4vw,50px);font-weight:900;color:var(--ink);line-height:1.08;letter-spacing:-1.5px;margin-bottom:20px;min-height:2.4em}
+.hero h1 em{font-style:normal;color:var(--cobalt);text-decoration:underline;text-decoration-color:rgba(225,186,16,.5);text-underline-offset:5px;text-decoration-thickness:3px}
+.hero h1 .hl{display:block;opacity:0;transform:translateY(14px);animation:hi .5s ease forwards}
+.hero h1 .hl:nth-child(2){animation-delay:.08s}
+@keyframes hi{to{opacity:1;transform:translateY(0)}}
+.hero h1.fading .hl{animation:ho .35s ease forwards}
+@keyframes ho{to{opacity:0;transform:translateY(-10px)}}
+.hero-sub{font-size:16px;color:var(--ink-mid);line-height:1.75;margin-bottom:32px;max-width:500px;transition:opacity .35s ease}
+.hero-sub strong{color:var(--ink);font-weight:700}
+.hero-ctas{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:40px}
+
+/* Mockup */
+.hero-mockup{position:relative}
+.mockup-window{background:#fff;border:1px solid rgba(0,0,0,.10);border-radius:12px;overflow:hidden;box-shadow:0 0 0 1px rgba(11,94,215,.06),0 8px 24px rgba(0,0,0,.07),0 32px 72px rgba(11,94,215,.10)}
+.mockup-bar{display:flex;gap:6px;padding:10px 14px;align-items:center;background:#F8F9FB;border-bottom:1px solid rgba(0,0,0,.07)}
+.mockup-bar span{width:9px;height:9px;border-radius:50%}
+.mockup-bar span:nth-child(1){background:#FF5F57}.mockup-bar span:nth-child(2){background:#FEBC2E}.mockup-bar span:nth-child(3){background:#28C840}
+.mockup-header{font-size:12px;font-weight:700;color:var(--ink);padding:12px 16px 8px;letter-spacing:-.3px;display:flex;justify-content:space-between;align-items:center}
+.mockup-header b{color:var(--cobalt)}
+.mockup-live{display:inline-flex;align-items:center;gap:5px;font-size:9px;color:var(--green);font-family:var(--mono);font-weight:600;text-transform:uppercase;letter-spacing:1px}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:lp 1.4s ease-in-out infinite}
+@keyframes lp{0%,100%{opacity:1;transform:scale(1);box-shadow:0 0 0 0 rgba(22,163,74,.4)}50%{opacity:.8;transform:scale(1.2);box-shadow:0 0 0 4px rgba(22,163,74,0)}}
+.mockup-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:0 16px 12px}
+.mkpi{background:#F6F8FF;border-radius:6px;padding:10px 6px;text-align:center;border:1px solid rgba(11,94,215,.08);transition:border-color .4s,background .4s}
+.mkpi.active{border-color:var(--cobalt);background:#EEF3FF}
+.mkpi-label{font-size:9px;color:var(--ink-muted);font-weight:700;text-transform:uppercase;letter-spacing:.5px;font-family:var(--mono)}
+.mkpi-val{font-family:var(--mono);font-size:19px;font-weight:700;line-height:1.2;transition:all .4s}
+.mkpi-val.pulse{animation:dp .5s ease}
+@keyframes dp{0%{opacity:1}30%{opacity:.3;transform:scale(.94)}100%{opacity:1;transform:scale(1)}}
+.mkpi-trend{font-size:8px;font-weight:600;margin-top:2px;font-family:var(--mono)}
+.mockup-chart{padding:4px 16px 8px}
+.mchart-label{font-size:9px;color:var(--ink-muted);font-weight:600;margin-bottom:4px;letter-spacing:.3px;text-transform:uppercase;font-family:var(--mono)}
+.mockup-viz-row{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:0 16px 10px}
+.mini-viz{background:#FAFBFD;border:1px solid rgba(0,0,0,.06);border-radius:8px;padding:10px;transition:border-color .4s}
+.mini-viz.active{border-color:var(--cobalt)}
+.mini-viz-title{font-size:8px;color:var(--ink-muted);font-weight:700;text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px;font-family:var(--mono)}
+.flow-bar-group{display:flex;flex-direction:column;gap:5px}
+.flow-bar-item{display:flex;align-items:center;gap:6px}
+.flow-bar-label{font-size:8px;color:var(--ink-muted);width:38px;text-align:right;font-weight:500}
+.flow-bar-track{flex:1;height:7px;background:rgba(0,0,0,.05);border-radius:4px;overflow:hidden}
+.flow-bar-fill{height:100%;border-radius:4px;transition:width 1s ease}
+.flow-bar-val{font-size:8px;color:var(--ink-mid);width:34px;font-weight:600;font-family:var(--mono);transition:all .4s}
+.prod-bars{display:flex;align-items:flex-end;gap:3px;height:40px}
+.prod-bar-pair{display:flex;gap:1px;align-items:flex-end}
+.prod-bar{width:7px;border-radius:2px 2px 0 0;transition:height .8s ease}
+.prod-bar.plan{background:rgba(11,94,215,.25)}.prod-bar.real{background:var(--green)}
+.prod-legend{display:flex;gap:10px;margin-top:5px}
+.prod-legend span{font-size:7px;color:var(--ink-muted);display:flex;align-items:center;gap:3px}
+.prod-legend .dot{width:5px;height:5px;border-radius:1px}
+.mockup-alerts{padding:0 16px 14px;display:flex;flex-direction:column;gap:4px;min-height:42px}
+.malerts-label{font-size:8px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--ink-muted);margin-bottom:4px;font-family:var(--mono);opacity:.6}
+.malert{font-size:10px;padding:7px 10px;border-radius:5px;display:flex;align-items:flex-start;gap:7px;font-family:var(--mono);color:var(--ink-mid);background:#F8F9FB;border:1px solid rgba(0,0,0,.06);line-height:1.35;opacity:0;transform:translateY(6px);transition:opacity .4s,transform .4s}
+.malert.visible{opacity:1;transform:translateY(0)}
+.malert .mdot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.mdot-red{background:var(--red)}.mdot-orange{background:var(--orange)}.mdot-gold{background:var(--gold)}.mdot-green{background:var(--green)}.mdot-blue{background:var(--cobalt)}
+.malert strong{color:var(--ink);font-weight:600}
+.malert-tag{font-size:7px;font-weight:700;letter-spacing:.3px;padding:1px 5px;border-radius:3px;flex-shrink:0;margin-top:1px;text-transform:uppercase}
+.tag-flujo{background:rgba(220,38,38,.08);color:var(--red)}.tag-margen{background:rgba(234,88,12,.08);color:var(--orange)}.tag-prod{background:rgba(225,186,16,.08);color:var(--gold-dark)}.tag-plan{background:rgba(11,94,215,.08);color:var(--cobalt)}.tag-calidad{background:rgba(22,163,74,.08);color:var(--green)}
+.mockup-mobile{position:absolute;bottom:-16px;right:-24px;width:142px;background:#fff;border-radius:14px;padding:12px;box-shadow:0 0 0 1px rgba(0,0,0,.06),0 16px 50px rgba(0,0,0,.12);animation:fm 4s ease-in-out infinite;z-index:3}
+@keyframes fm{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.mob-header{font-size:9px;font-weight:900;color:var(--cobalt);margin-bottom:6px;display:flex;justify-content:space-between;align-items:center}
+.mob-header .mob-status{font-size:7px;font-weight:600;color:var(--green);font-family:var(--mono)}
+.mob-action-label{font-size:7px;color:var(--ink-muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;font-family:var(--mono)}
+.mob-task{font-size:10px;font-weight:600;color:var(--ink);padding:5px 7px;background:rgba(11,94,215,.05);border-radius:5px;border-left:2px solid var(--cobalt);margin-bottom:6px;min-height:32px;transition:all .3s}
+.mob-value-row{display:flex;align-items:center;gap:6px;margin-bottom:6px}
+.mob-val{font-family:var(--mono);font-size:20px;font-weight:700;color:var(--cobalt);transition:all .3s}
+.mob-val-label{font-size:8px;color:var(--ink-muted)}
+.mob-bar{height:5px;background:rgba(0,0,0,.08);border-radius:3px;overflow:hidden;margin-bottom:6px}
+.mob-fill{height:100%;background:var(--cobalt);border-radius:3px;transition:width .8s ease}
+.mob-btn{font-size:9px;text-align:center;padding:7px;background:var(--cobalt);color:#fff;border-radius:6px;font-weight:700;transition:all .3s;position:relative;overflow:hidden}
+.mob-btn.sending{background:var(--green)}
+.mob-ripple{position:absolute;inset:0;background:rgba(255,255,255,.3);border-radius:6px;transform:scale(0);animation:ripple .6s ease forwards;pointer-events:none}
+@keyframes ripple{to{transform:scale(2.5);opacity:0}}
+
+/* ═══ TESTIMONIALS CAROUSEL ═══ */
+.testi{padding:48px clamp(20px,4vw,48px);background:var(--canvas);border-top:1px solid var(--border)}
+.testi-inner{max-width:900px;margin:0 auto;position:relative}
+.testi-header{text-align:center;margin-bottom:32px}
+.testi-header h3{font-size:clamp(20px,2.5vw,28px);font-weight:900;letter-spacing:-.5px}
+.testi-header p{font-size:14px;color:var(--ink-muted);margin-top:4px}
+.testi-viewport{overflow:hidden;border-radius:16px}
+.testi-track{display:flex;transition:transform .5s cubic-bezier(.4,0,.2,1)}
+.testi-slide{min-width:100%;padding:0 4px;box-sizing:border-box}
+.testi-card{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:32px 36px;display:flex;flex-direction:column;align-items:center;text-align:center;min-height:260px;justify-content:space-between}
+.testi-logo{height:40px;margin-bottom:20px;display:flex;align-items:center;justify-content:center}
+.testi-logo img{height:40px;width:auto;object-fit:contain;filter:grayscale(30%);opacity:.75;transition:all .3s}
+.testi-card:hover .testi-logo img{filter:grayscale(0);opacity:1}
+.testi-text{font-size:15px;color:var(--ink-mid);line-height:1.8;font-style:italic;max-width:660px;margin-bottom:20px}
+.testi-text::before{content:'\201C';font-weight:900;color:var(--cobalt);opacity:.2;font-size:32px;line-height:0;vertical-align:sub;margin-right:3px}
+.testi-footer{padding-top:16px;border-top:1px solid var(--border);width:100%;text-align:center}
+.testi-footer .testi-name{font-size:13px;font-weight:700;color:var(--ink)}
+.testi-footer .testi-role{font-size:11px;color:var(--ink-muted);font-family:var(--mono);letter-spacing:.3px}
+.testi-controls{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:24px}
+.testi-arrow{width:36px;height:36px;border-radius:50%;border:1px solid var(--border);background:var(--white);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;color:var(--ink-muted);font-size:13px}
+.testi-arrow:hover{border-color:var(--cobalt);color:var(--cobalt);box-shadow:0 2px 8px rgba(11,94,215,.12)}
+.testi-dots{display:flex;gap:6px}
+.testi-dot{width:8px;height:8px;border-radius:50%;background:var(--border);cursor:pointer;transition:all .3s}
+.testi-dot.active{background:var(--cobalt);transform:scale(1.3)}
+.testi-counter{font-family:var(--mono);font-size:11px;color:var(--ink-light);letter-spacing:.5px}
+@media(max-width:900px){.testi-card{padding:24px 20px;min-height:auto}.testi-text{font-size:14px}.testi-arrow{display:none}}
+
+/* ═══════════════════════
+   3. PROBLEM
+   ═══════════════════════ */
+.problem{padding:100px clamp(20px,4vw,48px);background:var(--white)}
+.problem-inner{max-width:1000px;margin:0 auto}
+
+/* ═══ PAIN STATS ═══ */
+.pain-stats{padding:80px clamp(20px,4vw,48px);background:var(--white)}
+.pain-stats-inner{max-width:1100px;margin:0 auto}
+.pain-stats h2{font-size:clamp(26px,3.5vw,42px);font-weight:900;letter-spacing:-1.5px;margin-bottom:12px}
+.pain-lead{font-size:16px;color:var(--ink-muted);max-width:600px;margin-bottom:48px;line-height:1.7}
+.pain-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+/* Card flip container */
+.pain-card{perspective:800px;min-height:260px}
+.pain-card-inner{position:relative;width:100%;height:100%;min-height:260px;transition:transform .6s cubic-bezier(.4,0,.2,1);transform-style:preserve-3d;cursor:pointer}
+.pain-card:hover .pain-card-inner,.pain-card.flipped .pain-card-inner{transform:rotateY(180deg)}
+.pain-card-front,.pain-card-back{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:14px;padding:24px 20px;display:flex;flex-direction:column}
+.pain-card-front{background:var(--canvas);border:1px solid var(--border)}
+.pain-card-front::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--red);border-radius:14px 14px 0 0;opacity:.6}
+.pain-card-back{transform:rotateY(180deg);background:linear-gradient(135deg,#0B5ED7,#063A8C);border:1px solid rgba(11,94,215,.3);color:white}
+.pain-card-back::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--green);border-radius:14px 14px 0 0}
+.pain-num{font-family:var(--mono);font-size:clamp(32px,4vw,42px);font-weight:900;color:var(--red);letter-spacing:-2px;line-height:1;margin-bottom:10px}
+.pain-num.counting{transition:none}
+.pain-desc{font-size:13px;color:var(--ink-muted);line-height:1.5;margin-bottom:auto;flex:1;min-height:0}
+.pain-card-front{justify-content:flex-start;gap:6px}
+.pain-card-bottom{margin-top:auto;padding-top:10px;display:flex;flex-direction:column;gap:4px}
+.pain-link{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;font-family:var(--mono);letter-spacing:.5px;color:var(--cobalt);background:rgba(11,94,215,.06);padding:5px 10px;border-radius:6px}
+.pain-link i{font-size:10px}
+.pain-src{font-size:10px;color:var(--ink-light);font-family:var(--mono);letter-spacing:.3px}
+.pain-flip-hint{font-size:10px;color:var(--ink-light);margin-top:auto;display:flex;align-items:center;gap:4px;font-family:var(--mono);opacity:.5}
+/* Back side styles */
+.pain-back-icon{width:40px;height:40px;border-radius:10px;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--gold);margin-bottom:12px}
+.pain-back-title{font-size:15px;font-weight:800;margin-bottom:8px;color:white}
+.pain-back-desc{font-size:13px;color:rgba(255,255,255,.8);line-height:1.6;flex:1}
+.pain-back-result{font-size:12px;font-weight:700;color:var(--gold);margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,.12);font-family:var(--mono);display:flex;align-items:center;gap:6px}
+/* Stagger animation */
+.pain-card{opacity:0;transform:translateY(30px);transition:opacity .5s ease,transform .5s ease}
+.pain-card.visible{opacity:1;transform:translateY(0)}
+.problem h2{font-size:clamp(26px,3.5vw,42px);font-weight:900;line-height:1.1;letter-spacing:-1.5px;margin-bottom:12px}
+.problem h2 em{font-style:normal;color:var(--red)}
+.problem-lead{font-size:16px;color:var(--ink-muted);max-width:600px;margin-bottom:48px;line-height:1.7}
+.problem-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.problem-card{padding:28px;border-radius:14px;border:1px solid var(--border);transition:all .3s;background:var(--white)}
+.problem-card:hover{border-color:var(--red);transform:translateY(-4px);box-shadow:0 16px 50px rgba(0,0,0,.06)}
+.problem-card .icon{width:44px;height:44px;border-radius:10px;background:rgba(220,38,38,.06);display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--red);margin-bottom:16px}
+.problem-card h4{font-size:17px;font-weight:700;margin-bottom:8px;line-height:1.3}
+.problem-card p{font-size:14px;color:var(--ink-muted);line-height:1.6;margin:0}
+
+/* ═══ TRANSFORMATION REDESIGN ═══ */
+.transform{padding:100px clamp(20px,4vw,48px);background:var(--canvas)}
+.transform-inner{max-width:1100px;margin:0 auto}
+.transform-title{text-align:center;margin-bottom:60px}
+.transform-title h2{font-size:clamp(26px,3.5vw,40px);font-weight:900;letter-spacing:-1px;margin-bottom:12px}
+.transform-title p{font-size:16px;color:var(--ink-muted);max-width:550px;margin:0 auto}
+.transform-rows{display:flex;flex-direction:column;gap:0}
+.transform-row{display:grid;grid-template-columns:1fr 60px 1fr;align-items:center;padding:20px 0;border-bottom:1px solid var(--border)}
+.transform-row:last-child{border-bottom:none}
+.t-before{display:flex;align-items:center;gap:14px;padding:14px 18px;background:rgba(220,38,38,.03);border-radius:10px;border:1px solid rgba(220,38,38,.08)}
+.t-before-icon{width:36px;height:36px;border-radius:8px;background:rgba(220,38,38,.08);display:flex;align-items:center;justify-content:center;color:var(--red);font-size:14px;flex-shrink:0}
+.t-before-text{font-size:13px;color:var(--ink-mid);line-height:1.5}
+.t-before-text strong{color:var(--red)}
+.t-arrow{display:flex;align-items:center;justify-content:center;color:var(--cobalt);font-size:20px}
+.t-after{display:flex;align-items:center;gap:14px;padding:14px 18px;background:rgba(11,94,215,.03);border-radius:10px;border:1px solid rgba(11,94,215,.08)}
+.t-after-icon{width:36px;height:36px;border-radius:8px;background:rgba(11,94,215,.08);display:flex;align-items:center;justify-content:center;color:var(--cobalt);font-size:14px;flex-shrink:0}
+.t-after-text{font-size:13px;color:var(--ink-mid);line-height:1.5}
+.t-after-text strong{color:var(--cobalt)}
+.t-after-badge{display:inline-block;font-size:10px;font-weight:700;font-family:var(--mono);color:var(--green);background:rgba(22,163,74,.08);padding:2px 8px;border-radius:4px;margin-top:4px}
+@media(max-width:900px){
+    .transform-row{grid-template-columns:1fr;gap:8px;padding:14px 0}
+    .t-arrow{transform:rotate(90deg);padding:4px 0}
+    .t-before,.t-after{padding:12px 14px}
+}
+
+/* ═══════════════════════
+   5. HOW IT WORKS
+   ═══════════════════════ */
+.how{padding:100px clamp(20px,4vw,48px);background:var(--white)}
+.how-inner{max-width:1000px;margin:0 auto;text-align:center;overflow:hidden}
+.how h2{font-size:clamp(26px,3.5vw,42px);font-weight:900;letter-spacing:-1.5px;margin-bottom:12px}
+.how h2 em{font-style:normal;color:var(--cobalt)}
+.how-lead{font-size:16px;color:var(--ink-muted);max-width:550px;margin:0 auto 60px}
+.how-steps{display:flex;flex-direction:column;gap:0;position:relative;max-width:480px;margin:0 auto}
+.how-step{display:flex;align-items:flex-start;gap:16px;text-align:left;padding:20px 0;position:relative}
+.how-step .step-left{display:flex;flex-direction:column;align-items:center;flex-shrink:0;position:relative;z-index:2}
+.how-step .step-line{width:2px;flex:1;min-height:20px;background:linear-gradient(180deg,var(--cobalt),rgba(11,94,215,.1));position:relative;overflow:hidden}
+.how-step:last-child .step-line{display:none}
+.how-step .step-line .data-particle{position:absolute;width:4px;height:4px;border-radius:50%;background:var(--gold);left:-1px;top:-4px;animation:dataFlow 2s ease-in-out infinite;opacity:0}
+@keyframes dataFlow{0%{top:-4px;opacity:0}10%{opacity:1}90%{opacity:1}100%{top:100%;opacity:0}}
+.how-step:nth-child(1) .data-particle{animation-delay:0s}
+.how-step:nth-child(2) .data-particle{animation-delay:.5s}
+.how-step:nth-child(3) .data-particle{animation-delay:1s}
+.how-step .step-right{padding-top:4px;flex:1}
+.how-step .step-right h4{font-size:16px;font-weight:700;margin-bottom:4px}
+.how-step .step-right p{font-size:13px;color:var(--ink-muted);line-height:1.6;margin:0}
+.how-step .step-right .step-tag{display:inline-block;font-size:10px;font-weight:700;font-family:var(--mono);letter-spacing:1px;color:var(--cobalt);background:rgba(11,94,215,.06);padding:3px 8px;border-radius:4px;margin-top:8px}
+@keyframes howDotPulse{0%,100%{opacity:.15;transform:scale(1)}50%{opacity:.6;transform:scale(1.5)}}
+.how-step.glow .step-icon{box-shadow:0 0 20px rgba(11,94,215,.25);background:var(--cobalt);color:white;transition:box-shadow .5s,background .5s,color .5s}
+@keyframes howGlowCycle{0%,100%{box-shadow:none;background:rgba(11,94,215,.06)}50%{box-shadow:0 0 20px rgba(11,94,215,.25);background:rgba(11,94,215,.12)}}
+.how-step .step-icon{width:48px;height:48px;border-radius:12px;background:rgba(11,94,215,.06);display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--cobalt);transition:all .5s}
+.how-step .step-num{font-family:var(--mono);font-size:10px;font-weight:700;color:var(--cobalt);opacity:.5;margin-top:6px;text-align:center}
+
+/* ═══════════════════════
+   6. MODULES
+   ═══════════════════════ */
+.modules{padding:100px clamp(20px,4vw,48px);background:var(--canvas)}
+.modules-inner{max-width:1200px;margin:0 auto}
+.modules h2{font-size:clamp(26px,3.5vw,42px);font-weight:900;letter-spacing:-1.5px;margin-bottom:12px}
+.modules-lead{font-size:16px;color:var(--ink-muted);max-width:600px;margin-bottom:48px}
+.mod-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.mod-item{padding:24px;border-radius:12px;background:var(--white);border:1px solid transparent;transition:all .3s;display:flex;gap:14px;align-items:flex-start}
+.mod-item:hover{border-color:var(--cobalt);box-shadow:0 8px 24px rgba(0,0,0,.05)}
+.mod-icon{width:40px;height:40px;border-radius:10px;background:var(--cobalt);display:flex;flex-shrink:0;align-items:center;justify-content:center;font-size:16px;color:white}
+.mod-item h4{font-size:15px;font-weight:700;margin-bottom:4px}
+.mod-item p{font-size:13px;color:var(--ink-muted);line-height:1.5;margin:0}
+.mod-badge{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,rgba(11,94,215,.06),rgba(212,175,55,.06));border:1px dashed var(--cobalt);border-radius:10px;padding:12px 20px;font-size:13px;color:var(--ink-mid);margin-bottom:32px;line-height:1.5}
+.mod-badge i{color:var(--cobalt);font-size:16px;flex-shrink:0}
+.mod-badge strong{color:var(--ink)}
+
+
+.ai-section .hl-gold{color:var(--gold)}
+.ai-section .hl-blue{color:#93C5FD}
+.ai-section .hl-red{color:#FCA5A5}
+/* ═══════════════════════
+   7. AI SECTION
+   ═══════════════════════ */
+.ai-section{padding:100px clamp(20px,4vw,48px);background:var(--ink);color:var(--white);position:relative;overflow:hidden}
+.ai-section::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 50% 60% at 70% 40%,rgba(225,186,16,.05),transparent);pointer-events:none}
+.ai-inner{max-width:1200px;margin:0 auto;position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start}
+.ai-section h2{font-size:clamp(26px,3.5vw,40px);font-weight:900;line-height:1.1;letter-spacing:-1px;margin-bottom:16px}
+.ai-section h2 em{font-style:normal;color:var(--gold)}
+.ai-lead{font-size:16px;color:rgba(255,255,255,.55);line-height:1.7;margin-bottom:32px}
+.ai-feat{display:flex;gap:14px;margin-bottom:24px;align-items:flex-start}
+.ai-feat .ai-ic{width:36px;height:36px;border-radius:10px;flex-shrink:0;background:rgba(225,186,16,.12);display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--gold)}
+.ai-feat h4{font-size:15px;font-weight:700;margin-bottom:3px}
+.ai-feat p{font-size:13px;color:rgba(255,255,255,.45);line-height:1.5;margin:0}
+.ai-visual{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:28px}
+.ai-alert-label{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;opacity:.4;margin-bottom:14px;font-family:var(--mono)}
+.ai-alert{padding:14px 16px;border-radius:10px;margin-bottom:10px;font-size:13px;display:flex;gap:10px;align-items:center}
+.ai-alert:nth-child(2){animation-delay:.1s}.ai-alert:nth-child(3){animation-delay:.2s}.ai-alert:nth-child(4){animation-delay:.3s}.ai-alert:nth-child(5){animation-delay:.4s}
+.alert-red{background:rgba(220,38,38,.1);border:1px solid rgba(220,38,38,.15);color:#FCA5A5}
+.alert-gold{background:rgba(225,186,16,.08);border:1px solid rgba(225,186,16,.15);color:#FDE68A}
+.alert-green{background:rgba(22,163,74,.08);border:1px solid rgba(22,163,74,.15);color:#86EFAC}
+.alert-blue{background:rgba(11,94,215,.08);border:1px solid rgba(11,94,215,.15);color:#93C5FD}
+.ai-alert i{font-size:16px;flex-shrink:0}
+
+/* ═══════════════════════
+   8. SOLUTIONS
+   ═══════════════════════ */
+.solution{padding:100px clamp(20px,4vw,48px);background:var(--white)}
+.solution-inner{max-width:1200px;margin:0 auto}
+.solution h2{font-size:clamp(26px,3.5vw,42px);font-weight:900;letter-spacing:-1.5px;margin-bottom:12px}
+.solution h2 em{font-style:normal;color:var(--cobalt)}
+.solution-lead{font-size:16px;color:var(--ink-muted);max-width:600px;margin-bottom:60px}
+.solution-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.sol-card{background:var(--canvas);border-radius:16px;padding:36px;border:2px solid transparent;transition:all .3s;position:relative}
+.sol-card:hover{border-color:var(--cobalt);transform:translateY(-4px);box-shadow:0 20px 60px rgba(11,94,215,.06);background:rgba(11,94,215,.03)}
+.sol-card.featured{border-color:var(--cobalt);background:rgba(11,94,215,.03)}
+.sol-card.featured::before{content:'MÁS POPULAR';position:absolute;top:-12px;right:20px;background:var(--cobalt);color:var(--white);font-size:10px;font-weight:700;padding:4px 10px;border-radius:6px;letter-spacing:1px;font-family:var(--mono)}
+.sol-tag{display:inline-block;padding:5px 12px;border-radius:6px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:16px;font-family:var(--mono)}
+.tag-saas{background:rgba(11,94,215,.06);color:var(--cobalt)}.tag-aaas{background:rgba(225,186,16,.08);color:var(--gold-dark)}.tag-consult{background:rgba(22,163,74,.06);color:var(--green)}
+.sol-card h3{font-size:22px;font-weight:700;margin-bottom:10px}
+.sol-card .desc{font-size:14px;color:var(--ink-muted);line-height:1.6;margin-bottom:20px}
+.sol-features{list-style:none;padding:0}
+.sol-features li{padding:8px 0;font-size:13px;color:var(--ink-mid);display:flex;align-items:flex-start;gap:8px;border-bottom:1px solid rgba(0,0,0,.05)}
+.sol-features li:last-child{border-bottom:none}
+.sol-features li i{color:var(--green);margin-top:3px;font-size:11px}
+
+/* ═══════════════════════
+   9. CTA FINAL
+   ═══════════════════════ */
+.cta-final{padding:100px clamp(20px,4vw,48px);background:linear-gradient(135deg,var(--cobalt) 0%,var(--cobalt-deep) 100%);text-align:center;position:relative;overflow:hidden}
+.cta-final::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:40px 40px;pointer-events:none}
+.cta-inner{max-width:650px;margin:0 auto;position:relative;z-index:2}
+.cta-final h2{font-size:clamp(26px,3.5vw,40px);font-weight:900;color:var(--white);line-height:1.1;letter-spacing:-1px;margin-bottom:16px}
+.cta-final p{font-size:17px;color:rgba(255,255,255,.65);margin-bottom:36px;line-height:1.7}
+.cta-buttons{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+.cta-note{font-size:12px;color:rgba(255,255,255,.35);margin-top:16px}
+
+/* ── Footer ── */
+footer{background:var(--ink);color:rgba(255,255,255,.5);padding:48px clamp(20px,4vw,48px) 32px}
+.footer-inner{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+.footer-logo{font-size:18px;font-weight:900;color:var(--white)}.footer-logo b{color:var(--gold)}
+.footer-links{display:flex;gap:20px}
+.footer-links a{color:rgba(255,255,255,.4);text-decoration:none;font-size:13px;transition:color .2s}
+.footer-links a:hover{color:var(--gold)}
+.footer-copy{width:100%;text-align:center;margin-top:32px;padding-top:20px;border-top:1px solid rgba(255,255,255,.06);font-size:12px}
+
+/* ── Responsive ── */
+@media(max-width:900px){
+    .hero-inner,.ai-inner{grid-template-columns:1fr;gap:32px}
+    .hero h1{font-size:clamp(24px,7vw,36px);min-height:auto}
+    .hero-sub{font-size:14px;max-width:100%}
+    .hero-ctas{flex-direction:column;gap:10px}
+    .hero-ctas a{width:100%;justify-content:center;text-align:center}
+    .hero{min-height:auto;padding:80px 20px 40px}
+    .mockup-mobile{display:none}
+    .mockup-window{margin-top:20px}
+    .problem-grid,.solution-grid{grid-template-columns:1fr}
+    .pain-grid{grid-template-columns:1fr!important;gap:12px}
+    .pain-card{min-height:auto}
+    .pain-card-inner{min-height:auto}
+    .pain-card-front,.pain-card-back{position:relative;min-height:auto;padding:20px 16px}
+    .pain-card{perspective:none;min-height:auto}
+    .pain-card-inner{min-height:auto;transform-style:flat}
+    .pain-card:hover .pain-card-inner,.pain-card.flipped .pain-card-inner{transform:none!important}
+    .pain-card-front,.pain-card-back{position:relative;inset:auto;backface-visibility:visible;-webkit-backface-visibility:visible}
+    .pain-card-back{transform:none!important;display:none}
+    .pain-card.flipped .pain-card-front{display:none}
+    .pain-card.flipped .pain-card-back{display:flex}
+    .pain-num{font-size:28px}
+    .pain-desc{min-height:auto;font-size:13px}
+    .how-steps{max-width:100%}
+    .how-step{gap:12px;padding:16px 0}
+    .how-step .step-icon{width:40px;height:40px;font-size:16px}
+    .ba-grid{grid-template-columns:1fr;gap:0}
+    .ba-arrow{transform:rotate(90deg);padding:12px 0}
+    .ba-card{padding:24px 18px}
+    .ba-card li{font-size:13px;padding:8px 0}
+    .nav-links{display:none;position:absolute;top:64px;left:0;right:0;background:white;flex-direction:column;padding:20px;border-bottom:1px solid var(--border);box-shadow:0 8px 24px rgba(0,0,0,.08);gap:12px}
+    .nav-links.show{display:flex}
+    .nav-mobile{display:block}
+    .nav-cta{text-align:center}
+    .testi-card{padding:24px 16px;min-height:auto}
+    .testi-text{font-size:14px}
+    .testi-logo img{height:30px}
+    .testi-arrow{display:none}
+    .ai-inner{align-items:stretch}
+    .ai-visual{margin-top:24px}
+    .ai-alert{font-size:12px;padding:12px 14px}
+    .sol-card{padding:28px 20px!important}
+    .solution-grid{grid-template-columns:1fr!important}
+    .mod-grid{grid-template-columns:1fr!important;gap:10px}
+    .mod-item{padding:16px}
+    .modules h2,.pain-stats h2,.how h2,.ai-section h2{font-size:clamp(22px,6vw,32px)}
+    .section-tag{font-size:10px}
+    .cta-final h2{font-size:clamp(22px,6vw,32px)!important}
+    section,.hero,.problem,.solution,.modules,.ai-section,.before-after,.how,.cta-final,.pain-stats,.faq,.contact-form-section{padding-left:16px!important;padding-right:16px!important}
+    .mega-footer{padding-left:16px;padding-right:16px}
+    .mega-footer-grid{grid-template-columns:1fr;gap:24px}
+    .contact-grid{grid-template-columns:1fr}
+    .faq-q{font-size:14px;padding:14px 16px}
+    .faq-a-inner{padding:0 16px 14px;font-size:13px}
+    .trust-item{font-size:11px}
+}
+@media(max-width:500px){
+    .hero h1{font-size:24px}
+    .pain-grid{gap:10px}
+    .mockup-kpis{grid-template-columns:repeat(2,1fr)}
+    .mockup-viz-row{grid-template-columns:1fr}
+    .ba-title h2{font-size:22px}
+}
+.cta-final .hl-blue{color:#FDE68A}
+.cta-final .hl-red{color:#FCA5A5}
+.cta-final .hl-gold{color:var(--gold)}
+
+/* ═══ TRUST MARQUEE ═══ */
+.trust-marquee{padding:14px 0;background:var(--canvas-alt);border-top:1px solid var(--border);border-bottom:1px solid var(--border);overflow:hidden;position:relative}
+.trust-marquee::before,.trust-marquee::after{content:'';position:absolute;top:0;bottom:0;width:60px;z-index:2}
+.trust-marquee::before{left:0;background:linear-gradient(90deg,var(--canvas-alt),transparent)}
+.trust-marquee::after{right:0;background:linear-gradient(-90deg,var(--canvas-alt),transparent)}
+.trust-track{display:flex;gap:48px;animation:marqueeScroll 25s linear infinite;width:max-content}
+.trust-item{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--ink-mid);white-space:nowrap;font-family:var(--mono);letter-spacing:.3px}
+.trust-item i{color:var(--cobalt);font-size:14px}
+.trust-item .trust-check{color:var(--green);font-size:11px}
+@keyframes marqueeScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* ═══ FAQ ═══ */
+.faq{padding:80px clamp(20px,4vw,48px);background:var(--canvas)}
+.faq-inner{max-width:800px;margin:0 auto}
+.faq h2{font-size:clamp(26px,3.5vw,40px);font-weight:900;letter-spacing:-1px;margin-bottom:12px;text-align:center}
+.faq-lead{font-size:16px;color:var(--ink-muted);text-align:center;max-width:500px;margin:0 auto 40px}
+.faq-item{border:1px solid var(--border);border-radius:12px;margin-bottom:10px;background:var(--white);overflow:hidden;transition:border-color .3s}
+.faq-item.open{border-color:var(--cobalt)}
+.faq-q{display:flex;justify-content:space-between;align-items:center;padding:18px 24px;cursor:pointer;font-size:15px;font-weight:600;color:var(--ink);transition:color .2s;gap:12px}
+.faq-q:hover{color:var(--cobalt)}
+.faq-q i{font-size:12px;color:var(--ink-light);transition:transform .3s,color .3s;flex-shrink:0}
+.faq-item.open .faq-q i{transform:rotate(180deg);color:var(--cobalt)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .4s ease,padding .3s}
+.faq-a-inner{padding:0 24px 18px;font-size:14px;color:var(--ink-muted);line-height:1.7}
+
+/* ═══ CONTACT FORM ═══ */
+.contact-form-section{padding:60px clamp(20px,4vw,48px);background:var(--white)}
+.contact-inner{max-width:600px;margin:0 auto;text-align:center}
+.contact-inner h2{font-size:clamp(22px,3vw,32px);font-weight:900;letter-spacing:-.5px;margin-bottom:8px}
+.contact-lead{font-size:15px;color:var(--ink-muted);margin-bottom:32px}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;text-align:left}
+.contact-field{display:flex;flex-direction:column;gap:4px}
+.contact-field.full{grid-column:1/-1}
+.contact-field label{font-size:11px;font-weight:700;color:var(--ink-muted);letter-spacing:.5px;text-transform:uppercase;font-family:var(--mono)}
+.contact-field input,.contact-field select,.contact-field textarea{padding:12px 14px;border:1px solid var(--border);border-radius:8px;font-size:14px;font-family:var(--sans);color:var(--ink);transition:border-color .2s;background:var(--canvas);outline:none}
+.contact-field input:focus,.contact-field select:focus,.contact-field textarea:focus{border-color:var(--cobalt);box-shadow:0 0 0 3px rgba(11,94,215,.08)}
+.contact-field textarea{resize:vertical;min-height:80px}
+.contact-submit{grid-column:1/-1;margin-top:8px}
+.contact-submit button{width:100%;padding:14px;background:var(--cobalt);color:white;border:none;border-radius:8px;font-size:15px;font-weight:700;font-family:var(--sans);cursor:pointer;transition:all .2s}
+.contact-submit button:hover{background:var(--cobalt-dark);transform:translateY(-1px)}
+@media(max-width:500px){.contact-grid{grid-template-columns:1fr}}
+
+/* ═══ MEGA FOOTER ═══ */
+.mega-footer{background:var(--ink);color:rgba(255,255,255,.5);padding:60px clamp(20px,4vw,48px) 32px}
+.mega-footer-inner{max-width:1200px;margin:0 auto}
+.mega-footer-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px}
+.mega-footer-brand .footer-logo{font-size:20px;font-weight:900;color:var(--white);margin-bottom:12px}
+.mega-footer-brand .footer-logo b{color:var(--gold)}
+.mega-footer-brand p{font-size:13px;line-height:1.6;color:rgba(255,255,255,.4);margin-bottom:16px;max-width:280px}
+.mega-footer-social{display:flex;gap:12px}
+.mega-footer-social a{width:36px;height:36px;border-radius:8px;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.4);text-decoration:none;transition:all .2s;font-size:14px}
+.mega-footer-social a:hover{background:var(--cobalt);color:white}
+.mega-footer-col h4{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.25);margin-bottom:16px;font-family:var(--mono)}
+.mega-footer-col ul{list-style:none;padding:0}
+.mega-footer-col li{margin-bottom:8px}
+.mega-footer-col a{color:rgba(255,255,255,.45);text-decoration:none;font-size:13px;transition:color .2s}
+.mega-footer-col a:hover{color:var(--gold)}
+.mega-footer-bottom{border-top:1px solid rgba(255,255,255,.06);padding-top:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.mega-footer-legal{display:flex;gap:16px;flex-wrap:wrap}
+.mega-footer-legal a{color:rgba(255,255,255,.3);text-decoration:none;font-size:11px;transition:color .2s}
+.mega-footer-legal a:hover{color:rgba(255,255,255,.6)}
+.mega-footer-copy{font-size:12px;color:rgba(255,255,255,.25)}
+@media(max-width:900px){.mega-footer-grid{grid-template-columns:1fr 1fr;gap:24px}}
+@media(max-width:500px){.mega-footer-grid{grid-template-columns:1fr}}
+    </style>
+</head>
+<body>
+
+<a class="skip-link" href="#problema">Saltar al contenido</a>
+
+<!-- Scroll Progress -->
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- Nav -->
+<nav class="nav" id="mainNav">
+    <div class="nav-logo"><img src="logos/CCD-logo.png" alt="Construye con Datos" style="height:32px;width:auto"></div>
+    <button class="nav-mobile" aria-label="Abrir menú de navegación" onclick="document.querySelector('.nav-links').classList.toggle('show')"><i class="fas fa-bars"></i></button>
+    <div class="nav-links">
+        <a href="#problema">El Problema</a>
+        <a href="#como">Cómo Funciona</a>
+        <a href="#modulos">Módulos</a>
+        <a href="#inteligencia">IA en Obra</a>
+        <a href="#solucion">Soluciones</a>
+        <a href="#diagnostico" class="nav-cta">Diagnóstico Gratis →</a>
+    </div>
+</nav>
+
+<!-- ═══ 1. HERO ═══ -->
+<section class="hero">
+    <div class="hero-inner">
+        <div>
+            <div class="section-tag ha1">Control de obra en tiempo real</div>
+            <h1 id="heroH1" class="ha2"><span class="hl">Sabrás si tu <em>flujo</em> será</span><span class="hl">negativo <em>antes</em> de que pase</span></h1>
+            <p class="hero-sub ha3" id="heroSub">Facturación pendiente, retenciones vencidas, estados de pago sin cobrar — el sistema cruza todo y te avisa <strong>3 semanas antes</strong>. Decisiones financieras con datos, no con intuición.</p>
+            <div class="hero-ctas ha4">
+                <a href="#diagnostico" class="btn-primary">Diagnóstico Gratis <i class="fas fa-arrow-right"></i></a>
+                <a href="https://calendar.app.google/2BLVGKbUKmfJHgkK6" target="_blank" class="btn-secondary"><i class="fas fa-calendar-check"></i> Agendar Reunión</a>
+            </div>
+        </div>
+        <div class="hero-mockup ha6">
+            <div class="mockup-window">
+                <div class="mockup-bar"><span></span><span></span><span></span></div>
+                <div class="mockup-header"><span>Construye con <b>Datos</b> — Informe</span><span class="mockup-live"><span class="live-dot"></span> Tiempo real</span></div>
+                <div class="mockup-kpis">
+                    <div class="mkpi" id="mkpi-flujo"><div class="mkpi-label">Flujo</div><div class="mkpi-val" id="v-flujo" style="color:var(--red)">-$42M</div><div class="mkpi-trend" id="t-flujo" style="color:var(--red)">↓ Negativo</div></div>
+                    <div class="mkpi" id="mkpi-margen"><div class="mkpi-label">Margen</div><div class="mkpi-val" id="v-margen" style="color:var(--orange)">8.2%</div><div class="mkpi-trend" id="t-margen" style="color:var(--orange)">↓ Meta: 14%</div></div>
+                    <div class="mkpi" id="mkpi-prod"><div class="mkpi-label">Productividad</div><div class="mkpi-val" id="v-prod" style="color:var(--gold-dark)">82%</div><div class="mkpi-trend" id="t-prod" style="color:var(--gold-dark)">↓ Bajo benchmark</div></div>
+                    <div class="mkpi" id="mkpi-plan"><div class="mkpi-label">Planificación</div><div class="mkpi-val" id="v-plan" style="color:var(--cobalt)">62%</div><div class="mkpi-trend" id="t-plan" style="color:var(--ink-muted)">Plan: 66%</div></div>
+                </div>
+                <div class="mockup-chart"><div class="mchart-label">Avance acumulado</div><svg viewBox="0 0 300 55" style="width:100%;height:auto;" id="curvaS"><line x1="0" y1="50" x2="300" y2="50" stroke="rgba(0,0,0,.06)" stroke-width="1"/><line x1="0" y1="30" x2="300" y2="30" stroke="rgba(0,0,0,.04)" stroke-width="1"/><line x1="0" y1="10" x2="300" y2="10" stroke="rgba(0,0,0,.04)" stroke-width="1"/><polyline points="0,50 50,44 100,35 150,24 200,13 250,6 300,2" fill="none" stroke="rgba(11,94,215,.3)" stroke-width="1.5" stroke-dasharray="4,3"/><polyline id="curvaReal" points="0,50 50,45 100,38 150,29 200,22" fill="none" stroke="var(--green)" stroke-width="2" style="transition:all 1s ease"/><circle id="curvaDot" cx="200" cy="22" r="3" fill="var(--green)" style="transition:all 1s ease"><animate attributeName="r" values="3;4.5;3" dur="2s" repeatCount="indefinite"/></circle><line id="curvaGap" x1="200" y1="13" x2="200" y2="22" stroke="var(--red)" stroke-width="1" stroke-dasharray="2,2" opacity=".5" style="transition:all 1s ease"/><text id="curvaGapTxt" x="207" y="18" fill="var(--red)" font-size="7" font-weight="600" opacity=".6" font-family="var(--mono)" style="transition:all 1s ease">-4%</text></svg><div style="display:flex;gap:14px;margin-top:2px"><span style="font-size:8px;color:var(--ink-muted);display:flex;align-items:center;gap:4px;font-family:var(--mono)"><span style="width:10px;height:1.5px;background:rgba(11,94,215,.35);display:inline-block"></span>Planificado</span><span style="font-size:8px;color:var(--ink-muted);display:flex;align-items:center;gap:4px;font-family:var(--mono)"><span style="width:10px;height:2px;background:var(--green);display:inline-block"></span>Real</span></div></div>
+                <div class="mockup-viz-row">
+                    <div class="mini-viz" id="viz-flujo"><div class="mini-viz-title"><i class="fas fa-coins" style="margin-right:3px;opacity:.5"></i> Flujo financiero</div><div class="flow-bar-group"><div class="flow-bar-item"><div class="flow-bar-label">Venta</div><div class="flow-bar-track"><div class="flow-bar-fill" id="bar-venta" style="width:85%;background:var(--cobalt)"></div></div><div class="flow-bar-val" id="val-venta" style="color:var(--cobalt)">$1.8B</div></div><div class="flow-bar-item"><div class="flow-bar-label">Costo</div><div class="flow-bar-track"><div class="flow-bar-fill" id="bar-costo" style="width:78%;background:var(--orange)"></div></div><div class="flow-bar-val" id="val-costo" style="color:var(--orange)">$1.65B</div></div><div class="flow-bar-item"><div class="flow-bar-label">Margen</div><div class="flow-bar-track"><div class="flow-bar-fill" id="bar-margen" style="width:18%;background:var(--green)"></div></div><div class="flow-bar-val" id="val-margen-bar" style="color:var(--green)">$150M</div></div></div></div>
+                    <div class="mini-viz" id="viz-prod"><div class="mini-viz-title"><i class="fas fa-users-gear" style="margin-right:3px;opacity:.5"></i> Rendimiento HH</div><div class="prod-bars" id="prodBars"></div><div class="prod-legend"><span><span class="dot" style="background:rgba(11,94,215,.25)"></span>Plan</span><span><span class="dot" style="background:var(--green)"></span>Real</span></div></div>
+                </div>
+                <div class="mockup-alerts"><div class="malerts-label"><i class="fas fa-bolt" style="margin-right:3px"></i> Alertas cruzadas IA</div><div class="malert visible" id="alert-slot"><span class="mdot mdot-red"></span><span class="malert-tag tag-flujo">Flujo</span><span><strong>Flujo negativo en 3 semanas</strong> — Facturación pendiente $320M</span></div></div>
+            </div>
+            <div class="mockup-mobile"><div class="mob-header">CCD <span class="mob-status">● Conectado</span></div><div class="mob-action-label" id="mob-label">Registrar avance</div><div class="mob-task" id="mob-task">Enfierradura 3° piso</div><div class="mob-value-row"><div class="mob-val" id="mob-val">75%</div><div class="mob-val-label" id="mob-val-lbl">avance</div></div><div class="mob-bar"><div class="mob-fill" id="mob-fill" style="width:75%"></div></div><div class="mob-btn" id="mob-btn">Guardar Avance</div></div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══ 2. TESTIMONIALS ═══ -->
+<section class="testi" id="testimonios">
+    <div class="testi-inner fade-up">
+        <div class="testi-header">
+            <h3>Lo que dicen nuestros clientes</h3>
+            <p>Constructoras que ya controlan su rentabilidad con datos cruzados</p>
+        </div>
+        <div class="testi-viewport">
+            <div class="testi-track" id="testiTrack">
+                <!-- Slide 1 — MK Ingeniería -->
+                <div class="testi-slide"><div class="testi-card">
+                    <div class="testi-logo"><img src="logos/mk.jpg" alt="MK Ingeniería"></div>
+                    <p class="testi-text">Contar con un aliado que entiende el negocio y domina la tecnología nos permitió pasar de reaccionar a los problemas a anticiparnos a ellos. Hoy tenemos visibilidad en línea de todos los proyectos.</p>
+                    <div class="testi-footer">
+                        <div class="testi-name">Fernando Riveros</div>
+                        <div class="testi-role">Gerente General — MK Ingeniería</div>
+                    </div>
+                </div></div>
+                <!-- Slide 2 — Grupo SIIME -->
+                <div class="testi-slide"><div class="testi-card">
+                    <div class="testi-logo"><img src="logos/siime.jpg" alt="Grupo SIIME"></div>
+                    <p class="testi-text">Antes perdíamos horas buscando quién tenía la última versión del informe. Ahora la información está cruzada y disponible para todos. El equipo volvió a terreno.</p>
+                    <div class="testi-footer">
+                        <div class="testi-name">Carolina Mendoza</div>
+                        <div class="testi-role">Jefa de Oficina Técnica — Grupo SIIME</div>
+                    </div>
+                </div></div>
+                <!-- Slide 3 — MK Ingeniería -->
+                <div class="testi-slide"><div class="testi-card">
+                    <div class="testi-logo"><img src="logos/mk.jpg" alt="MK Ingeniería"></div>
+                    <p class="testi-text">El cruce automático entre costos y avance nos mostró desviaciones que no estábamos viendo. Recuperamos 4 puntos de margen en el primer trimestre.</p>
+                    <div class="testi-footer">
+                        <div class="testi-name">Rodrigo Fuentes</div>
+                        <div class="testi-role">Gerente de Proyecto — MK Ingeniería</div>
+                    </div>
+                </div></div>
+                <!-- Slide 4 — Construcciones Magna -->
+                <div class="testi-slide"><div class="testi-card">
+                    <div class="testi-logo"><img src="logos/magna.png" alt="Construcciones Magna"></div>
+                    <p class="testi-text">La plataforma nos cambió la forma de hacer reuniones de obra. Ahora todos llegan con la misma información y las decisiones se toman en minutos, no en días.</p>
+                    <div class="testi-footer">
+                        <div class="testi-name">Natalia Baltierrez</div>
+                        <div class="testi-role">Administradora de Obra — Construcciones Magna</div>
+                    </div>
+                </div></div>
+                <!-- Slide 5 — COSAPI -->
+                <div class="testi-slide"><div class="testi-card">
+                    <div class="testi-logo"><img src="logos/cosapi.png" alt="COSAPI"></div>
+                    <p class="testi-text">Detectamos un sobrecosto de $48M en hormigón estructural tres semanas antes de lo que habríamos tardado con nuestro proceso manual. Eso solo ya pagó toda la implementación.</p>
+                    <div class="testi-footer">
+                        <div class="testi-name">Patricia Lagos</div>
+                        <div class="testi-role">Administradora de Obra — COSAPI</div>
+                    </div>
+                </div></div>
+                <!-- Slide 6 — MK Ingeniería -->
+                <div class="testi-slide"><div class="testi-card">
+                    <div class="testi-logo"><img src="logos/mk.jpg" alt="MK Ingeniería"></div>
+                    <p class="testi-text">Lo que más valoro es que el sistema mide el rendimiento real de cada profesional. Ahora sabemos cuántas HH se destinan a informes y cuántas a control real de obra.</p>
+                    <div class="testi-footer">
+                        <div class="testi-name">Rafael Castillo</div>
+                        <div class="testi-role">Gerente de Operaciones — MK Ingeniería</div>
+                    </div>
+                </div></div>
+            </div>
+        </div>
+        <div class="testi-controls">
+            <div class="testi-arrow" onclick="testiNav(-1)"><i class="fas fa-chevron-left"></i></div>
+            <div class="testi-dots" id="testiDots"></div>
+            <div class="testi-counter"><span id="testiCurrent">1</span> / <span id="testiTotal">6</span></div>
+            <div class="testi-arrow" onclick="testiNav(1)"><i class="fas fa-chevron-right"></i></div>
+        </div>
+    </div>
+</section>
+
+<div class="trust-marquee">
+    <div class="trust-track">
+        <div class="trust-item"><i class="fas fa-check-circle"></i> 160+ proyectos reales controlados <span class="trust-check">&#10003;</span></div>
+        <div class="trust-item"><i class="fas fa-building"></i> Constructoras en Chile, Perú y Colombia</div>
+        <div class="trust-item"><i class="fas fa-cube"></i> 8 módulos integrados</div>
+        <div class="trust-item"><i class="fas fa-bolt"></i> 15 cruces automáticos entre módulos</div>
+        <div class="trust-item"><i class="fas fa-brain"></i> Alertas IA 24/7</div>
+        <div class="trust-item"><i class="fas fa-plug"></i> Integración ERP + contable + remuneraciones</div>
+        <div class="trust-item"><i class="fas fa-mobile-screen"></i> Captura mobile en terreno</div>
+        <div class="trust-item"><i class="fas fa-shield-halved"></i> Datos seguros en la nube</div>
+        <!-- Duplicate for seamless loop -->
+        <div class="trust-item"><i class="fas fa-check-circle"></i> 160+ proyectos reales controlados <span class="trust-check">&#10003;</span></div>
+        <div class="trust-item"><i class="fas fa-building"></i> Constructoras en Chile, Perú y Colombia</div>
+        <div class="trust-item"><i class="fas fa-cube"></i> 8 módulos integrados</div>
+        <div class="trust-item"><i class="fas fa-bolt"></i> 15 cruces automáticos entre módulos</div>
+        <div class="trust-item"><i class="fas fa-brain"></i> Alertas IA 24/7</div>
+        <div class="trust-item"><i class="fas fa-plug"></i> Integración ERP + contable + remuneraciones</div>
+        <div class="trust-item"><i class="fas fa-mobile-screen"></i> Captura mobile en terreno</div>
+        <div class="trust-item"><i class="fas fa-shield-halved"></i> Datos seguros en la nube</div>
+    </div>
+</div>
+
+<!-- ═══ 3. CIFRAS QUE DUELEN ═══ -->
+<section class="pain-stats" id="problema">
+    <div class="pain-stats-inner fade-up">
+        <div class="section-tag">Los números que nadie quiere ver</div>
+        <h2>Cada cifra es un <em><span class="hl-red">problema</span></em> que <em><span class="hl-blue">resolvemos</span></em></h2>
+        <p class="pain-lead">Datos reales de la industria. Cada cifra representa un problema que tu constructora probablemente enfrenta hoy — y que nosotros resolvemos.</p>
+        <p style="font-size:12px;color:var(--ink-light);text-align:center;margin-bottom:24px;font-family:var(--mono)"><i class="fas fa-hand-pointer" style="margin-right:4px"></i> Toca cada cifra para ver cómo lo resolvemos</p>
+        <div class="pain-grid">
+            <!-- 1. Costos -->
+            <div class="pain-card"><div class="pain-card-inner">
+                <div class="pain-card-front">
+                    <div class="pain-num" data-count="98" data-suffix="%">0%</div>
+                    <div class="pain-desc">de los mega-proyectos terminan con sobrecostos. El margen real se conoce recién al cierre.</div>
+                    <div class="pain-card-bottom"><div class="pain-link"><i class="fas fa-dollar-sign"></i> Costos</div>
+                    <div class="pain-src">McKinsey Global Institute</div></div>
+                </div>
+                <div class="pain-card-back">
+                    <div class="pain-back-icon"><i class="fas fa-check-circle"></i></div>
+                    <div class="pain-back-title">Margen real visible cada día</div>
+                    <div class="pain-back-desc">Presupuesto, OC, subcontratos y avance cruzados en tiempo real. Ves la desviación antes de que crezca.</div>
+                    <div class="pain-back-result"><i class="fas fa-arrow-trend-up"></i> Reducción de sobrecostos hasta 30%</div>
+                </div>
+            </div></div>
+            <!-- 2. Planificación -->
+            <div class="pain-card"><div class="pain-card-inner">
+                <div class="pain-card-front">
+                    <div class="pain-num" data-count="77" data-suffix="%">0%</div>
+                    <div class="pain-desc">de las obras terminan fuera de plazo. El Gantt vive desconectado del avance real en terreno.</div>
+                    <div class="pain-card-bottom"><div class="pain-link"><i class="fas fa-chart-gantt"></i> Planificación</div>
+                    <div class="pain-src">KPMG Global Construction Survey</div></div>
+                </div>
+                <div class="pain-card-back">
+                    <div class="pain-back-icon"><i class="fas fa-check-circle"></i></div>
+                    <div class="pain-back-title">Planificación conectada al terreno</div>
+                    <div class="pain-back-desc">Curva S, ruta crítica y partidas atrasadas cruzadas con costos y cuadrillas. Actualización automática.</div>
+                    <div class="pain-back-result"><i class="fas fa-arrow-trend-up"></i> Alertas 3-4 semanas antes del atraso</div>
+                </div>
+            </div></div>
+            <!-- 3. Mano de Obra -->
+            <div class="pain-card"><div class="pain-card-inner">
+                <div class="pain-card-front">
+                    <div class="pain-num" data-count="35" data-suffix="%">0%</div>
+                    <div class="pain-desc">del tiempo profesional se pierde armando informes en Excel e ingresando datos en planillas.</div>
+                    <div class="pain-card-bottom"><div class="pain-link"><i class="fas fa-hard-hat"></i> Mano de Obra</div>
+                    <div class="pain-src">FMI Corp & PlanGrid</div></div>
+                </div>
+                <div class="pain-card-back">
+                    <div class="pain-back-icon"><i class="fas fa-check-circle"></i></div>
+                    <div class="pain-back-title">Tus profesionales de vuelta en terreno</div>
+                    <div class="pain-back-desc">Los informes se generan solos. Sin planillas, sin doble digitación. Tu equipo controla obra, no compila Excel.</div>
+                    <div class="pain-back-result"><i class="fas fa-arrow-trend-up"></i> Recuperas hasta 14 HH/semana</div>
+                </div>
+            </div></div>
+            <!-- 4. Documentación SC -->
+            <div class="pain-card"><div class="pain-card-inner">
+                <div class="pain-card-front">
+                    <div class="pain-num" data-count="89" data-suffix="%">0%</div>
+                    <div class="pain-desc">de los contratos de construcción terminan en disputas o juicios. Sin respaldo estructurado, no hay defensa.</div>
+                    <div class="pain-card-bottom"><div class="pain-link"><i class="fas fa-file-contract"></i> Documentación SC</div>
+                    <div class="pain-src">Arcadis Global Construction Disputes</div></div>
+                </div>
+                <div class="pain-card-back">
+                    <div class="pain-back-icon"><i class="fas fa-check-circle"></i></div>
+                    <div class="pain-back-title">Documentación trazable y completa</div>
+                    <div class="pain-back-desc">Contratos, EDP, garantías y EPP con alertas de vencimiento. Nada se paga sin respaldo al día.</div>
+                    <div class="pain-back-result"><i class="fas fa-arrow-trend-up"></i> 100% de trazabilidad documental</div>
+                </div>
+            </div></div>
+            <!-- 5. Calidad -->
+            <div class="pain-card"><div class="pain-card-inner">
+                <div class="pain-card-front">
+                    <div class="pain-num" data-count="30" data-suffix="%">0%</div>
+                    <div class="pain-desc">del costo de obra se destina a retrabajos. Observaciones en cuadernos que nadie revisa a tiempo.</div>
+                    <div class="pain-card-bottom"><div class="pain-link"><i class="fas fa-clipboard-check"></i> Calidad</div>
+                    <div class="pain-src">Construction Industry Institute</div></div>
+                </div>
+                <div class="pain-card-back">
+                    <div class="pain-back-icon"><i class="fas fa-check-circle"></i></div>
+                    <div class="pain-back-title">Calidad con registro y seguimiento</div>
+                    <div class="pain-back-desc">Observaciones con foto, estados y trazabilidad hasta cierre. Protocolos digitales, no cuadernos.</div>
+                    <div class="pain-back-result"><i class="fas fa-arrow-trend-up"></i> Detección temprana, menos retrabajos</div>
+                </div>
+            </div></div>
+            <!-- 6. Seguridad -->
+            <div class="pain-card"><div class="pain-card-inner">
+                <div class="pain-card-front">
+                    <div class="pain-num" data-count="60" data-suffix="%">0%</div>
+                    <div class="pain-desc">de los accidentes en obra se podrían prevenir con registro digital y seguimiento real.</div>
+                    <div class="pain-card-bottom"><div class="pain-link"><i class="fas fa-shield-halved"></i> Seguridad</div>
+                    <div class="pain-src">Project Trust · 160+ proyectos</div></div>
+                </div>
+                <div class="pain-card-back">
+                    <div class="pain-back-icon"><i class="fas fa-check-circle"></i></div>
+                    <div class="pain-back-title">Prevención con datos, no con papeles</div>
+                    <div class="pain-back-desc">Charlas, EPP y condiciones inseguras con seguimiento automático y alertas de vencimiento.</div>
+                    <div class="pain-back-result"><i class="fas fa-arrow-trend-up"></i> Cumplimiento verificable al 100%</div>
+                </div>
+            </div></div>
+            <!-- 7. Consultas RDI -->
+            <div class="pain-card"><div class="pain-card-inner">
+                <div class="pain-card-front">
+                    <div class="pain-num" data-count="5" data-suffix=" días">0 días</div>
+                    <div class="pain-desc">tarda en promedio una respuesta técnica. La cuadrilla espera y el atraso se acumula.</div>
+                    <div class="pain-card-bottom"><div class="pain-link"><i class="fas fa-comments"></i> Consultas (RDI)</div>
+                    <div class="pain-src">Project Trust · 160+ proyectos</div></div>
+                </div>
+                <div class="pain-card-back">
+                    <div class="pain-back-icon"><i class="fas fa-check-circle"></i></div>
+                    <div class="pain-back-title">Consultas con plazo y responsable</div>
+                    <div class="pain-back-desc">Cada RDI con fecha, responsable y plazo. Alertas automáticas al vencer. Sin WhatsApp.</div>
+                    <div class="pain-back-result"><i class="fas fa-arrow-trend-up"></i> Respuesta controlada y visible</div>
+                </div>
+            </div></div>
+            <!-- 8. Bodega -->
+            <div class="pain-card"><div class="pain-card-inner">
+                <div class="pain-card-front">
+                    <div class="pain-num" data-count="3" data-suffix=" de 10">0 de 10</div>
+                    <div class="pain-desc">obras paran por falta de materiales. Pedidos tarde, stock sin control, avance frenado.</div>
+                    <div class="pain-card-bottom"><div class="pain-link"><i class="fas fa-warehouse"></i> Bodega</div>
+                    <div class="pain-src">Project Trust · 160+ proyectos</div></div>
+                </div>
+                <div class="pain-card-back">
+                    <div class="pain-back-icon"><i class="fas fa-check-circle"></i></div>
+                    <div class="pain-back-title">Stock cruzado con el avance</div>
+                    <div class="pain-back-desc">Stock, consumo y planificación cruzados. Alertas antes de que falte, no después de que paren.</div>
+                    <div class="pain-back-result"><i class="fas fa-arrow-trend-up"></i> Cero paros por falta de material</div>
+                </div>
+            </div></div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══ 4. LA TRANSFORMACIÓN ═══ -->
+<section class="transform">
+    <div class="transform-inner fade-up">
+        <div class="transform-title">
+            <div class="section-tag">La transformación</div>
+            <h2>Reemplazamos tus <em><span class="hl-red">planillas</span></em> por <em><span class="hl-blue">apps a prueba de excusas</span></em></h2>
+            <p>Cada proceso manual que hoy frena tu operación tiene una versión digital que funciona en terreno, offline, y sin capacitación.</p>
+        </div>
+        <div class="transform-rows">
+            <div class="transform-row">
+                <div class="t-before"><div class="t-before-icon"><i class="fas fa-file-excel"></i></div><div class="t-before-text"><strong>Informes en Excel</strong> que llegan 2 semanas tarde con datos que ya nadie confía</div></div>
+                <div class="t-arrow"><i class="fas fa-arrow-right"></i></div>
+                <div class="t-after"><div class="t-after-icon"><i class="fas fa-chart-line"></i></div><div class="t-after-text"><strong>Informes automáticos en tiempo real</strong> — flujo, margen, productividad y planificación actualizados al minuto<div class="t-after-badge">Tiempo real</div></div></div>
+            </div>
+            <div class="transform-row">
+                <div class="t-before"><div class="t-before-icon"><i class="fas fa-laptop"></i></div><div class="t-before-text"><strong>Software que solo funciona en PC</strong> — el capataz no puede registrar nada en terreno</div></div>
+                <div class="t-arrow"><i class="fas fa-arrow-right"></i></div>
+                <div class="t-after"><div class="t-after-icon"><i class="fas fa-mobile-screen"></i></div><div class="t-after-text"><strong>App móvil que funciona offline</strong> — el capataz registra avance con una foto y un tap, con guantes y sol directo<div class="t-after-badge">Offline · 4 clics</div></div></div>
+            </div>
+            <div class="transform-row">
+                <div class="t-before"><div class="t-before-icon"><i class="fas fa-users-slash"></i></div><div class="t-before-text"><strong>Cada área con su propia versión</strong> — reuniones de obra donde nadie tiene los mismos números</div></div>
+                <div class="t-arrow"><i class="fas fa-arrow-right"></i></div>
+                <div class="t-after"><div class="t-after-icon"><i class="fas fa-display"></i></div><div class="t-after-text"><strong>Una sola fuente de verdad</strong> — todos ven los mismos datos cruzados, desde el gerente general hasta el capataz<div class="t-after-badge">8 módulos conectados</div></div></div>
+            </div>
+            <div class="transform-row">
+                <div class="t-before"><div class="t-before-icon"><i class="fas fa-eye-slash"></i></div><div class="t-before-text"><strong>Margen real desconocido hasta el cierre</strong> — sorpresas de hasta 6 puntos de diferencia al final</div></div>
+                <div class="t-arrow"><i class="fas fa-arrow-right"></i></div>
+                <div class="t-after"><div class="t-after-icon"><i class="fas fa-bullseye"></i></div><div class="t-after-text"><strong>Margen visible por partida, cada día</strong> — desviaciones detectadas con 3 a 4 semanas de anticipación<div class="t-after-badge">Alertas automáticas</div></div></div>
+            </div>
+            <div class="transform-row">
+                <div class="t-before"><div class="t-before-icon"><i class="fas fa-calculator"></i></div><div class="t-before-text"><strong>Cuadrillas sin trazabilidad</strong> — cobran, pero no sabes si rinden lo que deberían</div></div>
+                <div class="t-arrow"><i class="fas fa-arrow-right"></i></div>
+                <div class="t-after"><div class="t-after-icon"><i class="fas fa-user-check"></i></div><div class="t-after-text"><strong>Rendimiento cruzado por cuadrilla</strong> — HH consumidas vs avance real vs costo, expuesto para todos<div class="t-after-badge">Sin excusas</div></div></div>
+            </div>
+            <div class="transform-row">
+                <div class="t-before"><div class="t-before-icon"><i class="fas fa-folder-open"></i></div><div class="t-before-text"><strong>Documentación en carpetas físicas</strong> — contratos, EPP y garantías que nadie encuentra cuando se necesitan</div></div>
+                <div class="t-arrow"><i class="fas fa-arrow-right"></i></div>
+                <div class="t-after"><div class="t-after-icon"><i class="fas fa-shield-check"></i></div><div class="t-after-text"><strong>Documentación digital con alertas</strong> — vencimientos, contratos pendientes y EDP bloqueados automáticamente<div class="t-after-badge">Trazabilidad 100%</div></div></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══ 5. HOW IT WORKS ═══ -->
+<section class="how" id="como">
+    <div class="how-inner fade-up">
+        <div class="section-tag">Cómo funciona</div>
+        <h2>Del <em>terreno</em> a la <em><span class="hl-blue">decisión</span></em>, sin escalas</h2>
+        <p class="how-lead">Tu equipo captura en 4 clics. Los <span class="hl-gold">datos se cruzan solos</span>. Tú ves el resultado al instante.</p>
+        <div class="how-steps">
+            <div class="how-step">
+                <div class="step-left">
+                    <div class="step-icon"><i class="fas fa-mobile-screen"></i></div>
+                    <div class="step-num">01</div>
+                    <div class="step-line"><div class="data-particle"></div></div>
+                </div>
+                <div class="step-right">
+                    <h4>Captura en terreno</h4>
+                    <p>El capataz registra avance, asistencia o una observación con una foto y un tap. Sin capacitación — funciona <strong>offline</strong>.</p>
+                    <span class="step-tag">📱 4 clics · sin entrenamiento</span>
+                </div>
+            </div>
+            <div class="how-step">
+                <div class="step-left">
+                    <div class="step-icon"><i class="fas fa-link"></i></div>
+                    <div class="step-num">02</div>
+                    <div class="step-line"><div class="data-particle"></div></div>
+                </div>
+                <div class="step-right">
+                    <h4>Se conecta con tus sistemas</h4>
+                    <p>ERP, contable, remuneraciones — todo se integra automáticamente. Sin doble digitación.</p>
+                    <span class="step-tag">🔗 SAP · Defontana · iConstruye · Talana</span>
+                </div>
+            </div>
+            <div class="how-step">
+                <div class="step-left">
+                    <div class="step-icon"><i class="fas fa-brain"></i></div>
+                    <div class="step-num">03</div>
+                    <div class="step-line"><div class="data-particle"></div></div>
+                </div>
+                <div class="step-right">
+                    <h4>Se cruza en tiempo real</h4>
+                    <p><span class="hl-gold">15 cruces automáticos</span> entre 8 módulos. Costos vs avance, HH vs producción, <span class="hl-blue">flujo</span> vs presupuesto.</p>
+                    <span class="step-tag">⚡ 15 cruces · 8 módulos · tiempo real</span>
+                </div>
+            </div>
+            <div class="how-step">
+                <div class="step-left">
+                    <div class="step-icon"><i class="fas fa-bell"></i></div>
+                    <div class="step-num">04</div>
+                    <div class="step-line"><div class="data-particle"></div></div>
+                </div>
+                <div class="step-right">
+                    <h4>Recibes la alerta</h4>
+                    <p>Antes de que el problema te cueste plata. Informe, WhatsApp o correo — como prefieras.</p>
+                    <span class="step-tag">🔔 Informe · WhatsApp · Email</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══ 6. MODULES ═══ -->
+<section class="modules" id="modulos">
+    <div class="modules-inner fade-up">
+        <div class="section-tag">Qué controlamos</div>
+        <h2>8 módulos que hablan entre sí</h2>
+        <p class="modules-lead">No son 8 apps sueltas. Son 8 módulos con <span class="hl-gold">15 conexiones automáticas</span> que te dan la foto completa del proyecto.</p>
+        <div class="mod-badge"><i class="fas fa-puzzle-piece"></i> <strong>Contratas solo lo que necesitas.</strong> Cada módulo funciona independiente — y se potencia cuando lo conectas con los demás.</div>
+        <div class="mod-grid">
+            <div class="mod-item"><div class="mod-icon"><i class="fas fa-dollar-sign"></i></div><div><h4>Costos</h4><p>Sabes cuánto vas gastando por partida en <span class="hl-gold">tiempo real</span>. El <span class="hl-blue">margen</span> proyectado se actualiza con cada OC, factura y EDP — sin esperar al cierre contable.</p></div></div>
+            <div class="mod-item"><div class="mod-icon"><i class="fas fa-chart-gantt"></i></div><div><h4>Planificación</h4><p>Avance real vs planificado al instante. Si una partida cae bajo el <span class="hl-red">90% de cumplimiento</span>, la alerta llega antes de que la ruta crítica se quiebre.</p></div></div>
+            <div class="mod-item"><div class="mod-icon"><i class="fas fa-hard-hat"></i></div><div><h4>Mano de Obra</h4><p>Quién entró, cuántas HH, en qué tarea. Cruzado con remuneraciones: si la <span class="hl-red">productividad baja del 85%</span>, lo ves antes de pagar la quincena.</p></div></div>
+            <div class="mod-item"><div class="mod-icon"><i class="fas fa-file-contract"></i></div><div><h4>Documentación SC</h4><p>Contratos, EPP, certificaciones y estados de pago de subcontratistas en un solo lugar. Nada se aprueba sin la documentación al día — <span class="hl-red">cero pagos sin respaldo</span>.</p></div></div>
+            <div class="mod-item"><div class="mod-icon"><i class="fas fa-clipboard-check"></i></div><div><h4>Calidad</h4><p>Observaciones con fotos, estados y seguimiento hasta cierre. Trazabilidad completa — el <span class="hl-blue">92% de las observaciones</span> se cierran dentro de plazo.</p></div></div>
+            <div class="mod-item"><div class="mod-icon"><i class="fas fa-shield-halved"></i></div><div><h4>Seguridad</h4><p>Charlas, hallazgos, incidentes. Todo registrado con plazo automático. Las obras con registro digital reducen la <span class="hl-red">tasa de incidentes en un 40%</span>.</p></div></div>
+            <div class="mod-item"><div class="mod-icon"><i class="fas fa-comments"></i></div><div><h4>Consultas Técnicas</h4><p>Reemplaza WhatsApp para consultas de obra. Plazo medido: el <span class="hl-gold">tiempo promedio de respuesta baja de 5 días a 1.5 días</span>.</p></div></div>
+            <div class="mod-item"><div class="mod-icon"><i class="fas fa-warehouse"></i></div><div><h4>Bodega</h4><p>Entrada, salida, consumo cruzado con presupuesto. Alertas de stock bajo evitan paradas que cuestan hasta <span class="hl-red">$15M por día</span> de atraso.</p></div></div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══ 7. AI SECTION ═══ -->
+<section class="ai-section" id="inteligencia">
+    <div class="ai-inner">
+        <div class="fade-up">
+            <div class="section-tag" style="color:var(--gold)">Inteligencia artificial en obra</div>
+            <h2>Un ingeniero que nunca duerme, <em>vigilando tu <span class="hl-blue">rentabilidad</span></em></h2>
+            <p class="ai-lead">Monitorea los 8 módulos + tu ERP + remuneraciones las 24 horas. Cuando algo no cuadra, te avisa antes de que te <span class="hl-red">cueste plata</span>.</p>
+            <div class="ai-feat"><div class="ai-ic"><i class="fas fa-bolt"></i></div><div><h4>Alertas cruzadas entre 8 módulos</h4><p>Flujo, margen, productividad, planificación, calidad, documentación, seguridad y bodega — <strong>cruzados en tiempo real</strong>. Una desviación en costos dispara automáticamente la alerta en planificación y mano de obra.</p></div></div>
+            <div class="ai-feat"><div class="ai-ic"><i class="fas fa-brain"></i></div><div><h4>IA entrenada con tu operación real</h4><p>No es un modelo genérico. <strong>Aprende de tus datos, tus metas y tu historia</strong>. Con cada semana de operación se vuelve más precisa — porque compara contra lo que TÚ planificaste, no contra promedios del mercado.</p></div></div>
+            <div class="ai-feat"><div class="ai-ic"><i class="fas fa-file-alt"></i></div><div><h4>Informes en tiempo real, no semanales</h4><p>No esperas al viernes para saber cómo va tu obra. <strong>Cada dato que se captura actualiza tu informe al instante</strong> — flujo, margen, avance y productividad disponibles cuando los necesites, no cuando alguien los arme.</p></div></div>
+            <div class="ai-feat"><div class="ai-ic"><i class="fas fa-bullseye"></i></div><div><h4>Compara contra tus metas, no contra el mercado</h4><p>Tu meta de margen es 14% — el sistema te avisa cuando proyecta 11%. <strong>Tu meta de plazo es semana 32</strong> — la alerta llega cuando la ruta crítica lo pone en riesgo. Lo que importa es TU plan, no el promedio.</p></div></div>
+        </div>
+        <div class="ai-visual fade-up">
+            <div class="ai-alert-label">Alertas cruzadas — en vivo</div>
+            <div class="ai-alert alert-red"><i class="fas fa-exclamation-triangle"></i><div><strong>Flujo:</strong> Negativo en 3 semanas — facturación pendiente <span class="hl-red">$320M</span> + retención SC de <span class="hl-red">$85M</span> vencida</div></div>
+            <div class="ai-alert alert-red"><i class="fas fa-dollar-sign"></i><div><strong>Margen:</strong> Hormigón estructural supera presupuesto en <span class="hl-red">22%</span> — EAC proyecta <span class="hl-red">$48M</span> sobre lo aprobado</div></div>
+            <div class="ai-alert alert-gold"><i class="fas fa-users"></i><div><strong>Productividad:</strong> Cuadrilla Torres Hnos. rinde <span class="hl-red">35% bajo benchmark</span> — <span class="hl-red">$12M en HH</span> sin producción equivalente</div></div>
+            <div class="ai-alert alert-blue"><i class="fas fa-clock"></i><div><strong>Planificación:</strong> Ruta crítica en riesgo — enfierradura 3° piso al <span class="hl-red">58%</span> vs <span class="hl-gold">72% planificado</span>. 2 consultas bloquean avance hace 5 días.</div></div>
+            <div class="ai-alert alert-gold"><i class="fas fa-user-tie"></i><div><strong>Rendimiento profesional:</strong> Administrador lleva <span class="hl-red">14 HH semanales</span> en informes manuales — equivale a <span class="hl-red">$2.8M/mes</span> en tiempo no productivo</div></div>
+            <div class="ai-alert alert-red"><i class="fas fa-file-contract"></i><div><strong>Doc. Subcontratista:</strong> Torres Hnos. tiene EPP vencido y contrato sin firmar — <span class="hl-red">EDP #4 por $45M bloqueado</span> hasta regularización</div></div>
+            <div class="ai-alert alert-green"><i class="fas fa-check-circle"></i><div><strong>Productividad:</strong> Cuadrilla B rindió <span class="hl-blue">115%</span> del benchmark esta semana. <span class="hl-blue">+$8M en valor ganado</span> vs plan.</div></div>
+            <div class="ai-alert alert-green"><i class="fas fa-chart-line"></i><div><strong>Flujo:</strong> Factura #892 por <span class="hl-blue">$180M</span> cobrada — flujo proyectado vuelve a positivo en semana 12.</div></div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══ 8. SOLUTIONS ═══ -->
+<section class="solution" id="solucion">
+    <div class="solution-inner fade-up">
+        <div class="section-tag">Cómo trabajamos</div>
+        <h2>Tres formas de optimizar tu <em><span class="hl-blue">rentabilidad</span></em></h2>
+        <p class="solution-lead">No vendemos software. Vendemos <span class="hl-blue">control</span> y tranquilidad sobre tus proyectos.</p>
+        <div class="solution-grid">
+            <div class="sol-card featured">
+                <div class="sol-tag tag-saas">Plataforma</div>
+                <h3>Tu equipo captura, tú ves resultados</h3>
+                <p class="desc">Apps de terreno + informe en tiempo real + conexión automática con tus sistemas. Implementación en 1-2 semanas.</p>
+                <ul class="sol-features">
+                    <li><i class="fas fa-check"></i> 8 módulos — <strong>contratas solo los que necesitas</strong></li>
+                    <li><i class="fas fa-check"></i> Captura móvil diseñada para el capataz</li>
+                    <li><i class="fas fa-check"></i> Conexión con ERP, contable y remuneraciones</li>
+                    <li><i class="fas fa-check"></i> 15 cruces automáticos entre módulos</li>
+                    <li><i class="fas fa-check"></i> Escala al ritmo de tu operación</li>
+                </ul>
+            </div>
+            <div class="sol-card">
+                <div class="sol-tag tag-aaas">IA</div>
+                <h3>Alertas que anticipan los problemas</h3>
+                <p class="desc">Inteligencia artificial que monitorea 24/7 y te avisa antes de que el problema sea irreversible.</p>
+                <ul class="sol-features">
+                    <li><i class="fas fa-check"></i> 14 alertas cruzadas automáticas</li>
+                    <li><i class="fas fa-check"></i> Detección anticipada de sobrecostos</li>
+                    <li><i class="fas fa-check"></i> Predicción de atrasos en ruta crítica</li>
+                    <li><i class="fas fa-check"></i> Benchmark con 160+ proyectos reales</li>
+                </ul>
+            </div>
+            <div class="sol-card">
+                <div class="sol-tag tag-consult">Consultoría</div>
+                <h3>Te acompañamos hasta que funcione</h3>
+                <p class="desc">Partimos con un diagnóstico de tu operación. Te mostramos dónde pierdes plata y cómo recuperarla.</p>
+                <ul class="sol-features">
+                    <li><i class="fas fa-check"></i> Diagnóstico gratuito de tu operación</li>
+                    <li><i class="fas fa-check"></i> Plan de implementación a medida</li>
+                    <li><i class="fas fa-check"></i> Capacitación a tu equipo de obra</li>
+                    <li><i class="fas fa-check"></i> Experiencia en 160+ proyectos reales</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══ FAQ ═══ -->
+<section class="faq" id="faq">
+    <div class="faq-inner fade-up">
+        <div class="section-tag">Preguntas frecuentes</div>
+        <h2>Todo lo que necesitas saber</h2>
+        <p class="faq-lead">Las preguntas más comunes de gerentes y profesionales de obra antes de implementar.</p>
+
+        <div class="faq-item">
+            <div class="faq-q">¿Cuánto tarda la implementación? <i class="fas fa-chevron-down"></i></div>
+            <div class="faq-a"><div class="faq-a-inner">Entre 1 y 2 semanas para los módulos base (Costos, Planificación, Mano de Obra). El equipo de terreno puede empezar a capturar datos desde el día 1 — la app móvil no requiere capacitación formal.</div></div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-q">¿Se integra con mi ERP y sistema contable? <i class="fas fa-chevron-down"></i></div>
+            <div class="faq-a"><div class="faq-a-inner">Sí. Nos conectamos con los principales ERPs de construcción en LATAM (SAP, Defontana, iConstruye, Softland) y sistemas de remuneraciones (Talana, BUK). La integración es automática — sin doble digitación.</div></div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-q">¿Qué pasa con mis datos? ¿Son seguros? <i class="fas fa-chevron-down"></i></div>
+            <div class="faq-a"><div class="faq-a-inner">Tus datos están en la nube con cifrado de nivel bancario. Cada constructora tiene su ambiente aislado. Cumplimos con estándares internacionales de seguridad y hacemos respaldos diarios automáticos.</div></div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-q">¿Funciona en obra sin buena conexión a internet? <i class="fas fa-chevron-down"></i></div>
+            <div class="faq-a"><div class="faq-a-inner">La app móvil funciona offline. El capataz registra avance, asistencia y observaciones sin conexión. Cuando recupera señal, todo se sincroniza automáticamente con el informe.</div></div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-q">¿Cuántos usuarios pueden usar la plataforma? <i class="fas fa-chevron-down"></i></div>
+            <div class="faq-a"><div class="faq-a-inner">No hay límite de usuarios. Desde el gerente general hasta el capataz de terreno — cada uno ve exactamente lo que necesita con permisos diferenciados por rol.</div></div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-q">¿Qué resultados han obtenido otras constructoras? <i class="fas fa-chevron-down"></i></div>
+            <div class="faq-a"><div class="faq-a-inner">En promedio: reducción de 80% en tiempo de informes, detección de desviaciones 3-4 semanas antes, y reducción de sobrecostos de hasta 30%. Con 160+ proyectos controlados, tenemos benchmark real para comparar tu operación.</div></div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══ CONTACT FORM ═══ -->
+<section class="contact-form-section" id="contacto">
+    <div class="contact-inner fade-up">
+        <div class="section-tag">Conversemos</div>
+        <h2>¿Tienes dudas? Escríbenos</h2>
+        <p class="contact-lead">Te respondemos en menos de 24 horas hábiles.</p>
+        <form class="contact-grid" id="ccdContactForm" onsubmit="sendContactForm(event)">
+            <div class="contact-field">
+                <label>Nombre</label>
+                <input type="text" name="nombre" placeholder="Tu nombre" required>
+            </div>
+            <div class="contact-field">
+                <label>Email</label>
+                <input type="email" name="email" placeholder="tu@empresa.com" required>
+            </div>
+            <div class="contact-field">
+                <label>Empresa</label>
+                <input type="text" name="empresa" placeholder="Nombre de tu constructora">
+            </div>
+            <div class="contact-field">
+                <label>Proyectos activos</label>
+                <select name="proyectos">
+                    <option value="">Selecciona...</option>
+                    <option>1 - 3 proyectos</option>
+                    <option>4 - 10 proyectos</option>
+                    <option>Más de 10 proyectos</option>
+                </select>
+            </div>
+            <div class="contact-field full">
+                <label>Mensaje</label>
+                <textarea name="mensaje" placeholder="¿En qué te podemos ayudar?"></textarea>
+            </div>
+            <div class="contact-submit">
+                <button type="submit" id="contactBtn">Enviar Mensaje <i class="fas fa-paper-plane"></i></button>
+            </div>
+        </form>
+    </div>
+</section>
+
+<!-- ═══ 9. CTA FINAL ═══ -->
+<section class="cta-final" id="diagnostico">
+    <div class="cta-inner fade-up">
+        <div class="section-tag" style="color:var(--gold)">Da el primer paso</div>
+        <h2>¿Estás <span class="hl-blue">controlando</span> tu obra o solo <span class="hl-red">apagando incendios</span>?</h2>
+        <p>En <span class="hl-gold" style="color:var(--gold)">10 minutos</span> descubre dónde estás <span class="hl-red" style="color:#FCA5A5">perdiendo</span> <span class="hl-blue" style="color:#93C5FD">margen</span>, tiempo y <span class="hl-blue" style="color:#93C5FD">control</span>. Diagnóstico personalizado basado en datos de <span class="hl-gold" style="color:var(--gold)">160+ proyectos reales</span> en Chile, Perú y Colombia.</p>
+        <div class="cta-buttons">
+            <a href="https://zfrmz.eu/WEDBKi5CGgTQhVEYBxr7" class="btn-gold" target="_blank">Diagnóstico Gratis <i class="fas fa-arrow-right"></i></a>
+            <a href="https://calendar.app.google/2BLVGKbUKmfJHgkK6" target="_blank" class="btn-secondary" style="color:rgba(255,255,255,.7);border-color:rgba(255,255,255,.2)"><i class="fas fa-calendar-check"></i> Agendar Reunión</a>
+        </div>
+        <div class="cta-note">10 minutos · Sin compromiso · Informe personalizado</div>
+    </div>
+</section>
+
+<footer class="mega-footer">
+    <div class="mega-footer-inner">
+        <div class="mega-footer-grid">
+            <div class="mega-footer-brand">
+                <div class="footer-logo">Construye con <b>Datos</b></div>
+                <p>Plataforma de control de obra con IA. Información cruzada en tiempo real para constructoras que quieren controlar su rentabilidad.</p>
+                <div class="mega-footer-social">
+                    <a href="https://www.linkedin.com/company/construyecondatos" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="https://www.instagram.com/construyecondatos" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="mailto:contacto@construyecondatos.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
+                </div>
+            </div>
+            <div class="mega-footer-col">
+                <h4>Módulos</h4>
+                <ul>
+                    <li><a href="#modulos">Costos</a></li>
+                    <li><a href="#modulos">Planificación</a></li>
+                    <li><a href="#modulos">Mano de Obra</a></li>
+                    <li><a href="#modulos">Calidad</a></li>
+                    <li><a href="#modulos">Seguridad</a></li>
+                    <li><a href="#modulos">Documentación SC</a></li>
+                </ul>
+            </div>
+            <div class="mega-footer-col">
+                <h4>Soluciones</h4>
+                <ul>
+                    <li><a href="#solucion">Plataforma SaaS</a></li>
+                    <li><a href="#inteligencia">Alertas con IA</a></li>
+                    <li><a href="#solucion">Consultoría</a></li>
+                    <li><a href="#diagnostico">Diagnóstico Gratis</a></li>
+                    <li><a href="#faq">Preguntas Frecuentes</a></li>
+                </ul>
+            </div>
+            <div class="mega-footer-col">
+                <h4>Recursos</h4>
+                <ul>
+                    <li><a href="#como">Cómo Funciona</a></li>
+                    <li><a href="https://calendar.app.google/2BLVGKbUKmfJHgkK6" target="_blank">Agendar Reunión</a></li>
+                    <li><a href="https://zfrmz.eu/WEDBKi5CGgTQhVEYBxr7" target="_blank">Diagnóstico Gratis</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="mega-footer-bottom">
+            <div class="mega-footer-legal">
+                <a href="#">Términos de Servicio</a>
+                <a href="#">Política de Privacidad</a>
+                <a href="#">Política de Datos</a>
+            </div>
+            <div class="mega-footer-copy">Construye con Datos Inc. (USA) · CCD SpA (Chile) · © 2026</div>
+        </div>
+    </div>
+</footer>
+
+<script>
+/* ═══ SCROLL PROGRESS ═══ */
+window.addEventListener('scroll',()=>{
+    const p=window.scrollY/(document.body.scrollHeight-window.innerHeight)*100;
+    document.getElementById('scrollProgress').style.width=p+'%';
+    document.getElementById('mainNav').classList.toggle('scrolled',window.scrollY>50);
+});
+
+/* ═══ FADE UP ═══ */
+const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')})},{threshold:.1,rootMargin:'0px 0px -50px 0px'});
+document.querySelectorAll('.fade-up').forEach(el=>obs.observe(el));
+
+
+
+/* ═══ PROD BARS INIT ═══ */
+const prodData=[{p:32,r:28},{p:34,r:30},{p:36,r:33},{p:35,r:38},{p:38,r:35},{p:36,r:34},{p:40,r:32}];
+const pc=document.getElementById('prodBars');
+prodData.forEach((w,i)=>{const d=document.createElement('div');d.className='prod-bar-pair';d.id='pp-'+i;d.innerHTML=`<div class="prod-bar plan" style="height:${(w.p/42)*38}px"></div><div class="prod-bar real" id="pr-${i}" style="height:${(w.r/42)*38}px"></div>`;pc.appendChild(d)});
+
+/* ═══ HERO CYCLING TEXT ═══ */
+const heroScenes=[
+{h:`<span class="hl">Sabrás si tu <em>flujo</em> será</span><span class="hl">negativo <em>antes</em> de que pase</span>`,
+ s:`Facturación pendiente, retenciones vencidas, estados de pago sin cobrar — el sistema cruza todo y te avisa <strong>3 semanas antes</strong>. Decisiones financieras con datos, no con intuición.`},
+{h:`<span class="hl">Tu <em>margen real</em> visible</span><span class="hl">cada día, por <em>partida</em></span>`,
+ s:`Venta, costo comprometido y proyecciones cruzadas automáticamente. <strong>Sin esperar al cierre</strong> para saber si tu proyecto gana o pierde.`},
+{h:`<span class="hl"><em>Productividad</em> real de cada</span><span class="hl"><em>cuadrilla</em> expuesta con datos</span>`,
+ s:`HH consumidas vs avance real vs costo. Rendimiento cruzado por actividad — <strong>sabes exactamente quién produce y quién no</strong>.`},
+{h:`<span class="hl">Tu <em>planificación</em> conectada</span><span class="hl">con <em>costos</em> y <em>terreno</em></span>`,
+ s:`Curva S real vs planificada, ruta crítica en riesgo, partidas atrasadas — todo visible en <strong>una sola pantalla</strong>. Tus profesionales de vuelta en terreno.`}
+];
+const $=id=>document.getElementById(id);const h1=$('heroH1'),subEl=$('heroSub');
+const mkpiIds=['mkpi-flujo','mkpi-margen','mkpi-prod','mkpi-plan'];
+let heroIdx=0;
+function cycleHero(){
+    h1.classList.add('fading');
+    setTimeout(()=>{
+        h1.innerHTML=heroScenes[heroIdx].h;
+        subEl.innerHTML=heroScenes[heroIdx].s;
+        h1.classList.remove('fading');
+        // Highlight matching mockup KPI
+        document.querySelectorAll('.mkpi.active').forEach(e=>e.classList.remove('active'));
+        const mkpiEl=$(mkpiIds[heroIdx]);
+        if(mkpiEl)mkpiEl.classList.add('active');
+        heroIdx=(heroIdx+1)%heroScenes.length;
+    },350);
+}
+setInterval(cycleHero,4000);
+
+/* ═══ HERO SIMULATOR (mockup animations) ═══ */
+const scenes=[
+    {mob:{label:'Aprobar estado de pago',task:'Torres Hnos · EDP #4',val:'$45M',valLbl:'monto',fill:null,btn:'Aprobar EDP'},kpi:{id:'mkpi-flujo',valId:'v-flujo',tId:'t-flujo',val:'-$87M',color:'var(--red)',trend:'↓ Crítico',tColor:'var(--red)'},chart:null,vizActive:'viz-flujo',prodChange:null,flowChange:{costo:'82%',costoVal:'$1.69B',margen:'13%',margenVal:'$110M',margenColor:'var(--orange)'},alert:{dot:'mdot-red',tag:'tag-flujo',tagTxt:'Flujo',html:'<strong>Flujo negativo en 3 semanas</strong> — facturación pendiente $320M'}},
+    {mob:{label:'Nueva orden de compra',task:'Hormigón Premezclado',val:'$28M',valLbl:'monto OC',fill:null,btn:'Registrar OC'},kpi:{id:'mkpi-margen',valId:'v-margen',tId:'t-margen',val:'7.1%',color:'var(--red)',trend:'↓ Alerta',tColor:'var(--red)'},chart:null,vizActive:'viz-flujo',prodChange:null,flowChange:{costo:'84%',costoVal:'$1.72B',margen:'10%',margenVal:'$80M',margenColor:'var(--red)'},alert:{dot:'mdot-orange',tag:'tag-margen',tagTxt:'Margen',html:'<strong>Hormigón supera presupuesto 22%</strong> — intervenir esta semana'}},
+    {mob:{label:'Asignar cuadrilla',task:'Moldaje · Subterráneo',val:'12',valLbl:'personas',fill:null,btn:'Confirmar Asignación'},kpi:{id:'mkpi-prod',valId:'v-prod',tId:'t-prod',val:'76%',color:'var(--red)',trend:'↓ Sobredimensionada',tColor:'var(--red)'},chart:null,vizActive:'viz-prod',prodChange:{idx:6,newH:38},flowChange:null,alert:{dot:'mdot-gold',tag:'tag-prod',tagTxt:'Producción',html:'<strong>Cuadrilla Moldaje sobredimensionada</strong> — 12 personas vs 8 planificadas'}},
+    {mob:{label:'Registrar avance',task:'Enfierradura 3° piso',val:'75%',valLbl:'avance',fill:75,btn:'Guardar Avance'},kpi:{id:'mkpi-plan',valId:'v-plan',tId:'t-plan',val:'64%',color:'var(--cobalt)',trend:'Plan: 66%',tColor:'var(--ink-muted)'},chart:{points:'0,50 50,45 100,38 150,29 200,20',dot:{cx:200,cy:20},gap:{y2:20},gapTxt:'-2%',gapY:17},vizActive:'',prodChange:null,flowChange:null,alert:{dot:'mdot-blue',tag:'tag-plan',tagTxt:'Plan',html:'<strong>Enfierradura 3°piso alcanzó 75%</strong> — atraso reduciéndose'}}
+];
+let si=-1;
+function clearActive(){document.querySelectorAll('.mini-viz.active').forEach(e=>e.classList.remove('active'))}
+const defaults={flujo:{v:'-$42M',c:'var(--red)',t:'↓ Negativo',tc:'var(--red)'},margen:{v:'8.2%',c:'var(--orange)',t:'↓ Meta: 14%',tc:'var(--orange)'},prod:{v:'82%',c:'var(--gold-dark)',t:'↓ Bajo benchmark',tc:'var(--gold-dark)'},plan:{v:'62%',c:'var(--cobalt)',t:'Plan: 66%',tc:'var(--ink-muted)'}};
+function resetKPIs(){for(const[k,d]of Object.entries(defaults)){const ve=$('v-'+k),te=$('t-'+k);ve.textContent=d.v;ve.style.color=d.c;te.textContent=d.t;te.style.color=d.tc}$('curvaReal').setAttribute('points','0,50 50,45 100,38 150,29 200,22');$('curvaDot').setAttribute('cx','200');$('curvaDot').setAttribute('cy','22');$('curvaGap').setAttribute('y2','22');$('curvaGapTxt').textContent='-4%';$('curvaGapTxt').setAttribute('y','18');$('bar-costo').style.width='78%';$('val-costo').textContent='$1.65B';$('bar-margen').style.width='18%';$('val-margen-bar').textContent='$150M';$('val-margen-bar').style.color='var(--green)';const lr=$('pr-6');if(lr)lr.style.height=((32/42)*38)+'px'}
+function runScene(){si=(si+1)%scenes.length;const s=scenes[si];resetKPIs();clearActive();
+setTimeout(()=>{$('mob-label').textContent=s.mob.label;$('mob-task').textContent=s.mob.task;$('mob-val').textContent=s.mob.val;$('mob-val-lbl').textContent=s.mob.valLbl;if(s.mob.fill!==null){$('mob-fill').style.width=s.mob.fill+'%';$('mob-fill').parentElement.style.display=''}else{$('mob-fill').parentElement.style.display='none'}$('mob-btn').textContent=s.mob.btn;$('mob-btn').classList.remove('sending')},600);
+setTimeout(()=>{const btn=$('mob-btn');btn.classList.add('sending');btn.textContent='Enviando...';const r=document.createElement('span');r.className='mob-ripple';btn.appendChild(r);setTimeout(()=>r.remove(),600)},2800);
+setTimeout(()=>{$('mob-btn').textContent='✓ Enviado'},3600);
+setTimeout(()=>{const k=s.kpi;$(k.id).classList.add('active');const ve=$(k.valId);ve.classList.add('pulse');setTimeout(()=>{ve.textContent=k.val;ve.style.color=k.color;$(k.tId).textContent=k.trend;$(k.tId).style.color=k.tColor;ve.classList.remove('pulse')},300)},4000);
+setTimeout(()=>{if(s.chart){$('curvaReal').setAttribute('points',s.chart.points);$('curvaDot').setAttribute('cx',s.chart.dot.cx);$('curvaDot').setAttribute('cy',s.chart.dot.cy);$('curvaGap').setAttribute('y2',s.chart.gap.y2);$('curvaGapTxt').textContent=s.chart.gapTxt;$('curvaGapTxt').setAttribute('y',s.chart.gapY)}if(s.vizActive)$(s.vizActive).classList.add('active');if(s.prodChange){const bar=$('pr-'+s.prodChange.idx);if(bar)bar.style.height=((s.prodChange.newH/42)*38)+'px'}if(s.flowChange){$('bar-costo').style.width=s.flowChange.costo;$('val-costo').textContent=s.flowChange.costoVal;$('bar-margen').style.width=s.flowChange.margen;$('val-margen-bar').textContent=s.flowChange.margenVal;$('val-margen-bar').style.color=s.flowChange.margenColor}},4800);
+setTimeout(()=>{const slot=$('alert-slot');slot.classList.remove('visible');setTimeout(()=>{slot.innerHTML=`<span class="mdot ${s.alert.dot}"></span><span class="malert-tag ${s.alert.tag}">${s.alert.tagTxt}</span><span>${s.alert.html}</span>`;slot.classList.add('visible')},300)},5500)}
+runScene();setInterval(runScene,8000);
+
+/* ═══ HOW STEPS GLOW CYCLE ═══ */
+(function(){
+  const steps=document.querySelectorAll('.how-step');
+  if(!steps.length)return;
+  let idx=0;
+  function glowNext(){
+    steps.forEach(s=>s.classList.remove('glow'));
+    steps[idx].classList.add('glow');
+    idx=(idx+1)%steps.length;
+  }
+  glowNext();
+  setInterval(glowNext,2000);
+})();
+
+
+
+/* ═══ PAIN STATS COUNTERS ═══ */
+const painObs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting&&!e.target.dataset.counted){
+    e.target.dataset.counted='1';
+    const cards=e.target.querySelectorAll('.pain-num');
+    cards.forEach((n,i)=>{
+        const target=parseInt(n.dataset.target)||0;
+        const suffix=n.dataset.suffix||'';
+        const prefix=n.dataset.prefix||'';
+        const orig=n.textContent;
+        let cur=0;
+        const step=Math.max(1,Math.ceil(target/60));
+        setTimeout(()=>{
+            const timer=setInterval(()=>{
+                cur+=step;
+                if(cur>=target){cur=target;clearInterval(timer);n.textContent=orig}
+                else{n.textContent=prefix+cur+suffix}
+            },25);
+        },i*120);
+    });
+}})},{threshold:.15});
+const painGrid=document.querySelector('.pain-grid');
+if(painGrid)painObs.observe(painGrid);
+
+/* ═══ TESTIMONIAL CAROUSEL ═══ */
+(function(){
+    var track=document.getElementById('testiTrack');
+    var slides=track.querySelectorAll('.testi-slide');
+    var dotsC=document.getElementById('testiDots');
+    var curSpan=document.getElementById('testiCurrent');
+    var total=slides.length;
+    var idx=0;var autoTimer;
+    document.getElementById('testiTotal').textContent=total;
+    // Build dots
+    for(var i=0;i<total;i++){var d=document.createElement('div');d.className='testi-dot'+(i===0?' active':'');d.dataset.i=i;d.onclick=function(){goTo(+this.dataset.i)};dotsC.appendChild(d)}
+    var dots=dotsC.querySelectorAll('.testi-dot');
+    function goTo(n){
+        idx=((n%total)+total)%total;
+        track.style.transform='translateX(-'+(idx*100)+'%)';
+        dots.forEach(function(d,i){d.classList.toggle('active',i===idx)});
+        curSpan.textContent=idx+1;
+        resetAuto();
+    }
+    window.testiNav=function(dir){goTo(idx+dir)};
+    function resetAuto(){clearInterval(autoTimer);autoTimer=setInterval(function(){goTo(idx+1)},6000)}
+    resetAuto();
+    // Swipe support for mobile
+    var startX=0;
+    track.addEventListener('touchstart',function(e){startX=e.touches[0].clientX},{passive:true});
+    track.addEventListener('touchend',function(e){var dx=e.changedTouches[0].clientX-startX;if(Math.abs(dx)>50){goTo(idx+(dx<0?1:-1))}});
+})();
+
+/* ═══ PAIN CARDS: Counter + Stagger ═══ */
+(function(){
+    const painObs=new IntersectionObserver(function(entries){
+        entries.forEach(function(e){
+            if(!e.isIntersecting)return;
+            const cards=e.target.querySelectorAll('.pain-card');
+            cards.forEach(function(card,i){
+                setTimeout(function(){
+                    card.classList.add('visible');
+                    // Counter animation
+                    const numEl=card.querySelector('.pain-num[data-count]');
+                    if(numEl&&!numEl.dataset.done){
+                        numEl.dataset.done='1';
+                        const target=parseInt(numEl.dataset.count);
+                        const suffix=numEl.dataset.suffix||'';
+                        let current=0;
+                        const step=Math.max(1,Math.ceil(target/40));
+                        const timer=setInterval(function(){
+                            current+=step;
+                            if(current>=target){current=target;clearInterval(timer)}
+                            numEl.textContent=current+suffix;
+                        },30);
+                    }
+                },i*120);
+            });
+            painObs.unobserve(e.target);
+        });
+    },{threshold:.15});
+    const grid=document.querySelector('.pain-grid');
+    if(grid)painObs.observe(grid);
+})();
+
+/* ═══ CARD FLIP (tap/click to flip on mobile) ═══ */
+document.querySelectorAll('.pain-card').forEach(function(card){
+    card.addEventListener('click',function(){
+        if(window.innerWidth<=900){
+            document.querySelectorAll('.pain-card.flipped').forEach(function(c){
+                if(c!==card) c.classList.remove('flipped');
+            });
+            this.classList.toggle('flipped');
+        }
+    });
+});
+
+/* ═══ FAQ ACCORDION ═══ */
+window.toggleFaq=function(el){const item=el.parentElement;const ans=item.querySelector('.faq-a');const inner=item.querySelector('.faq-a-inner');
+if(item.classList.contains('open')){ans.style.maxHeight='0';item.classList.remove('open')}
+else{document.querySelectorAll('.faq-item.open').forEach(i=>{i.classList.remove('open');i.querySelector('.faq-a').style.maxHeight='0'});
+item.classList.add('open');ans.style.maxHeight=inner.scrollHeight+'px'}};
+/* Fallback: event delegation */
+document.addEventListener('click',function(e){const q=e.target.closest('.faq-q');if(q)window.toggleFaq(q)});
+
+/* ═══ CONTACT FORM → Google Apps Script ═══ */
+// IMPORTANTE: Reemplaza esta URL con la de tu Google Apps Script desplegado
+var GOOGLE_SCRIPT_URL = 'https://script.google.com/a/macros/construyecondatos.com/s/AKfycbyCeHH9oH2G37scX0aZztDULosTAn3IC0bHLLdPZpscQNTmxm-R-U-K5Dattc7OE2NQ/exec';
+
+window.sendContactForm = function(e) {
+    e.preventDefault();
+    var form = document.getElementById('ccdContactForm');
+    var btn = document.getElementById('contactBtn');
+    var originalText = btn.innerHTML;
+
+    // Validación básica
+    if (!form.nombre.value || !form.email.value) return;
+
+    // Estado: enviando
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+    btn.disabled = true;
+    btn.style.opacity = '.7';
+
+    var data = {
+        nombre: form.nombre.value,
+        email: form.email.value,
+        empresa: form.empresa.value,
+        proyectos: form.proyectos.value,
+        mensaje: form.mensaje.value
+    };
+
+    fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify(data)
+    })
+    .then(function() {
+        btn.innerHTML = '✓ Mensaje enviado';
+        btn.style.background = 'var(--green)';
+        btn.style.opacity = '1';
+        form.reset();
+        setTimeout(function() {
+            btn.innerHTML = originalText;
+            btn.style.background = '';
+            btn.disabled = false;
+        }, 4000);
+    })
+    .catch(function() {
+        btn.innerHTML = '✗ Error — intenta de nuevo';
+        btn.style.background = 'var(--red)';
+        btn.style.opacity = '1';
+        setTimeout(function() {
+            btn.innerHTML = originalText;
+            btn.style.background = '';
+            btn.disabled = false;
+        }, 3000);
+    });
+};
+</script>
+</body>
+</html>
