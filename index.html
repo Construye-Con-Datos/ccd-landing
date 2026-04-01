@@ -1307,7 +1307,7 @@ document.addEventListener('click',function(e){const q=e.target.closest('.faq-q')
 
 /* ═══ CONTACT FORM → Google Apps Script ═══ */
 // IMPORTANTE: Reemplaza esta URL con la de tu Google Apps Script desplegado
-var GOOGLE_SCRIPT_URL = 'https://script.google.com/a/macros/construyecondatos.com/s/AKfycbyCeHH9oH2G37scX0aZztDULosTAn3IC0bHLLdPZpscQNTmxm-R-U-K5Dattc7OE2NQ/exec';
+var CONTACT_API_URL = '/api/contact';
 
 window.sendContactForm = function(e) {
     e.preventDefault();
@@ -1331,13 +1331,14 @@ window.sendContactForm = function(e) {
         mensaje: form.mensaje.value
     };
 
-    fetch(GOOGLE_SCRIPT_URL, {
+    fetch(CONTACT_API_URL, {
         method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'text/plain' },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
     })
-    .then(function() {
+    .then(function(r) { return r.json() })
+    .then(function(result) {
+        if (result.status !== 'ok') throw new Error(result.message);
         btn.innerHTML = '✓ Mensaje enviado';
         btn.style.background = 'var(--green)';
         btn.style.opacity = '1';
