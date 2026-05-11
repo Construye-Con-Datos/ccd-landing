@@ -42,6 +42,8 @@ body{font-family:var(--sans);color:var(--ink);background:var(--canvas);line-heig
 .nav-links a:hover{color:var(--ink)}
 .nav-cta{background:var(--cobalt);color:var(--white)!important;padding:9px 20px;border-radius:7px;font-weight:700!important;font-size:13px!important;transition:all .2s;box-shadow:0 1px 3px rgba(11,94,215,.2)}
 .nav-cta:hover{background:var(--cobalt-dark);transform:translateY(-1px)}
+.nav-access{padding:9px 18px;border-radius:7px;border:1.5px solid rgba(11,94,215,.35);color:var(--cobalt)!important;font-size:13px!important;font-weight:600!important;text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:all .2s;white-space:nowrap}
+.nav-access:hover{border-color:var(--cobalt);background:rgba(11,94,215,.06);color:var(--cobalt-dark)!important}
 .nav-mobile{display:none;background:none;border:none;color:var(--ink);font-size:20px;cursor:pointer}
 
 /* ── Fade Up ── */
@@ -403,6 +405,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.5);padding:48px clamp(20px,
     .nav-links.show{display:flex}
     .nav-mobile{display:block}
     .nav-cta{text-align:center}
+    .nav-access{text-align:center;justify-content:center}
     .testi-card{padding:24px 16px;min-height:auto}
     .testi-text{font-size:14px}
     .testi-logo img{height:30px}
@@ -519,6 +522,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.5);padding:48px clamp(20px,
         <a href="#modulos">Módulos</a>
         <a href="#inteligencia">IA en Obra</a>
         <a href="#solucion">Soluciones</a>
+        <a href="https://app.construyecondatos.com" target="_blank" rel="noopener noreferrer" class="nav-access"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>Acceso Clientes</a>
         <a href="#diagnostico" class="nav-cta">Diagnóstico Gratis →</a>
     </div>
 </nav>
