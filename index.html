@@ -45,6 +45,11 @@ body{font-family:var(--sans);color:var(--ink);background:var(--canvas);line-heig
 .nav-access{padding:9px 18px;border-radius:7px;border:1.5px solid rgba(11,94,215,.35);color:var(--cobalt)!important;font-size:13px!important;font-weight:600!important;text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:all .2s;white-space:nowrap}
 .nav-access:hover{border-color:var(--cobalt);background:rgba(11,94,215,.06);color:var(--cobalt-dark)!important}
 .nav-mobile{display:none;background:none;border:none;color:var(--ink);font-size:20px;cursor:pointer}
+/* ── Language Switcher ── */
+.lang-switch{display:inline-flex;align-items:center;gap:1px;background:rgba(0,0,0,.05);border-radius:8px;padding:3px;margin-left:auto;margin-right:14px}
+.lang-switch button{border:none;background:transparent;font-family:var(--sans);font-size:12px;font-weight:700;color:var(--ink-muted);padding:5px 8px;border-radius:6px;cursor:pointer;transition:all .15s;letter-spacing:.3px;line-height:1}
+.lang-switch button:hover{color:var(--ink)}
+.lang-switch button.active{background:var(--white);color:var(--cobalt);box-shadow:0 1px 2px rgba(0,0,0,.12)}
 
 /* ── Fade Up ── */
 .fade-up{opacity:0;transform:translateY(28px);transition:all .7s cubic-bezier(.16,1,.3,1)}
@@ -515,6 +520,11 @@ footer{background:var(--ink);color:rgba(255,255,255,.5);padding:48px clamp(20px,
 <!-- Nav -->
 <nav class="nav" id="mainNav">
     <div class="nav-logo"><img src="logos/CCD-logo.png" alt="Construye con Datos" style="height:32px;width:auto"></div>
+    <div class="lang-switch" role="group" aria-label="Language / Idioma">
+        <button type="button" data-lang="es" onclick="setLang('es')">ES</button>
+        <button type="button" data-lang="en" onclick="setLang('en')">EN</button>
+        <button type="button" data-lang="pt" onclick="setLang('pt')">PT</button>
+    </div>
     <button class="nav-mobile" aria-label="Abrir menú de navegación" onclick="document.querySelector('.nav-links').classList.toggle('show')"><i class="fas fa-bars"></i></button>
     <div class="nav-links">
         <a href="#problema">El Problema</a>
@@ -1123,6 +1133,288 @@ footer{background:var(--ink);color:rgba(255,255,255,.5);padding:48px clamp(20px,
 </footer>
 
 <script>
+/* ═══════════════ I18N · ES (default) · EN (US) · PT-BR ═══════════════ */
+const I18N = {
+ en:{
+  "Saltar al contenido":"Skip to content",
+  "El Problema":"The Problem","Cómo Funciona":"How It Works","Módulos":"Modules","IA en Obra":"AI On-Site","Soluciones":"Solutions","Acceso Clientes":"Client Login","Diagnóstico Gratis →":"Free Diagnosis →",
+  "Control de obra en tiempo real":"Real-time site control","Diagnóstico Gratis":"Free Diagnosis","Agendar Reunión":"Book a Meeting",
+  "— Informe":"— Report","Tiempo real":"Real time","Flujo":"Cash Flow","Margen":"Margin","Productividad":"Productivity","Planificación":"Planning","Avance acumulado":"Cumulative progress","Planificado":"Planned","Real":"Actual","Flujo financiero":"Cash flow","Venta":"Revenue","Costo":"Cost","Rendimiento HH":"Labor performance","Plan":"Plan","Alertas cruzadas IA":"AI cross-alerts","● Conectado":"● Connected",
+  "Lo que dicen nuestros clientes":"What our clients say","Constructoras que ya controlan su rentabilidad con datos cruzados":"Construction firms already controlling profitability with cross-referenced data",
+  "Contar con un aliado que entiende el negocio y domina la tecnología nos permitió pasar de reaccionar a los problemas a anticiparnos a ellos. Hoy tenemos visibilidad en línea de todos los proyectos.":"Having a partner who understands the business and masters the technology let us go from reacting to problems to anticipating them. Today we have online visibility across every project.",
+  "Gerente General — MK Ingeniería":"General Manager — MK Ingeniería",
+  "Antes perdíamos horas buscando quién tenía la última versión del informe. Ahora la información está cruzada y disponible para todos. El equipo volvió a terreno.":"We used to lose hours hunting for who had the latest version of the report. Now the data is cross-referenced and available to everyone. The team is back in the field.",
+  "Jefa de Oficina Técnica — Grupo SIIME":"Head of Technical Office — Grupo SIIME",
+  "El cruce automático entre costos y avance nos mostró desviaciones que no estábamos viendo. Recuperamos 4 puntos de margen en el primer trimestre.":"The automatic cross-check between cost and progress revealed deviations we weren't seeing. We recovered 4 margin points in the first quarter.",
+  "Gerente de Proyecto — MK Ingeniería":"Project Manager — MK Ingeniería",
+  "La plataforma nos cambió la forma de hacer reuniones de obra. Ahora todos llegan con la misma información y las decisiones se toman en minutos, no en días.":"The platform changed how we run site meetings. Now everyone shows up with the same information and decisions are made in minutes, not days.",
+  "Administradora de Obra — Construcciones Magna":"Site Manager — Construcciones Magna",
+  "Detectamos un sobrecosto de $48M en hormigón estructural tres semanas antes de lo que habríamos tardado con nuestro proceso manual. Eso solo ya pagó toda la implementación.":"We caught a $48M cost overrun in structural concrete three weeks earlier than our manual process would have. That alone paid for the entire implementation.",
+  "Administradora de Obra — COSAPI":"Site Manager — COSAPI",
+  "Lo que más valoro es que el sistema mide el rendimiento real de cada profesional. Ahora sabemos cuántas HH se destinan a informes y cuántas a control real de obra.":"What I value most is that the system measures each professional's real performance. Now we know how many man-hours go to reports and how many to actual site control.",
+  "Gerente de Operaciones — MK Ingeniería":"Operations Manager — MK Ingeniería",
+  "160+ proyectos reales controlados":"160+ real projects under control","Constructoras en Chile, Perú y Colombia":"Construction firms in Chile, Peru and Colombia","8 módulos integrados":"8 integrated modules","15 cruces automáticos entre módulos":"15 automatic cross-checks between modules","Alertas IA 24/7":"AI alerts 24/7","Integración ERP + contable + remuneraciones":"ERP + accounting + payroll integration","Captura mobile en terreno":"Mobile capture in the field","Datos seguros en la nube":"Secure data in the cloud",
+  "Los números que nadie quiere ver":"The numbers nobody wants to see","Cada cifra es un":"Every figure is a","problema":"problem","que":"that we","resolvemos":"solve",
+  "Datos reales de la industria. Cada cifra representa un problema que tu constructora probablemente enfrenta hoy — y que nosotros resolvemos.":"Real industry data. Each figure represents a problem your construction company probably faces today — and that we solve.",
+  "Toca cada cifra para ver cómo lo resolvemos":"Tap each figure to see how we solve it",
+  "de los mega-proyectos terminan con sobrecostos. El margen real se conoce recién al cierre.":"of mega-projects end with cost overruns. The real margin is only known at closeout.",
+  "Costos":"Costs","Margen real visible cada día":"Real margin visible every day","Presupuesto, OC, subcontratos y avance cruzados en tiempo real. Ves la desviación antes de que crezca.":"Budget, POs, subcontracts and progress cross-referenced in real time. You see the deviation before it grows.","Reducción de sobrecostos hasta 30%":"Cost overruns reduced by up to 30%",
+  "de las obras terminan fuera de plazo. El Gantt vive desconectado del avance real en terreno.":"of sites finish behind schedule. The Gantt lives disconnected from real progress in the field.",
+  "Planificación conectada al terreno":"Planning connected to the field","Curva S, ruta crítica y partidas atrasadas cruzadas con costos y cuadrillas. Actualización automática.":"S-curve, critical path and delayed line items cross-referenced with costs and crews. Automatic updates.","Alertas 3-4 semanas antes del atraso":"Alerts 3-4 weeks before delays",
+  "del tiempo profesional se pierde armando informes en Excel e ingresando datos en planillas.":"of professional time is lost building Excel reports and entering data into spreadsheets.",
+  "Mano de Obra":"Labor","Tus profesionales de vuelta en terreno":"Your professionals back in the field","Los informes se generan solos. Sin planillas, sin doble digitación. Tu equipo controla obra, no compila Excel.":"Reports generate themselves. No spreadsheets, no double data entry. Your team controls the site, not Excel.","Recuperas hasta 14 HH/semana":"Recover up to 14 man-hours/week",
+  "de los contratos de construcción terminan en disputas o juicios. Sin respaldo estructurado, no hay defensa.":"of construction contracts end in disputes or lawsuits. Without structured backup, there's no defense.",
+  "Documentación SC":"Subcontractor Docs","Documentación trazable y completa":"Traceable, complete documentation","Contratos, EDP, garantías y EPP con alertas de vencimiento. Nada se paga sin respaldo al día.":"Contracts, payment certificates, guarantees and PPE with expiration alerts. Nothing gets paid without up-to-date backup.","100% de trazabilidad documental":"100% document traceability",
+  "del costo de obra se destina a retrabajos. Observaciones en cuadernos que nadie revisa a tiempo.":"of construction cost goes to rework. Observations in notebooks that nobody reviews in time.",
+  "Calidad":"Quality","Calidad con registro y seguimiento":"Quality with records and tracking","Observaciones con foto, estados y trazabilidad hasta cierre. Protocolos digitales, no cuadernos.":"Observations with photo, statuses and traceability to closeout. Digital protocols, not notebooks.","Detección temprana, menos retrabajos":"Early detection, less rework",
+  "de los accidentes en obra se podrían prevenir con registro digital y seguimiento real.":"of on-site accidents could be prevented with digital records and real tracking.",
+  "Seguridad":"Safety","Project Trust · 160+ proyectos":"Project Trust · 160+ projects","Prevención con datos, no con papeles":"Prevention with data, not paperwork","Charlas, EPP y condiciones inseguras con seguimiento automático y alertas de vencimiento.":"Toolbox talks, PPE and unsafe conditions with automatic tracking and expiration alerts.","Cumplimiento verificable al 100%":"100% verifiable compliance",
+  "tarda en promedio una respuesta técnica. La cuadrilla espera y el atraso se acumula.":"is the average time for a technical answer. The crew waits and the delay piles up.",
+  "Consultas (RDI)":"RFIs (Requests)","Consultas con plazo y responsable":"RFIs with deadline and owner","Cada RDI con fecha, responsable y plazo. Alertas automáticas al vencer. Sin WhatsApp.":"Every RFI with date, owner and deadline. Automatic alerts on expiry. No WhatsApp.","Respuesta controlada y visible":"Controlled, visible responses",
+  "obras paran por falta de materiales. Pedidos tarde, stock sin control, avance frenado.":"sites stop for lack of materials. Late orders, uncontrolled stock, progress halted.",
+  "Bodega":"Warehouse","Stock cruzado con el avance":"Stock cross-checked with progress","Stock, consumo y planificación cruzados. Alertas antes de que falte, no después de que paren.":"Stock, consumption and planning cross-referenced. Alerts before you run out, not after work stops.","Cero paros por falta de material":"Zero stoppages from material shortages",
+  "La transformación":"The transformation","Reemplazamos tus":"We replace your","planillas":"spreadsheets","por":"with","apps a prueba de excusas":"excuse-proof apps","Cada proceso manual que hoy frena tu operación tiene una versión digital que funciona en terreno, offline, y sin capacitación.":"Every manual process slowing your operation today has a digital version that works in the field, offline, and with no training.",
+  "Informes en Excel":"Excel reports","que llegan 2 semanas tarde con datos que ya nadie confía":"that arrive 2 weeks late with data nobody trusts anymore","Informes automáticos en tiempo real":"Automatic real-time reports","— flujo, margen, productividad y planificación actualizados al minuto":"— cash flow, margin, productivity and planning updated by the minute",
+  "Software que solo funciona en PC":"Software that only works on a PC","— el capataz no puede registrar nada en terreno":"— the foreman can't record anything in the field","App móvil que funciona offline":"Mobile app that works offline","— el capataz registra avance con una foto y un tap, con guantes y sol directo":"— the foreman logs progress with a photo and a tap, with gloves on and in direct sun","Offline · 4 clics":"Offline · 4 taps",
+  "Cada área con su propia versión":"Each department with its own version","— reuniones de obra donde nadie tiene los mismos números":"— site meetings where nobody has the same numbers","Una sola fuente de verdad":"A single source of truth","— todos ven los mismos datos cruzados, desde el gerente general hasta el capataz":"— everyone sees the same cross-referenced data, from the GM to the foreman","8 módulos conectados":"8 connected modules",
+  "Margen real desconocido hasta el cierre":"Real margin unknown until closeout","— sorpresas de hasta 6 puntos de diferencia al final":"— surprises of up to 6 points difference at the end","Margen visible por partida, cada día":"Margin visible by line item, every day","— desviaciones detectadas con 3 a 4 semanas de anticipación":"— deviations detected 3 to 4 weeks in advance","Alertas automáticas":"Automatic alerts",
+  "Cuadrillas sin trazabilidad":"Crews without traceability","— cobran, pero no sabes si rinden lo que deberían":"— they get paid, but you don't know if they perform as they should","Rendimiento cruzado por cuadrilla":"Performance cross-checked by crew","— HH consumidas vs avance real vs costo, expuesto para todos":"— man-hours used vs actual progress vs cost, visible to everyone","Sin excusas":"No excuses",
+  "Documentación en carpetas físicas":"Documentation in physical folders","— contratos, EPP y garantías que nadie encuentra cuando se necesitan":"— contracts, PPE and guarantees nobody can find when needed","Documentación digital con alertas":"Digital documentation with alerts","— vencimientos, contratos pendientes y EDP bloqueados automáticamente":"— expirations, pending contracts and payment certificates blocked automatically","Trazabilidad 100%":"100% traceability",
+  "Cómo funciona":"How it works","Del":"From the","terreno":"field","a la":"to the","decisión":"decision",", sin escalas":", non-stop","Tu equipo captura en 4 clics. Los":"Your team captures in 4 taps. The","datos se cruzan solos":"data cross-references itself",". Tú ves el resultado al instante.":". You see the result instantly.",
+  "Captura en terreno":"Capture in the field","El capataz registra avance, asistencia o una observación con una foto y un tap. Sin capacitación — funciona":"The foreman logs progress, attendance or an observation with a photo and a tap. No training — works","offline":"offline","📱 4 clics · sin entrenamiento":"📱 4 taps · no training",
+  "Se conecta con tus sistemas":"It connects to your systems","ERP, contable, remuneraciones — todo se integra automáticamente. Sin doble digitación.":"ERP, accounting, payroll — everything integrates automatically. No double data entry.",
+  "Se cruza en tiempo real":"It cross-references in real time","15 cruces automáticos":"15 automatic cross-checks","entre 8 módulos. Costos vs avance, HH vs producción,":"across 8 modules. Cost vs progress, man-hours vs output,","vs presupuesto.":"vs budget.","⚡ 15 cruces · 8 módulos · tiempo real":"⚡ 15 cross-checks · 8 modules · real time",
+  "Recibes la alerta":"You get the alert","Antes de que el problema te cueste plata. Informe, WhatsApp o correo — como prefieras.":"Before the problem costs you money. Report, WhatsApp or email — whatever you prefer.","🔔 Informe · WhatsApp · Email":"🔔 Report · WhatsApp · Email",
+  "Qué controlamos":"What we control","8 módulos que hablan entre sí":"8 modules that talk to each other","No son 8 apps sueltas. Son 8 módulos con":"They're not 8 separate apps. They're 8 modules with","15 conexiones automáticas":"15 automatic connections","que te dan la foto completa del proyecto.":"that give you the full picture of the project.",
+  "Contratas solo lo que necesitas.":"You only pay for what you need.","Cada módulo funciona independiente — y se potencia cuando lo conectas con los demás.":"Each module works on its own — and gets stronger when connected to the rest.",
+  "Sabes cuánto vas gastando por partida en":"You know how much you're spending per line item in","tiempo real":"real time",". El":". The","margen":"margin","proyectado se actualiza con cada OC, factura y EDP — sin esperar al cierre contable.":"projected updates with every PO, invoice and payment certificate — without waiting for the accounting close.",
+  "Avance real vs planificado al instante. Si una partida cae bajo el":"Actual vs planned progress instantly. If a line item drops below","90% de cumplimiento":"90% completion",", la alerta llega antes de que la ruta crítica se quiebre.":", the alert arrives before the critical path breaks.",
+  "Quién entró, cuántas HH, en qué tarea. Cruzado con remuneraciones: si la":"Who clocked in, how many man-hours, on which task. Cross-referenced with payroll: if","productividad baja del 85%":"productivity drops below 85%",", lo ves antes de pagar la quincena.":", you see it before paying the payroll period.",
+  "Contratos, EPP, certificaciones y estados de pago de subcontratistas en un solo lugar. Nada se aprueba sin la documentación al día —":"Contracts, PPE, certifications and subcontractor payment certificates in one place. Nothing gets approved without up-to-date documentation —","cero pagos sin respaldo":"zero payments without backup",
+  "Observaciones con fotos, estados y seguimiento hasta cierre. Trazabilidad completa — el":"Observations with photos, statuses and tracking to closeout. Full traceability —","92% de las observaciones":"92% of observations","se cierran dentro de plazo.":"are closed on time.",
+  "Charlas, hallazgos, incidentes. Todo registrado con plazo automático. Las obras con registro digital reducen la":"Toolbox talks, findings, incidents. All logged with automatic deadlines. Sites with digital records cut the","tasa de incidentes en un 40%":"incident rate by 40%",
+  "Consultas Técnicas":"Technical RFIs","Reemplaza WhatsApp para consultas de obra. Plazo medido: el":"Replaces WhatsApp for site queries. Measured turnaround:","tiempo promedio de respuesta baja de 5 días a 1.5 días":"average response time drops from 5 days to 1.5 days",
+  "Entrada, salida, consumo cruzado con presupuesto. Alertas de stock bajo evitan paradas que cuestan hasta":"In, out, consumption cross-referenced with budget. Low-stock alerts prevent stoppages costing up to","$15M por día":"$15M per day","de atraso.":"of delay.",
+  "Inteligencia artificial en obra":"Artificial intelligence on-site","Un ingeniero que nunca duerme,":"An engineer who never sleeps,","vigilando tu":"watching your","rentabilidad":"profitability","Monitorea los 8 módulos + tu ERP + remuneraciones las 24 horas. Cuando algo no cuadra, te avisa antes de que te":"It monitors all 8 modules + your ERP + payroll 24 hours a day. When something doesn't add up, it warns you before it","cueste plata":"costs you money",
+  "Alertas cruzadas entre 8 módulos":"Cross-alerts across 8 modules","Flujo, margen, productividad, planificación, calidad, documentación, seguridad y bodega —":"Cash flow, margin, productivity, planning, quality, documentation, safety and warehouse —","cruzados en tiempo real":"cross-referenced in real time",". Una desviación en costos dispara automáticamente la alerta en planificación y mano de obra.":". A cost deviation automatically triggers the alert in planning and labor.",
+  "IA entrenada con tu operación real":"AI trained on your real operation","No es un modelo genérico.":"It's not a generic model.","Aprende de tus datos, tus metas y tu historia":"It learns from your data, your goals and your history",". Con cada semana de operación se vuelve más precisa — porque compara contra lo que TÚ planificaste, no contra promedios del mercado.":". With every week of operation it gets more precise — because it compares against what YOU planned, not market averages.",
+  "Informes en tiempo real, no semanales":"Real-time reports, not weekly ones","No esperas al viernes para saber cómo va tu obra.":"You don't wait until Friday to know how your site is doing.","Cada dato que se captura actualiza tu informe al instante":"Every data point captured updates your report instantly","— flujo, margen, avance y productividad disponibles cuando los necesites, no cuando alguien los arme.":"— cash flow, margin, progress and productivity available when you need them, not when someone compiles them.",
+  "Compara contra tus metas, no contra el mercado":"Compares against your goals, not the market","Tu meta de margen es 14% — el sistema te avisa cuando proyecta 11%.":"Your margin goal is 14% — the system warns you when it projects 11%.","Tu meta de plazo es semana 32":"Your deadline goal is week 32","— la alerta llega cuando la ruta crítica lo pone en riesgo. Lo que importa es TU plan, no el promedio.":"— the alert arrives when the critical path puts it at risk. What matters is YOUR plan, not the average.",
+  "Alertas cruzadas — en vivo":"Cross-alerts — live","Flujo:":"Cash Flow:","Negativo en 3 semanas — facturación pendiente":"Negative in 3 weeks — pending invoicing","+ retención SC de":"+ subcontractor retention of","vencida":"overdue","Margen:":"Margin:","Hormigón estructural supera presupuesto en":"Structural concrete exceeds budget by","— EAC proyecta":"— EAC projects","sobre lo aprobado":"over the approved amount",
+  "Productividad:":"Productivity:","Cuadrilla Torres Hnos. rinde":"Torres Hnos. crew performs","35% bajo benchmark":"35% below benchmark","$12M en HH":"$12M in man-hours","sin producción equivalente":"with no equivalent output","Planificación:":"Planning:","Ruta crítica en riesgo — enfierradura 3° piso al":"Critical path at risk — 3rd-floor rebar at","72% planificado":"72% planned",". 2 consultas bloquean avance hace 5 días.":". 2 RFIs have blocked progress for 5 days.",
+  "Rendimiento profesional:":"Staff performance:","Administrador lleva":"Site manager has spent","14 HH semanales":"14 man-hours weekly","en informes manuales — equivale a":"on manual reports — equivalent to","$2.8M/mes":"$2.8M/month","en tiempo no productivo":"in non-productive time","Doc. Subcontratista:":"Subcontractor Docs:","Torres Hnos. tiene EPP vencido y contrato sin firmar —":"Torres Hnos. has expired PPE and an unsigned contract —","EDP #4 por $45M bloqueado":"Payment certificate #4 for $45M blocked","hasta regularización":"until resolved",
+  "Cuadrilla B rindió":"Crew B performed at","del benchmark esta semana.":"of benchmark this week.","+$8M en valor ganado":"+$8M in earned value","vs plan.":"vs plan.","Factura #892 por":"Invoice #892 for","cobrada — flujo proyectado vuelve a positivo en semana 12.":"collected — projected cash flow returns to positive in week 12.",
+  "Cómo trabajamos":"How we work","Tres formas de optimizar tu":"Three ways to optimize your","No vendemos software. Vendemos":"We don't sell software. We sell","control":"control","y tranquilidad sobre tus proyectos.":"and peace of mind over your projects.",
+  "Plataforma":"Platform","Tu equipo captura, tú ves resultados":"Your team captures, you see results","Apps de terreno + informe en tiempo real + conexión automática con tus sistemas. Implementación en 1-2 semanas.":"Field apps + real-time reporting + automatic connection to your systems. Implementation in 1-2 weeks.","8 módulos —":"8 modules —","contratas solo los que necesitas":"pay only for the ones you need","Captura móvil diseñada para el capataz":"Mobile capture designed for the foreman","Conexión con ERP, contable y remuneraciones":"Connection to ERP, accounting and payroll","Escala al ritmo de tu operación":"Scales at the pace of your operation",
+  "IA":"AI","Alertas que anticipan los problemas":"Alerts that anticipate problems","Inteligencia artificial que monitorea 24/7 y te avisa antes de que el problema sea irreversible.":"Artificial intelligence that monitors 24/7 and warns you before the problem becomes irreversible.","14 alertas cruzadas automáticas":"14 automatic cross-alerts","Detección anticipada de sobrecostos":"Early detection of cost overruns","Predicción de atrasos en ruta crítica":"Prediction of critical-path delays","Benchmark con 160+ proyectos reales":"Benchmark from 160+ real projects",
+  "Consultoría":"Consulting","Te acompañamos hasta que funcione":"We support you until it works","Partimos con un diagnóstico de tu operación. Te mostramos dónde pierdes plata y cómo recuperarla.":"We start with a diagnosis of your operation. We show you where you're losing money and how to recover it.","Diagnóstico gratuito de tu operación":"Free diagnosis of your operation","Plan de implementación a medida":"Tailored implementation plan","Capacitación a tu equipo de obra":"Training for your site team","Experiencia en 160+ proyectos reales":"Experience across 160+ real projects",
+  "Preguntas frecuentes":"Frequently asked questions","Todo lo que necesitas saber":"Everything you need to know","Las preguntas más comunes de gerentes y profesionales de obra antes de implementar.":"The most common questions from managers and site professionals before implementing.",
+  "¿Cuánto tarda la implementación?":"How long does implementation take?","Entre 1 y 2 semanas para los módulos base (Costos, Planificación, Mano de Obra). El equipo de terreno puede empezar a capturar datos desde el día 1 — la app móvil no requiere capacitación formal.":"Between 1 and 2 weeks for the base modules (Costs, Planning, Labor). The field team can start capturing data from day 1 — the mobile app requires no formal training.",
+  "¿Se integra con mi ERP y sistema contable?":"Does it integrate with my ERP and accounting system?","Sí. Nos conectamos con los principales ERPs de construcción en LATAM (SAP, Defontana, iConstruye, Softland) y sistemas de remuneraciones (Talana, BUK). La integración es automática — sin doble digitación.":"Yes. We connect with the leading construction ERPs in LATAM (SAP, Defontana, iConstruye, Softland) and payroll systems (Talana, BUK). Integration is automatic — no double data entry.",
+  "¿Qué pasa con mis datos? ¿Son seguros?":"What happens to my data? Is it secure?","Tus datos están en la nube con cifrado de nivel bancario. Cada constructora tiene su ambiente aislado. Cumplimos con estándares internacionales de seguridad y hacemos respaldos diarios automáticos.":"Your data is in the cloud with bank-level encryption. Each construction company has its own isolated environment. We comply with international security standards and run automatic daily backups.",
+  "¿Funciona en obra sin buena conexión a internet?":"Does it work on-site without a good internet connection?","La app móvil funciona offline. El capataz registra avance, asistencia y observaciones sin conexión. Cuando recupera señal, todo se sincroniza automáticamente con el informe.":"The mobile app works offline. The foreman logs progress, attendance and observations without a connection. When the signal returns, everything syncs automatically with the report.",
+  "¿Cuántos usuarios pueden usar la plataforma?":"How many users can use the platform?","No hay límite de usuarios. Desde el gerente general hasta el capataz de terreno — cada uno ve exactamente lo que necesita con permisos diferenciados por rol.":"There's no user limit. From the general manager to the site foreman — each one sees exactly what they need with role-based permissions.",
+  "¿Qué resultados han obtenido otras constructoras?":"What results have other construction firms achieved?","En promedio: reducción de 80% en tiempo de informes, detección de desviaciones 3-4 semanas antes, y reducción de sobrecostos de hasta 30%. Con 160+ proyectos controlados, tenemos benchmark real para comparar tu operación.":"On average: 80% reduction in reporting time, deviations detected 3-4 weeks earlier, and cost overruns cut by up to 30%. With 160+ projects under control, we have a real benchmark to compare your operation against.",
+  "Conversemos":"Let's talk","¿Tienes dudas? Escríbenos":"Have questions? Write to us","Te respondemos en menos de 24 horas hábiles.":"We reply within 24 business hours.","Nombre":"Name","Email":"Email","Empresa":"Company","Proyectos activos":"Active projects","Selecciona...":"Select...","1 - 3 proyectos":"1 - 3 projects","4 - 10 proyectos":"4 - 10 projects","Más de 10 proyectos":"More than 10 projects","Mensaje":"Message","Enviar Mensaje":"Send Message",
+  "Da el primer paso":"Take the first step","¿Estás":"Are you","controlando":"controlling","tu obra o solo":"your site, or just","apagando incendios":"putting out fires","En":"In","10 minutos":"10 minutes","descubre dónde estás":"discover where you're","perdiendo":"losing",", tiempo y":", time and",". Diagnóstico personalizado basado en datos de":". Personalized diagnosis based on data from","160+ proyectos reales":"160+ real projects","en Chile, Perú y Colombia.":"in Chile, Peru and Colombia.","10 minutos · Sin compromiso · Informe personalizado":"10 minutes · No commitment · Personalized report",
+  "Plataforma de control de obra con IA. Información cruzada en tiempo real para constructoras que quieren controlar su rentabilidad.":"AI-powered site-control platform. Cross-referenced data in real time for construction firms that want to control their profitability.","Plataforma SaaS":"SaaS Platform","Alertas con IA":"AI Alerts","Preguntas Frecuentes":"FAQ","Recursos":"Resources","Términos de Servicio":"Terms of Service","Política de Privacidad":"Privacy Policy","Política de Datos":"Data Policy"
+ },
+ pt:{
+  "Saltar al contenido":"Pular para o conteúdo",
+  "El Problema":"O Problema","Cómo Funciona":"Como Funciona","Módulos":"Módulos","IA en Obra":"IA na Obra","Soluciones":"Soluções","Acceso Clientes":"Acesso Clientes","Diagnóstico Gratis →":"Diagnóstico Grátis →",
+  "Control de obra en tiempo real":"Controle de obra em tempo real","Diagnóstico Gratis":"Diagnóstico Grátis","Agendar Reunión":"Agendar Reunião",
+  "— Informe":"— Relatório","Tiempo real":"Tempo real","Flujo":"Fluxo","Margen":"Margem","Productividad":"Produtividade","Planificación":"Planejamento","Avance acumulado":"Avanço acumulado","Planificado":"Planejado","Real":"Real","Flujo financiero":"Fluxo financeiro","Venta":"Venda","Costo":"Custo","Rendimiento HH":"Rendimento HH","Plan":"Plano","Alertas cruzadas IA":"Alertas cruzados IA","● Conectado":"● Conectado",
+  "Lo que dicen nuestros clientes":"O que dizem nossos clientes","Constructoras que ya controlan su rentabilidad con datos cruzados":"Construtoras que já controlam sua rentabilidade com dados cruzados",
+  "Contar con un aliado que entiende el negocio y domina la tecnología nos permitió pasar de reaccionar a los problemas a anticiparnos a ellos. Hoy tenemos visibilidad en línea de todos los proyectos.":"Contar com um parceiro que entende o negócio e domina a tecnologia nos permitiu deixar de reagir aos problemas e passar a antecipá-los. Hoje temos visibilidade online de todos os projetos.",
+  "Gerente General — MK Ingeniería":"Diretor Geral — MK Ingeniería",
+  "Antes perdíamos horas buscando quién tenía la última versión del informe. Ahora la información está cruzada y disponible para todos. El equipo volvió a terreno.":"Antes perdíamos horas procurando quem tinha a última versão do relatório. Agora a informação está cruzada e disponível para todos. A equipe voltou para o campo.",
+  "Jefa de Oficina Técnica — Grupo SIIME":"Chefe de Escritório Técnico — Grupo SIIME",
+  "El cruce automático entre costos y avance nos mostró desviaciones que no estábamos viendo. Recuperamos 4 puntos de margen en el primer trimestre.":"O cruzamento automático entre custos e avanço nos mostrou desvios que não estávamos vendo. Recuperamos 4 pontos de margem no primeiro trimestre.",
+  "Gerente de Proyecto — MK Ingeniería":"Gerente de Projeto — MK Ingeniería",
+  "La plataforma nos cambió la forma de hacer reuniones de obra. Ahora todos llegan con la misma información y las decisiones se toman en minutos, no en días.":"A plataforma mudou a forma como fazemos reuniões de obra. Agora todos chegam com a mesma informação e as decisões são tomadas em minutos, não em dias.",
+  "Administradora de Obra — Construcciones Magna":"Gerente de Obra — Construcciones Magna",
+  "Detectamos un sobrecosto de $48M en hormigón estructural tres semanas antes de lo que habríamos tardado con nuestro proceso manual. Eso solo ya pagó toda la implementación.":"Detectamos um sobrecusto de $48M em concreto estrutural três semanas antes do que levaríamos com nosso processo manual. Só isso já pagou toda a implementação.",
+  "Administradora de Obra — COSAPI":"Gerente de Obra — COSAPI",
+  "Lo que más valoro es que el sistema mide el rendimiento real de cada profesional. Ahora sabemos cuántas HH se destinan a informes y cuántas a control real de obra.":"O que mais valorizo é que o sistema mede o desempenho real de cada profissional. Agora sabemos quantas HH vão para relatórios e quantas para o controle real da obra.",
+  "Gerente de Operaciones — MK Ingeniería":"Gerente de Operações — MK Ingeniería",
+  "160+ proyectos reales controlados":"160+ projetos reais controlados","Constructoras en Chile, Perú y Colombia":"Construtoras no Chile, Peru e Colômbia","8 módulos integrados":"8 módulos integrados","15 cruces automáticos entre módulos":"15 cruzamentos automáticos entre módulos","Alertas IA 24/7":"Alertas IA 24/7","Integración ERP + contable + remuneraciones":"Integração ERP + contábil + folha de pagamento","Captura mobile en terreno":"Captura mobile no campo","Datos seguros en la nube":"Dados seguros na nuvem",
+  "Los números que nadie quiere ver":"Os números que ninguém quer ver","Cada cifra es un":"Cada número é um","problema":"problema","que":"que","resolvemos":"resolvemos",
+  "Datos reales de la industria. Cada cifra representa un problema que tu constructora probablemente enfrenta hoy — y que nosotros resolvemos.":"Dados reais da indústria. Cada número representa um problema que sua construtora provavelmente enfrenta hoje — e que nós resolvemos.",
+  "Toca cada cifra para ver cómo lo resolvemos":"Toque em cada número para ver como resolvemos",
+  "de los mega-proyectos terminan con sobrecostos. El margen real se conoce recién al cierre.":"dos megaprojetos terminam com estouro de custos. A margem real só é conhecida no fechamento.",
+  "Costos":"Custos","Margen real visible cada día":"Margem real visível todo dia","Presupuesto, OC, subcontratos y avance cruzados en tiempo real. Ves la desviación antes de que crezca.":"Orçamento, OC, subcontratos e avanço cruzados em tempo real. Você vê o desvio antes que ele cresça.","Reducción de sobrecostos hasta 30%":"Redução de sobrecustos de até 30%",
+  "de las obras terminan fuera de plazo. El Gantt vive desconectado del avance real en terreno.":"das obras terminam fora do prazo. O Gantt vive desconectado do avanço real no campo.",
+  "Planificación conectada al terreno":"Planejamento conectado ao campo","Curva S, ruta crítica y partidas atrasadas cruzadas con costos y cuadrillas. Actualización automática.":"Curva S, caminho crítico e itens atrasados cruzados com custos e equipes. Atualização automática.","Alertas 3-4 semanas antes del atraso":"Alertas 3-4 semanas antes do atraso",
+  "del tiempo profesional se pierde armando informes en Excel e ingresando datos en planillas.":"do tempo profissional é perdido montando relatórios em Excel e inserindo dados em planilhas.",
+  "Mano de Obra":"Mão de Obra","Tus profesionales de vuelta en terreno":"Seus profissionais de volta ao campo","Los informes se generan solos. Sin planillas, sin doble digitación. Tu equipo controla obra, no compila Excel.":"Os relatórios se geram sozinhos. Sem planilhas, sem dupla digitação. Sua equipe controla a obra, não compila Excel.","Recuperas hasta 14 HH/semana":"Recupere até 14 HH/semana",
+  "de los contratos de construcción terminan en disputas o juicios. Sin respaldo estructurado, no hay defensa.":"dos contratos de construção terminam em disputas ou processos. Sem comprovação estruturada, não há defesa.",
+  "Documentación SC":"Documentação SC","Documentación trazable y completa":"Documentação rastreável e completa","Contratos, EDP, garantías y EPP con alertas de vencimiento. Nada se paga sin respaldo al día.":"Contratos, medições, garantias e EPI com alertas de vencimento. Nada é pago sem comprovação em dia.","100% de trazabilidad documental":"100% de rastreabilidade documental",
+  "del costo de obra se destina a retrabajos. Observaciones en cuadernos que nadie revisa a tiempo.":"do custo da obra vai para retrabalho. Observações em cadernos que ninguém revisa a tempo.",
+  "Calidad":"Qualidade","Calidad con registro y seguimiento":"Qualidade com registro e acompanhamento","Observaciones con foto, estados y trazabilidad hasta cierre. Protocolos digitales, no cuadernos.":"Observações com foto, status e rastreabilidade até o encerramento. Protocolos digitais, não cadernos.","Detección temprana, menos retrabajos":"Detecção precoce, menos retrabalho",
+  "de los accidentes en obra se podrían prevenir con registro digital y seguimiento real.":"dos acidentes na obra poderiam ser evitados com registro digital e acompanhamento real.",
+  "Seguridad":"Segurança","Project Trust · 160+ proyectos":"Project Trust · 160+ projetos","Prevención con datos, no con papeles":"Prevenção com dados, não com papéis","Charlas, EPP y condiciones inseguras con seguimiento automático y alertas de vencimiento.":"DDS, EPI e condições inseguras com acompanhamento automático e alertas de vencimento.","Cumplimiento verificable al 100%":"Conformidade verificável em 100%",
+  "tarda en promedio una respuesta técnica. La cuadrilla espera y el atraso se acumula.":"é o tempo médio de uma resposta técnica. A equipe espera e o atraso se acumula.",
+  "Consultas (RDI)":"Consultas (RDI)","Consultas con plazo y responsable":"Consultas com prazo e responsável","Cada RDI con fecha, responsable y plazo. Alertas automáticas al vencer. Sin WhatsApp.":"Cada consulta com data, responsável e prazo. Alertas automáticos no vencimento. Sem WhatsApp.","Respuesta controlada y visible":"Resposta controlada e visível",
+  "obras paran por falta de materiales. Pedidos tarde, stock sin control, avance frenado.":"obras param por falta de materiais. Pedidos atrasados, estoque sem controle, avanço travado.",
+  "Bodega":"Almoxarifado","Stock cruzado con el avance":"Estoque cruzado com o avanço","Stock, consumo y planificación cruzados. Alertas antes de que falte, no después de que paren.":"Estoque, consumo e planejamento cruzados. Alertas antes que falte, não depois que param.","Cero paros por falta de material":"Zero paradas por falta de material",
+  "La transformación":"A transformação","Reemplazamos tus":"Substituímos suas","planillas":"planilhas","por":"por","apps a prueba de excusas":"apps à prova de desculpas","Cada proceso manual que hoy frena tu operación tiene una versión digital que funciona en terreno, offline, y sin capacitación.":"Cada processo manual que hoje trava sua operação tem uma versão digital que funciona no campo, offline e sem treinamento.",
+  "Informes en Excel":"Relatórios em Excel","que llegan 2 semanas tarde con datos que ya nadie confía":"que chegam 2 semanas atrasados com dados em que ninguém confia","Informes automáticos en tiempo real":"Relatórios automáticos em tempo real","— flujo, margen, productividad y planificación actualizados al minuto":"— fluxo, margem, produtividade e planejamento atualizados ao minuto",
+  "Software que solo funciona en PC":"Software que só funciona no PC","— el capataz no puede registrar nada en terreno":"— o encarregado não consegue registrar nada no campo","App móvil que funciona offline":"App móvel que funciona offline","— el capataz registra avance con una foto y un tap, con guantes y sol directo":"— o encarregado registra o avanço com uma foto e um toque, de luvas e sob sol forte","Offline · 4 clics":"Offline · 4 toques",
+  "Cada área con su propia versión":"Cada área com sua própria versão","— reuniones de obra donde nadie tiene los mismos números":"— reuniões de obra onde ninguém tem os mesmos números","Una sola fuente de verdad":"Uma única fonte de verdade","— todos ven los mismos datos cruzados, desde el gerente general hasta el capataz":"— todos veem os mesmos dados cruzados, do diretor ao encarregado","8 módulos conectados":"8 módulos conectados",
+  "Margen real desconocido hasta el cierre":"Margem real desconhecida até o fechamento","— sorpresas de hasta 6 puntos de diferencia al final":"— surpresas de até 6 pontos de diferença no final","Margen visible por partida, cada día":"Margem visível por item, todo dia","— desviaciones detectadas con 3 a 4 semanas de anticipación":"— desvios detectados com 3 a 4 semanas de antecedência","Alertas automáticas":"Alertas automáticos",
+  "Cuadrillas sin trazabilidad":"Equipes sem rastreabilidade","— cobran, pero no sabes si rinden lo que deberían":"— recebem, mas você não sabe se rendem o que deveriam","Rendimiento cruzado por cuadrilla":"Rendimento cruzado por equipe","— HH consumidas vs avance real vs costo, expuesto para todos":"— HH consumidas vs avanço real vs custo, exposto para todos","Sin excusas":"Sem desculpas",
+  "Documentación en carpetas físicas":"Documentação em pastas físicas","— contratos, EPP y garantías que nadie encuentra cuando se necesitan":"— contratos, EPI e garantias que ninguém acha quando precisa","Documentación digital con alertas":"Documentação digital com alertas","— vencimientos, contratos pendientes y EDP bloqueados automáticamente":"— vencimentos, contratos pendentes e medições bloqueadas automaticamente","Trazabilidad 100%":"Rastreabilidade 100%",
+  "Cómo funciona":"Como funciona","Del":"Do","terreno":"campo","a la":"à","decisión":"decisão",", sin escalas":", sem escalas","Tu equipo captura en 4 clics. Los":"Sua equipe captura em 4 toques. Os","datos se cruzan solos":"dados se cruzam sozinhos",". Tú ves el resultado al instante.":". Você vê o resultado na hora.",
+  "Captura en terreno":"Captura no campo","El capataz registra avance, asistencia o una observación con una foto y un tap. Sin capacitación — funciona":"O encarregado registra avanço, presença ou uma observação com uma foto e um toque. Sem treinamento — funciona","offline":"offline","📱 4 clics · sin entrenamiento":"📱 4 toques · sem treinamento",
+  "Se conecta con tus sistemas":"Conecta-se aos seus sistemas","ERP, contable, remuneraciones — todo se integra automáticamente. Sin doble digitación.":"ERP, contábil, folha de pagamento — tudo se integra automaticamente. Sem dupla digitação.",
+  "Se cruza en tiempo real":"Cruza em tempo real","15 cruces automáticos":"15 cruzamentos automáticos","entre 8 módulos. Costos vs avance, HH vs producción,":"entre 8 módulos. Custos vs avanço, HH vs produção,","vs presupuesto.":"vs orçamento.","⚡ 15 cruces · 8 módulos · tiempo real":"⚡ 15 cruzamentos · 8 módulos · tempo real",
+  "Recibes la alerta":"Você recebe o alerta","Antes de que el problema te cueste plata. Informe, WhatsApp o correo — como prefieras.":"Antes que o problema custe dinheiro. Relatório, WhatsApp ou e-mail — como preferir.","🔔 Informe · WhatsApp · Email":"🔔 Relatório · WhatsApp · Email",
+  "Qué controlamos":"O que controlamos","8 módulos que hablan entre sí":"8 módulos que conversam entre si","No son 8 apps sueltas. Son 8 módulos con":"Não são 8 apps soltos. São 8 módulos com","15 conexiones automáticas":"15 conexões automáticas","que te dan la foto completa del proyecto.":"que te dão a foto completa do projeto.",
+  "Contratas solo lo que necesitas.":"Você contrata só o que precisa.","Cada módulo funciona independiente — y se potencia cuando lo conectas con los demás.":"Cada módulo funciona de forma independente — e se potencializa quando conectado aos demais.",
+  "Sabes cuánto vas gastando por partida en":"Você sabe quanto está gastando por item em","tiempo real":"tempo real",". El":". A","margen":"margem","proyectado se actualiza con cada OC, factura y EDP — sin esperar al cierre contable.":"projetada se atualiza a cada OC, nota fiscal e medição — sem esperar o fechamento contábil.",
+  "Avance real vs planificado al instante. Si una partida cae bajo el":"Avanço real vs planejado na hora. Se um item cai abaixo de","90% de cumplimiento":"90% de cumprimento",", la alerta llega antes de que la ruta crítica se quiebre.":", o alerta chega antes que o caminho crítico se rompa.",
+  "Quién entró, cuántas HH, en qué tarea. Cruzado con remuneraciones: si la":"Quem entrou, quantas HH, em qual tarefa. Cruzado com a folha: se a","productividad baja del 85%":"produtividade cai abaixo de 85%",", lo ves antes de pagar la quincena.":", você vê antes de pagar a quinzena.",
+  "Contratos, EPP, certificaciones y estados de pago de subcontratistas en un solo lugar. Nada se aprueba sin la documentación al día —":"Contratos, EPI, certificações e medições de subcontratados em um só lugar. Nada é aprovado sem a documentação em dia —","cero pagos sin respaldo":"zero pagamentos sem comprovação",
+  "Observaciones con fotos, estados y seguimiento hasta cierre. Trazabilidad completa — el":"Observações com fotos, status e acompanhamento até o encerramento. Rastreabilidade completa —","92% de las observaciones":"92% das observações","se cierran dentro de plazo.":"são encerradas no prazo.",
+  "Charlas, hallazgos, incidentes. Todo registrado con plazo automático. Las obras con registro digital reducen la":"DDS, achados, incidentes. Tudo registrado com prazo automático. As obras com registro digital reduzem a","tasa de incidentes en un 40%":"taxa de incidentes em 40%",
+  "Consultas Técnicas":"Consultas Técnicas","Reemplaza WhatsApp para consultas de obra. Plazo medido: el":"Substitui o WhatsApp para consultas de obra. Prazo medido:","tiempo promedio de respuesta baja de 5 días a 1.5 días":"tempo médio de resposta cai de 5 dias para 1,5 dia",
+  "Entrada, salida, consumo cruzado con presupuesto. Alertas de stock bajo evitan paradas que cuestan hasta":"Entrada, saída, consumo cruzado com orçamento. Alertas de estoque baixo evitam paradas que custam até","$15M por día":"$15M por dia","de atraso.":"de atraso.",
+  "Inteligencia artificial en obra":"Inteligência artificial na obra","Un ingeniero que nunca duerme,":"Um engenheiro que nunca dorme,","vigilando tu":"vigiando sua","rentabilidad":"rentabilidade","Monitorea los 8 módulos + tu ERP + remuneraciones las 24 horas. Cuando algo no cuadra, te avisa antes de que te":"Monitora os 8 módulos + seu ERP + folha de pagamento 24 horas. Quando algo não fecha, avisa antes que","cueste plata":"custe dinheiro",
+  "Alertas cruzadas entre 8 módulos":"Alertas cruzados entre 8 módulos","Flujo, margen, productividad, planificación, calidad, documentación, seguridad y bodega —":"Fluxo, margem, produtividade, planejamento, qualidade, documentação, segurança e almoxarifado —","cruzados en tiempo real":"cruzados em tempo real",". Una desviación en costos dispara automáticamente la alerta en planificación y mano de obra.":". Um desvio de custo dispara automaticamente o alerta em planejamento e mão de obra.",
+  "IA entrenada con tu operación real":"IA treinada com sua operação real","No es un modelo genérico.":"Não é um modelo genérico.","Aprende de tus datos, tus metas y tu historia":"Aprende com seus dados, suas metas e seu histórico",". Con cada semana de operación se vuelve más precisa — porque compara contra lo que TÚ planificaste, no contra promedios del mercado.":". A cada semana de operação fica mais precisa — porque compara com o que VOCÊ planejou, não com médias de mercado.",
+  "Informes en tiempo real, no semanales":"Relatórios em tempo real, não semanais","No esperas al viernes para saber cómo va tu obra.":"Você não espera até sexta para saber como vai sua obra.","Cada dato que se captura actualiza tu informe al instante":"Cada dado capturado atualiza seu relatório na hora","— flujo, margen, avance y productividad disponibles cuando los necesites, no cuando alguien los arme.":"— fluxo, margem, avanço e produtividade disponíveis quando você precisar, não quando alguém montar.",
+  "Compara contra tus metas, no contra el mercado":"Compara com suas metas, não com o mercado","Tu meta de margen es 14% — el sistema te avisa cuando proyecta 11%.":"Sua meta de margem é 14% — o sistema avisa quando projeta 11%.","Tu meta de plazo es semana 32":"Sua meta de prazo é a semana 32","— la alerta llega cuando la ruta crítica lo pone en riesgo. Lo que importa es TU plan, no el promedio.":"— o alerta chega quando o caminho crítico o coloca em risco. O que importa é o SEU plano, não a média.",
+  "Alertas cruzadas — en vivo":"Alertas cruzados — ao vivo","Flujo:":"Fluxo:","Negativo en 3 semanas — facturación pendiente":"Negativo em 3 semanas — faturamento pendente","+ retención SC de":"+ retenção SC de","vencida":"vencida","Margen:":"Margem:","Hormigón estructural supera presupuesto en":"Concreto estrutural ultrapassa o orçamento em","— EAC proyecta":"— EAC projeta","sobre lo aprobado":"acima do aprovado",
+  "Productividad:":"Produtividade:","Cuadrilla Torres Hnos. rinde":"Equipe Torres Hnos. rende","35% bajo benchmark":"35% abaixo do benchmark","$12M en HH":"$12M em HH","sin producción equivalente":"sem produção equivalente","Planificación:":"Planejamento:","Ruta crítica en riesgo — enfierradura 3° piso al":"Caminho crítico em risco — armação 3º andar em","72% planificado":"72% planejado",". 2 consultas bloquean avance hace 5 días.":". 2 consultas bloqueiam o avanço há 5 dias.",
+  "Rendimiento profesional:":"Desempenho profissional:","Administrador lleva":"O gerente leva","14 HH semanales":"14 HH semanais","en informes manuales — equivale a":"em relatórios manuais — equivale a","$2.8M/mes":"$2,8M/mês","en tiempo no productivo":"em tempo não produtivo","Doc. Subcontratista:":"Doc. Subcontratado:","Torres Hnos. tiene EPP vencido y contrato sin firmar —":"Torres Hnos. está com EPI vencido e contrato sem assinar —","EDP #4 por $45M bloqueado":"Medição #4 de $45M bloqueada","hasta regularización":"até regularização",
+  "Cuadrilla B rindió":"Equipe B rendeu","del benchmark esta semana.":"do benchmark esta semana.","+$8M en valor ganado":"+$8M em valor agregado","vs plan.":"vs plano.","Factura #892 por":"Nota fiscal #892 de","cobrada — flujo proyectado vuelve a positivo en semana 12.":"recebida — fluxo projetado volta ao positivo na semana 12.",
+  "Cómo trabajamos":"Como trabalhamos","Tres formas de optimizar tu":"Três formas de otimizar sua","No vendemos software. Vendemos":"Não vendemos software. Vendemos","control":"controle","y tranquilidad sobre tus proyectos.":"e tranquilidade sobre seus projetos.",
+  "Plataforma":"Plataforma","Tu equipo captura, tú ves resultados":"Sua equipe captura, você vê resultados","Apps de terreno + informe en tiempo real + conexión automática con tus sistemas. Implementación en 1-2 semanas.":"Apps de campo + relatório em tempo real + conexão automática com seus sistemas. Implementação em 1-2 semanas.","8 módulos —":"8 módulos —","contratas solo los que necesitas":"contrate só os que precisar","Captura móvil diseñada para el capataz":"Captura móvel projetada para o encarregado","Conexión con ERP, contable y remuneraciones":"Conexão com ERP, contábil e folha de pagamento","Escala al ritmo de tu operación":"Escala no ritmo da sua operação",
+  "IA":"IA","Alertas que anticipan los problemas":"Alertas que antecipam os problemas","Inteligencia artificial que monitorea 24/7 y te avisa antes de que el problema sea irreversible.":"Inteligência artificial que monitora 24/7 e avisa antes que o problema seja irreversível.","14 alertas cruzadas automáticas":"14 alertas cruzados automáticos","Detección anticipada de sobrecostos":"Detecção antecipada de sobrecustos","Predicción de atrasos en ruta crítica":"Previsão de atrasos no caminho crítico","Benchmark con 160+ proyectos reales":"Benchmark com 160+ projetos reais",
+  "Consultoría":"Consultoria","Te acompañamos hasta que funcione":"Acompanhamos você até funcionar","Partimos con un diagnóstico de tu operación. Te mostramos dónde pierdes plata y cómo recuperarla.":"Começamos com um diagnóstico da sua operação. Mostramos onde você perde dinheiro e como recuperá-lo.","Diagnóstico gratuito de tu operación":"Diagnóstico gratuito da sua operação","Plan de implementación a medida":"Plano de implementação sob medida","Capacitación a tu equipo de obra":"Treinamento para sua equipe de obra","Experiencia en 160+ proyectos reales":"Experiência em 160+ projetos reais",
+  "Preguntas frecuentes":"Perguntas frequentes","Todo lo que necesitas saber":"Tudo o que você precisa saber","Las preguntas más comunes de gerentes y profesionales de obra antes de implementar.":"As perguntas mais comuns de gestores e profissionais de obra antes de implementar.",
+  "¿Cuánto tarda la implementación?":"Quanto tempo leva a implementação?","Entre 1 y 2 semanas para los módulos base (Costos, Planificación, Mano de Obra). El equipo de terreno puede empezar a capturar datos desde el día 1 — la app móvil no requiere capacitación formal.":"Entre 1 e 2 semanas para os módulos base (Custos, Planejamento, Mão de Obra). A equipe de campo pode começar a capturar dados desde o dia 1 — o app móvel não exige treinamento formal.",
+  "¿Se integra con mi ERP y sistema contable?":"Integra com meu ERP e sistema contábil?","Sí. Nos conectamos con los principales ERPs de construcción en LATAM (SAP, Defontana, iConstruye, Softland) y sistemas de remuneraciones (Talana, BUK). La integración es automática — sin doble digitación.":"Sim. Conectamos com os principais ERPs de construção da América Latina (SAP, Defontana, iConstruye, Softland) e sistemas de folha de pagamento (Talana, BUK). A integração é automática — sem dupla digitação.",
+  "¿Qué pasa con mis datos? ¿Son seguros?":"O que acontece com meus dados? São seguros?","Tus datos están en la nube con cifrado de nivel bancario. Cada constructora tiene su ambiente aislado. Cumplimos con estándares internacionales de seguridad y hacemos respaldos diarios automáticos.":"Seus dados estão na nuvem com criptografia de nível bancário. Cada construtora tem seu ambiente isolado. Cumprimos padrões internacionais de segurança e fazemos backups diários automáticos.",
+  "¿Funciona en obra sin buena conexión a internet?":"Funciona na obra sem boa conexão de internet?","La app móvil funciona offline. El capataz registra avance, asistencia y observaciones sin conexión. Cuando recupera señal, todo se sincroniza automáticamente con el informe.":"O app móvel funciona offline. O encarregado registra avanço, presença e observações sem conexão. Quando o sinal volta, tudo é sincronizado automaticamente com o relatório.",
+  "¿Cuántos usuarios pueden usar la plataforma?":"Quantos usuários podem usar a plataforma?","No hay límite de usuarios. Desde el gerente general hasta el capataz de terreno — cada uno ve exactamente lo que necesita con permisos diferenciados por rol.":"Não há limite de usuários. Do diretor geral ao encarregado de campo — cada um vê exatamente o que precisa com permissões por função.",
+  "¿Qué resultados han obtenido otras constructoras?":"Que resultados outras construtoras obtiveram?","En promedio: reducción de 80% en tiempo de informes, detección de desviaciones 3-4 semanas antes, y reducción de sobrecostos de hasta 30%. Con 160+ proyectos controlados, tenemos benchmark real para comparar tu operación.":"Em média: redução de 80% no tempo de relatórios, detecção de desvios 3-4 semanas antes e redução de sobrecustos de até 30%. Com 160+ projetos controlados, temos um benchmark real para comparar sua operação.",
+  "Conversemos":"Vamos conversar","¿Tienes dudas? Escríbenos":"Tem dúvidas? Escreva para nós","Te respondemos en menos de 24 horas hábiles.":"Respondemos em menos de 24 horas úteis.","Nombre":"Nome","Email":"E-mail","Empresa":"Empresa","Proyectos activos":"Projetos ativos","Selecciona...":"Selecione...","1 - 3 proyectos":"1 - 3 projetos","4 - 10 proyectos":"4 - 10 projetos","Más de 10 proyectos":"Mais de 10 projetos","Mensaje":"Mensagem","Enviar Mensaje":"Enviar Mensagem",
+  "Da el primer paso":"Dê o primeiro passo","¿Estás":"Você está","controlando":"controlando","tu obra o solo":"sua obra ou apenas","apagando incendios":"apagando incêndios","En":"Em","10 minutos":"10 minutos","descubre dónde estás":"descubra onde você está","perdiendo":"perdendo",", tiempo y":", tempo e",". Diagnóstico personalizado basado en datos de":". Diagnóstico personalizado baseado em dados de","160+ proyectos reales":"160+ projetos reais","en Chile, Perú y Colombia.":"no Chile, Peru e Colômbia.","10 minutos · Sin compromiso · Informe personalizado":"10 minutos · Sem compromisso · Relatório personalizado",
+  "Plataforma de control de obra con IA. Información cruzada en tiempo real para constructoras que quieren controlar su rentabilidad.":"Plataforma de controle de obra com IA. Informação cruzada em tempo real para construtoras que querem controlar sua rentabilidade.","Plataforma SaaS":"Plataforma SaaS","Alertas con IA":"Alertas com IA","Preguntas Frecuentes":"Perguntas Frequentes","Recursos":"Recursos","Términos de Servicio":"Termos de Serviço","Política de Privacidad":"Política de Privacidade","Política de Datos":"Política de Dados"
+ }
+};
+const I18N_ATTR = {
+ es:{title:"CCD — Construye con Datos | Control de Obra en Tiempo Real",desc:"Plataforma de control de obra con IA. Información cruzada en tiempo real para que tus profesionales controlen la obra, no el Excel.",phNombre:"Tu nombre",phEmail:"tu@empresa.com",phEmpresa:"Nombre de tu constructora",phMensaje:"¿En qué te podemos ayudar?",menu:"Abrir menú de navegación"},
+ en:{title:"CCD — Construye con Datos | Real-Time Construction Control",desc:"AI-powered construction-control platform. Cross-referenced data in real time so your professionals control the site, not Excel.",phNombre:"Your name",phEmail:"you@company.com",phEmpresa:"Your construction company",phMensaje:"How can we help?",menu:"Open navigation menu"},
+ pt:{title:"CCD — Construye con Datos | Controle de Obra em Tempo Real",desc:"Plataforma de controle de obra com IA. Informação cruzada em tempo real para que seus profissionais controlem a obra, não o Excel.",phNombre:"Seu nome",phEmail:"voce@empresa.com",phEmpresa:"Nome da sua construtora",phMensaje:"Como podemos ajudar?",menu:"Abrir menu de navegação"}
+};
+const DYN = {
+ es:{
+  hero:[
+   {h:`<span class="hl">Sabrás si tu <em>flujo</em> será</span><span class="hl">negativo <em>antes</em> de que pase</span>`,s:`Facturación pendiente, retenciones vencidas, estados de pago sin cobrar — el sistema cruza todo y te avisa <strong>3 semanas antes</strong>. Decisiones financieras con datos, no con intuición.`},
+   {h:`<span class="hl">Tu <em>margen real</em> visible</span><span class="hl">cada día, por <em>partida</em></span>`,s:`Venta, costo comprometido y proyecciones cruzadas automáticamente. <strong>Sin esperar al cierre</strong> para saber si tu proyecto gana o pierde.`},
+   {h:`<span class="hl"><em>Productividad</em> real de cada</span><span class="hl"><em>cuadrilla</em> expuesta con datos</span>`,s:`HH consumidas vs avance real vs costo. Rendimiento cruzado por actividad — <strong>sabes exactamente quién produce y quién no</strong>.`},
+   {h:`<span class="hl">Tu <em>planificación</em> conectada</span><span class="hl">con <em>costos</em> y <em>terreno</em></span>`,s:`Curva S real vs planificada, ruta crítica en riesgo, partidas atrasadas — todo visible en <strong>una sola pantalla</strong>. Tus profesionales de vuelta en terreno.`}
+  ],
+  sim:[
+   {label:'Aprobar estado de pago',task:'Torres Hnos · EDP #4',valLbl:'monto',btn:'Aprobar EDP',trend:'↓ Crítico',tag:'Flujo',html:'<strong>Flujo negativo en 3 semanas</strong> — facturación pendiente $320M'},
+   {label:'Nueva orden de compra',task:'Hormigón Premezclado',valLbl:'monto OC',btn:'Registrar OC',trend:'↓ Alerta',tag:'Margen',html:'<strong>Hormigón supera presupuesto 22%</strong> — intervenir esta semana'},
+   {label:'Asignar cuadrilla',task:'Moldaje · Subterráneo',valLbl:'personas',btn:'Confirmar Asignación',trend:'↓ Sobredimensionada',tag:'Producción',html:'<strong>Cuadrilla Moldaje sobredimensionada</strong> — 12 personas vs 8 planificadas'},
+   {label:'Registrar avance',task:'Enfierradura 3° piso',valLbl:'avance',btn:'Guardar Avance',trend:'Plan: 66%',tag:'Plan',html:'<strong>Enfierradura 3°piso alcanzó 75%</strong> — atraso reduciéndose'}
+  ],
+  defaults:{flujo:'↓ Negativo',margen:'↓ Meta: 14%',prod:'↓ Bajo benchmark',plan:'Plan: 66%'},
+  ui:{sending:'Enviando...',sent:'✓ Enviado',formSending:'Enviando...',formSent:'✓ Mensaje enviado',formError:'✗ Error — intenta de nuevo'}
+ },
+ en:{
+  hero:[
+   {h:`<span class="hl">You'll know if your <em>cash flow</em></span><span class="hl">turns <em>negative</em> before it does</span>`,s:`Pending invoicing, overdue retentions, uncollected payment certificates — the system cross-references everything and warns you <strong>3 weeks ahead</strong>. Financial decisions with data, not intuition.`},
+   {h:`<span class="hl">Your <em>real margin</em> visible</span><span class="hl">every day, by <em>line item</em></span>`,s:`Revenue, committed cost and projections cross-referenced automatically. <strong>No waiting for closeout</strong> to know if your project wins or loses.`},
+   {h:`<span class="hl">Real <em>productivity</em> of every</span><span class="hl"><em>crew</em> exposed with data</span>`,s:`Man-hours used vs actual progress vs cost. Performance cross-referenced by activity — <strong>you know exactly who produces and who doesn't</strong>.`},
+   {h:`<span class="hl">Your <em>planning</em> connected</span><span class="hl">to <em>costs</em> and the <em>field</em></span>`,s:`Actual vs planned S-curve, critical path at risk, delayed line items — all visible on <strong>a single screen</strong>. Your professionals back in the field.`}
+  ],
+  sim:[
+   {label:'Approve payment certificate',task:'Torres Hnos · Cert #4',valLbl:'amount',btn:'Approve Cert',trend:'↓ Critical',tag:'Cash Flow',html:'<strong>Cash flow negative in 3 weeks</strong> — pending invoicing $320M'},
+   {label:'New purchase order',task:'Ready-Mix Concrete',valLbl:'PO amount',btn:'Record PO',trend:'↓ Alert',tag:'Margin',html:'<strong>Concrete exceeds budget 22%</strong> — act this week'},
+   {label:'Assign crew',task:'Formwork · Basement',valLbl:'people',btn:'Confirm Assignment',trend:'↓ Oversized',tag:'Output',html:'<strong>Formwork crew oversized</strong> — 12 people vs 8 planned'},
+   {label:'Log progress',task:'3rd-floor rebar',valLbl:'progress',btn:'Save Progress',trend:'Plan: 66%',tag:'Plan',html:'<strong>3rd-floor rebar reached 75%</strong> — delay shrinking'}
+  ],
+  defaults:{flujo:'↓ Negative',margen:'↓ Goal: 14%',prod:'↓ Below benchmark',plan:'Plan: 66%'},
+  ui:{sending:'Sending...',sent:'✓ Sent',formSending:'Sending...',formSent:'✓ Message sent',formError:'✗ Error — try again'}
+ },
+ pt:{
+  hero:[
+   {h:`<span class="hl">Você saberá se seu <em>fluxo</em></span><span class="hl">ficará <em>negativo</em> antes que aconteça</span>`,s:`Faturamento pendente, retenções vencidas, medições a receber — o sistema cruza tudo e avisa <strong>3 semanas antes</strong>. Decisões financeiras com dados, não com intuição.`},
+   {h:`<span class="hl">Sua <em>margem real</em> visível</span><span class="hl">todo dia, por <em>item</em></span>`,s:`Venda, custo comprometido e projeções cruzadas automaticamente. <strong>Sem esperar o fechamento</strong> para saber se seu projeto ganha ou perde.`},
+   {h:`<span class="hl"><em>Produtividade</em> real de cada</span><span class="hl"><em>equipe</em> exposta com dados</span>`,s:`HH consumidas vs avanço real vs custo. Rendimento cruzado por atividade — <strong>você sabe exatamente quem produz e quem não</strong>.`},
+   {h:`<span class="hl">Seu <em>planejamento</em> conectado</span><span class="hl">a <em>custos</em> e ao <em>campo</em></span>`,s:`Curva S real vs planejada, caminho crítico em risco, itens atrasados — tudo visível em <strong>uma única tela</strong>. Seus profissionais de volta ao campo.`}
+  ],
+  sim:[
+   {label:'Aprovar medição',task:'Torres Hnos · Medição #4',valLbl:'valor',btn:'Aprovar Medição',trend:'↓ Crítico',tag:'Fluxo',html:'<strong>Fluxo negativo em 3 semanas</strong> — faturamento pendente $320M'},
+   {label:'Nova ordem de compra',task:'Concreto Usinado',valLbl:'valor OC',btn:'Registrar OC',trend:'↓ Alerta',tag:'Margem',html:'<strong>Concreto ultrapassa orçamento 22%</strong> — intervir esta semana'},
+   {label:'Atribuir equipe',task:'Fôrma · Subsolo',valLbl:'pessoas',btn:'Confirmar Atribuição',trend:'↓ Superdimensionada',tag:'Produção',html:'<strong>Equipe de fôrma superdimensionada</strong> — 12 pessoas vs 8 planejadas'},
+   {label:'Registrar avanço',task:'Armação 3º andar',valLbl:'avanço',btn:'Salvar Avanço',trend:'Plano: 66%',tag:'Plano',html:'<strong>Armação 3º andar chegou a 75%</strong> — atraso diminuindo'}
+  ],
+  defaults:{flujo:'↓ Negativo',margen:'↓ Meta: 14%',prod:'↓ Abaixo do benchmark',plan:'Plano: 66%'},
+  ui:{sending:'Enviando...',sent:'✓ Enviado',formSending:'Enviando...',formSent:'✓ Mensagem enviada',formError:'✗ Erro — tente de novo'}
+ }
+};
+let CCD_LANG=(function(){try{var s=localStorage.getItem('ccd_lang');if(s&&['es','en','pt'].indexOf(s)>=0)return s;}catch(e){}var n=(navigator.language||'es').toLowerCase();if(n.indexOf('pt')===0)return 'pt';if(n.indexOf('en')===0)return 'en';return 'es';})();
+const _i18nOrig=new WeakMap();
+function _i18nNorm(s){return s.replace(/\s+/g,' ').trim();}
+function _i18nSnapshot(){
+  var w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{acceptNode:function(n){
+    if(!n.nodeValue||!n.nodeValue.trim())return NodeFilter.FILTER_REJECT;
+    var p=n.parentElement;if(!p)return NodeFilter.FILTER_REJECT;
+    var t=p.tagName;if(t==='SCRIPT'||t==='STYLE'||t==='NOSCRIPT')return NodeFilter.FILTER_REJECT;
+    if(p.closest('.lang-switch'))return NodeFilter.FILTER_REJECT;
+    return NodeFilter.FILTER_ACCEPT;
+  }});
+  var n;while(n=w.nextNode()){if(!_i18nOrig.has(n))_i18nOrig.set(n,n.nodeValue);}
+}
+function _i18nTranslate(lang){
+  _i18nSnapshot();
+  var dict=I18N[lang]||{};
+  var w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{acceptNode:function(n){
+    if(!_i18nOrig.has(n))return NodeFilter.FILTER_REJECT;
+    return NodeFilter.FILTER_ACCEPT;
+  }});
+  var nodes=[],n;while(n=w.nextNode())nodes.push(n);
+  nodes.forEach(function(node){
+    var orig=_i18nOrig.get(node);
+    if(lang==='es'){node.nodeValue=orig;return;}
+    var key=_i18nNorm(orig);
+    if(Object.prototype.hasOwnProperty.call(dict,key)){
+      var lead=orig.match(/^\s*/)[0],trail=orig.match(/\s*$/)[0];
+      node.nodeValue=lead+dict[key]+trail;
+    }else{node.nodeValue=orig;}
+  });
+}
+function _i18nAttrs(lang){
+  var a=I18N_ATTR[lang]||I18N_ATTR.es;
+  document.title=a.title;
+  var md=document.querySelector('meta[name="description"]');if(md)md.setAttribute('content',a.desc);
+  var ph=function(sel,v){var el=document.querySelector(sel);if(el&&v!=null)el.setAttribute('placeholder',v);};
+  ph('#ccdContactForm [name=nombre]',a.phNombre);ph('#ccdContactForm [name=email]',a.phEmail);ph('#ccdContactForm [name=empresa]',a.phEmpresa);ph('#ccdContactForm [name=mensaje]',a.phMensaje);
+  var mb=document.querySelector('.nav-mobile');if(mb)mb.setAttribute('aria-label',a.menu);
+  document.documentElement.setAttribute('lang',lang==='pt'?'pt-BR':lang);
+}
+function T(k){return (DYN[CCD_LANG]&&DYN[CCD_LANG].ui&&DYN[CCD_LANG].ui[k])||DYN.es.ui[k]||'';}
+function setLang(lang){
+  if(['es','en','pt'].indexOf(lang)<0)lang='es';
+  CCD_LANG=lang;
+  try{localStorage.setItem('ccd_lang',lang);}catch(e){}
+  _i18nTranslate(lang);
+  _i18nAttrs(lang);
+  document.querySelectorAll('.lang-switch button').forEach(function(b){b.classList.toggle('active',b.dataset.lang===lang);});
+  if(window._i18nRefreshDynamic)window._i18nRefreshDynamic();
+}
+/* Snapshot Spanish originals before any dynamic script mutates the DOM, then
+   apply the active language right away (static text + attributes) so it holds
+   even if a later script throws. Dynamic blocks below render in CCD_LANG too. */
+_i18nSnapshot();
+setLang(CCD_LANG);
+
 /* ═══ SCROLL PROGRESS ═══ */
 window.addEventListener('scroll',()=>{
     const p=window.scrollY/(document.body.scrollHeight-window.innerHeight)*100;
@@ -1141,54 +1433,62 @@ const prodData=[{p:32,r:28},{p:34,r:30},{p:36,r:33},{p:35,r:38},{p:38,r:35},{p:3
 const pc=document.getElementById('prodBars');
 prodData.forEach((w,i)=>{const d=document.createElement('div');d.className='prod-bar-pair';d.id='pp-'+i;d.innerHTML=`<div class="prod-bar plan" style="height:${(w.p/42)*38}px"></div><div class="prod-bar real" id="pr-${i}" style="height:${(w.r/42)*38}px"></div>`;pc.appendChild(d)});
 
-/* ═══ HERO CYCLING TEXT ═══ */
-const heroScenes=[
-{h:`<span class="hl">Sabrás si tu <em>flujo</em> será</span><span class="hl">negativo <em>antes</em> de que pase</span>`,
- s:`Facturación pendiente, retenciones vencidas, estados de pago sin cobrar — el sistema cruza todo y te avisa <strong>3 semanas antes</strong>. Decisiones financieras con datos, no con intuición.`},
-{h:`<span class="hl">Tu <em>margen real</em> visible</span><span class="hl">cada día, por <em>partida</em></span>`,
- s:`Venta, costo comprometido y proyecciones cruzadas automáticamente. <strong>Sin esperar al cierre</strong> para saber si tu proyecto gana o pierde.`},
-{h:`<span class="hl"><em>Productividad</em> real de cada</span><span class="hl"><em>cuadrilla</em> expuesta con datos</span>`,
- s:`HH consumidas vs avance real vs costo. Rendimiento cruzado por actividad — <strong>sabes exactamente quién produce y quién no</strong>.`},
-{h:`<span class="hl">Tu <em>planificación</em> conectada</span><span class="hl">con <em>costos</em> y <em>terreno</em></span>`,
- s:`Curva S real vs planificada, ruta crítica en riesgo, partidas atrasadas — todo visible en <strong>una sola pantalla</strong>. Tus profesionales de vuelta en terreno.`}
-];
+/* ═══ HERO CYCLING TEXT (i18n) ═══ */
 const $=id=>document.getElementById(id);const h1=$('heroH1'),subEl=$('heroSub');
 const mkpiIds=['mkpi-flujo','mkpi-margen','mkpi-prod','mkpi-plan'];
-let heroIdx=0;
+let heroIdx=0,heroShown=0;
+function heroData(){return (DYN[CCD_LANG]&&DYN[CCD_LANG].hero)||DYN.es.hero;}
+function renderHero(i){
+    const sc=heroData()[i]||DYN.es.hero[i];
+    h1.innerHTML=sc.h;subEl.innerHTML=sc.s;
+    document.querySelectorAll('.mkpi.active').forEach(e=>e.classList.remove('active'));
+    const mkpiEl=$(mkpiIds[i]);if(mkpiEl)mkpiEl.classList.add('active');
+    heroShown=i;
+}
 function cycleHero(){
     h1.classList.add('fading');
     setTimeout(()=>{
-        h1.innerHTML=heroScenes[heroIdx].h;
-        subEl.innerHTML=heroScenes[heroIdx].s;
+        renderHero(heroIdx);
         h1.classList.remove('fading');
-        // Highlight matching mockup KPI
-        document.querySelectorAll('.mkpi.active').forEach(e=>e.classList.remove('active'));
-        const mkpiEl=$(mkpiIds[heroIdx]);
-        if(mkpiEl)mkpiEl.classList.add('active');
-        heroIdx=(heroIdx+1)%heroScenes.length;
+        heroIdx=(heroIdx+1)%heroData().length;
     },350);
 }
+renderHero(0);heroIdx=1;
 setInterval(cycleHero,4000);
 
-/* ═══ HERO SIMULATOR (mockup animations) ═══ */
+/* ═══ HERO SIMULATOR (mockup animations) — text pulled from DYN[CCD_LANG].sim ═══ */
 const scenes=[
-    {mob:{label:'Aprobar estado de pago',task:'Torres Hnos · EDP #4',val:'$45M',valLbl:'monto',fill:null,btn:'Aprobar EDP'},kpi:{id:'mkpi-flujo',valId:'v-flujo',tId:'t-flujo',val:'-$87M',color:'var(--red)',trend:'↓ Crítico',tColor:'var(--red)'},chart:null,vizActive:'viz-flujo',prodChange:null,flowChange:{costo:'82%',costoVal:'$1.69B',margen:'13%',margenVal:'$110M',margenColor:'var(--orange)'},alert:{dot:'mdot-red',tag:'tag-flujo',tagTxt:'Flujo',html:'<strong>Flujo negativo en 3 semanas</strong> — facturación pendiente $320M'}},
-    {mob:{label:'Nueva orden de compra',task:'Hormigón Premezclado',val:'$28M',valLbl:'monto OC',fill:null,btn:'Registrar OC'},kpi:{id:'mkpi-margen',valId:'v-margen',tId:'t-margen',val:'7.1%',color:'var(--red)',trend:'↓ Alerta',tColor:'var(--red)'},chart:null,vizActive:'viz-flujo',prodChange:null,flowChange:{costo:'84%',costoVal:'$1.72B',margen:'10%',margenVal:'$80M',margenColor:'var(--red)'},alert:{dot:'mdot-orange',tag:'tag-margen',tagTxt:'Margen',html:'<strong>Hormigón supera presupuesto 22%</strong> — intervenir esta semana'}},
-    {mob:{label:'Asignar cuadrilla',task:'Moldaje · Subterráneo',val:'12',valLbl:'personas',fill:null,btn:'Confirmar Asignación'},kpi:{id:'mkpi-prod',valId:'v-prod',tId:'t-prod',val:'76%',color:'var(--red)',trend:'↓ Sobredimensionada',tColor:'var(--red)'},chart:null,vizActive:'viz-prod',prodChange:{idx:6,newH:38},flowChange:null,alert:{dot:'mdot-gold',tag:'tag-prod',tagTxt:'Producción',html:'<strong>Cuadrilla Moldaje sobredimensionada</strong> — 12 personas vs 8 planificadas'}},
-    {mob:{label:'Registrar avance',task:'Enfierradura 3° piso',val:'75%',valLbl:'avance',fill:75,btn:'Guardar Avance'},kpi:{id:'mkpi-plan',valId:'v-plan',tId:'t-plan',val:'64%',color:'var(--cobalt)',trend:'Plan: 66%',tColor:'var(--ink-muted)'},chart:{points:'0,50 50,45 100,38 150,29 200,20',dot:{cx:200,cy:20},gap:{y2:20},gapTxt:'-2%',gapY:17},vizActive:'',prodChange:null,flowChange:null,alert:{dot:'mdot-blue',tag:'tag-plan',tagTxt:'Plan',html:'<strong>Enfierradura 3°piso alcanzó 75%</strong> — atraso reduciéndose'}}
+    {mob:{val:'$45M',fill:null},kpi:{id:'mkpi-flujo',valId:'v-flujo',tId:'t-flujo',val:'-$87M',color:'var(--red)',tColor:'var(--red)'},chart:null,vizActive:'viz-flujo',prodChange:null,flowChange:{costo:'82%',costoVal:'$1.69B',margen:'13%',margenVal:'$110M',margenColor:'var(--orange)'},alert:{dot:'mdot-red',tag:'tag-flujo'}},
+    {mob:{val:'$28M',fill:null},kpi:{id:'mkpi-margen',valId:'v-margen',tId:'t-margen',val:'7.1%',color:'var(--red)',tColor:'var(--red)'},chart:null,vizActive:'viz-flujo',prodChange:null,flowChange:{costo:'84%',costoVal:'$1.72B',margen:'10%',margenVal:'$80M',margenColor:'var(--red)'},alert:{dot:'mdot-orange',tag:'tag-margen'}},
+    {mob:{val:'12',fill:null},kpi:{id:'mkpi-prod',valId:'v-prod',tId:'t-prod',val:'76%',color:'var(--red)',tColor:'var(--red)'},chart:null,vizActive:'viz-prod',prodChange:{idx:6,newH:38},flowChange:null,alert:{dot:'mdot-gold',tag:'tag-prod'}},
+    {mob:{val:'75%',fill:75},kpi:{id:'mkpi-plan',valId:'v-plan',tId:'t-plan',val:'64%',color:'var(--cobalt)',tColor:'var(--ink-muted)'},chart:{points:'0,50 50,45 100,38 150,29 200,20',dot:{cx:200,cy:20},gap:{y2:20},gapTxt:'-2%',gapY:17},vizActive:'',prodChange:null,flowChange:null,alert:{dot:'mdot-blue',tag:'tag-plan'}}
 ];
+function simTxt(i){return (DYN[CCD_LANG]&&DYN[CCD_LANG].sim&&DYN[CCD_LANG].sim[i])||DYN.es.sim[i];}
 let si=-1;
 function clearActive(){document.querySelectorAll('.mini-viz.active').forEach(e=>e.classList.remove('active'))}
-const defaults={flujo:{v:'-$42M',c:'var(--red)',t:'↓ Negativo',tc:'var(--red)'},margen:{v:'8.2%',c:'var(--orange)',t:'↓ Meta: 14%',tc:'var(--orange)'},prod:{v:'82%',c:'var(--gold-dark)',t:'↓ Bajo benchmark',tc:'var(--gold-dark)'},plan:{v:'62%',c:'var(--cobalt)',t:'Plan: 66%',tc:'var(--ink-muted)'}};
-function resetKPIs(){for(const[k,d]of Object.entries(defaults)){const ve=$('v-'+k),te=$('t-'+k);ve.textContent=d.v;ve.style.color=d.c;te.textContent=d.t;te.style.color=d.tc}$('curvaReal').setAttribute('points','0,50 50,45 100,38 150,29 200,22');$('curvaDot').setAttribute('cx','200');$('curvaDot').setAttribute('cy','22');$('curvaGap').setAttribute('y2','22');$('curvaGapTxt').textContent='-4%';$('curvaGapTxt').setAttribute('y','18');$('bar-costo').style.width='78%';$('val-costo').textContent='$1.65B';$('bar-margen').style.width='18%';$('val-margen-bar').textContent='$150M';$('val-margen-bar').style.color='var(--green)';const lr=$('pr-6');if(lr)lr.style.height=((32/42)*38)+'px'}
-function runScene(){si=(si+1)%scenes.length;const s=scenes[si];resetKPIs();clearActive();
-setTimeout(()=>{$('mob-label').textContent=s.mob.label;$('mob-task').textContent=s.mob.task;$('mob-val').textContent=s.mob.val;$('mob-val-lbl').textContent=s.mob.valLbl;if(s.mob.fill!==null){$('mob-fill').style.width=s.mob.fill+'%';$('mob-fill').parentElement.style.display=''}else{$('mob-fill').parentElement.style.display='none'}$('mob-btn').textContent=s.mob.btn;$('mob-btn').classList.remove('sending')},600);
-setTimeout(()=>{const btn=$('mob-btn');btn.classList.add('sending');btn.textContent='Enviando...';const r=document.createElement('span');r.className='mob-ripple';btn.appendChild(r);setTimeout(()=>r.remove(),600)},2800);
-setTimeout(()=>{$('mob-btn').textContent='✓ Enviado'},3600);
-setTimeout(()=>{const k=s.kpi;$(k.id).classList.add('active');const ve=$(k.valId);ve.classList.add('pulse');setTimeout(()=>{ve.textContent=k.val;ve.style.color=k.color;$(k.tId).textContent=k.trend;$(k.tId).style.color=k.tColor;ve.classList.remove('pulse')},300)},4000);
+const defaults={flujo:{v:'-$42M',c:'var(--red)',tc:'var(--red)'},margen:{v:'8.2%',c:'var(--orange)',tc:'var(--orange)'},prod:{v:'82%',c:'var(--gold-dark)',tc:'var(--gold-dark)'},plan:{v:'62%',c:'var(--cobalt)',tc:'var(--ink-muted)'}};
+function defTrend(k){return (DYN[CCD_LANG]&&DYN[CCD_LANG].defaults&&DYN[CCD_LANG].defaults[k])||DYN.es.defaults[k];}
+function resetKPIs(){for(const[k,d]of Object.entries(defaults)){const ve=$('v-'+k),te=$('t-'+k);ve.textContent=d.v;ve.style.color=d.c;te.textContent=defTrend(k);te.style.color=d.tc}$('curvaReal').setAttribute('points','0,50 50,45 100,38 150,29 200,22');$('curvaDot').setAttribute('cx','200');$('curvaDot').setAttribute('cy','22');$('curvaGap').setAttribute('y2','22');$('curvaGapTxt').textContent='-4%';$('curvaGapTxt').setAttribute('y','18');$('bar-costo').style.width='78%';$('val-costo').textContent='$1.65B';$('bar-margen').style.width='18%';$('val-margen-bar').textContent='$150M';$('val-margen-bar').style.color='var(--green)';const lr=$('pr-6');if(lr)lr.style.height=((32/42)*38)+'px'}
+function runScene(){si=(si+1)%scenes.length;const s=scenes[si];const ST=simTxt(si);resetKPIs();clearActive();
+setTimeout(()=>{$('mob-label').textContent=ST.label;$('mob-task').textContent=ST.task;$('mob-val').textContent=s.mob.val;$('mob-val-lbl').textContent=ST.valLbl;if(s.mob.fill!==null){$('mob-fill').style.width=s.mob.fill+'%';$('mob-fill').parentElement.style.display=''}else{$('mob-fill').parentElement.style.display='none'}$('mob-btn').textContent=ST.btn;$('mob-btn').classList.remove('sending')},600);
+setTimeout(()=>{const btn=$('mob-btn');btn.classList.add('sending');btn.textContent=T('sending');const r=document.createElement('span');r.className='mob-ripple';btn.appendChild(r);setTimeout(()=>r.remove(),600)},2800);
+setTimeout(()=>{$('mob-btn').textContent=T('sent')},3600);
+setTimeout(()=>{const k=s.kpi;$(k.id).classList.add('active');const ve=$(k.valId);ve.classList.add('pulse');setTimeout(()=>{ve.textContent=k.val;ve.style.color=k.color;$(k.tId).textContent=simTxt(si).trend;$(k.tId).style.color=k.tColor;ve.classList.remove('pulse')},300)},4000);
 setTimeout(()=>{if(s.chart){$('curvaReal').setAttribute('points',s.chart.points);$('curvaDot').setAttribute('cx',s.chart.dot.cx);$('curvaDot').setAttribute('cy',s.chart.dot.cy);$('curvaGap').setAttribute('y2',s.chart.gap.y2);$('curvaGapTxt').textContent=s.chart.gapTxt;$('curvaGapTxt').setAttribute('y',s.chart.gapY)}if(s.vizActive)$(s.vizActive).classList.add('active');if(s.prodChange){const bar=$('pr-'+s.prodChange.idx);if(bar)bar.style.height=((s.prodChange.newH/42)*38)+'px'}if(s.flowChange){$('bar-costo').style.width=s.flowChange.costo;$('val-costo').textContent=s.flowChange.costoVal;$('bar-margen').style.width=s.flowChange.margen;$('val-margen-bar').textContent=s.flowChange.margenVal;$('val-margen-bar').style.color=s.flowChange.margenColor}},4800);
-setTimeout(()=>{const slot=$('alert-slot');slot.classList.remove('visible');setTimeout(()=>{slot.innerHTML=`<span class="mdot ${s.alert.dot}"></span><span class="malert-tag ${s.alert.tag}">${s.alert.tagTxt}</span><span>${s.alert.html}</span>`;slot.classList.add('visible')},300)},5500)}
+setTimeout(()=>{const slot=$('alert-slot');slot.classList.remove('visible');setTimeout(()=>{const ST2=simTxt(si);slot.innerHTML=`<span class="mdot ${s.alert.dot}"></span><span class="malert-tag ${s.alert.tag}">${ST2.tag}</span><span>${ST2.html}</span>`;slot.classList.add('visible')},300)},5500)}
 runScene();setInterval(runScene,8000);
+
+/* ═══ Re-render dynamic content on language change ═══ */
+window._i18nRefreshDynamic=function(){
+    renderHero(heroShown);
+    if(si>=0){
+        const ST=simTxt(si),s=scenes[si],slot=$('alert-slot');
+        if($('mob-label'))$('mob-label').textContent=ST.label;
+        if($('mob-task'))$('mob-task').textContent=ST.task;
+        if($('mob-val-lbl'))$('mob-val-lbl').textContent=ST.valLbl;
+        if(slot)slot.innerHTML=`<span class="mdot ${s.alert.dot}"></span><span class="malert-tag ${s.alert.tag}">${ST.tag}</span><span>${ST.html}</span>`;
+    }
+};
 
 /* ═══ HOW STEPS GLOW CYCLE ═══ */
 (function(){
@@ -1323,7 +1623,7 @@ window.sendContactForm = function(e) {
     if (!form.nombre.value || !form.email.value) return;
 
     // Estado: enviando
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ' + T('formSending');
     btn.disabled = true;
     btn.style.opacity = '.7';
 
@@ -1332,7 +1632,8 @@ window.sendContactForm = function(e) {
         email: form.email.value,
         empresa: form.empresa.value,
         proyectos: form.proyectos.value,
-        mensaje: form.mensaje.value
+        mensaje: form.mensaje.value,
+        idioma: CCD_LANG
     };
 
     fetch(CONTACT_API_URL, {
@@ -1343,7 +1644,7 @@ window.sendContactForm = function(e) {
     .then(function(r) { return r.json() })
     .then(function(result) {
         if (result.status !== 'ok') throw new Error(result.message);
-        btn.innerHTML = '✓ Mensaje enviado';
+        btn.innerHTML = T('formSent');
         btn.style.background = 'var(--green)';
         btn.style.opacity = '1';
         form.reset();
@@ -1354,7 +1655,7 @@ window.sendContactForm = function(e) {
         }, 4000);
     })
     .catch(function() {
-        btn.innerHTML = '✗ Error — intenta de nuevo';
+        btn.innerHTML = T('formError');
         btn.style.background = 'var(--red)';
         btn.style.opacity = '1';
         setTimeout(function() {
@@ -1364,6 +1665,9 @@ window.sendContactForm = function(e) {
         }, 3000);
     });
 };
+
+/* ═══ APPLY LANGUAGE (after all dynamic setup) ═══ */
+setLang(CCD_LANG);
 </script>
 </body>
 </html>

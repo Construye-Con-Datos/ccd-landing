@@ -18,13 +18,48 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    const { nombre, email, empresa, proyectos, mensaje } = req.body;
+    const { nombre, email, empresa, proyectos, mensaje, idioma } = req.body;
 
     if (!nombre || !email) {
       return res.status(400).json({ error: 'Nombre y email son obligatorios' });
     }
 
     const fecha = new Date().toLocaleString('es-CL', { timeZone: 'America/Santiago' });
+
+    // Localized copy for the lead confirmation email (ES default · EN · PT-BR)
+    const LEAD_COPY = {
+      es: {
+        tagline: 'Del dato al informe que decide',
+        subject: `Recibimos tu mensaje, ${nombre}`,
+        hi: `Hola <strong>${nombre}</strong>,`,
+        l1: 'Recibimos tu mensaje y nos encanta que estes explorando como mejorar el control de tus obras.',
+        l2: 'Nuestro equipo revisara tu consulta y te contactaremos en las proximas <strong>24 horas habiles</strong>.',
+        l3: 'Mientras tanto, puedes agendar una demo directamente:',
+        cta: 'Agendar Demo Gratuita',
+        ignore: 'Si no solicitaste esto, puedes ignorar este correo.',
+      },
+      en: {
+        tagline: 'From data to the report that decides',
+        subject: `We received your message, ${nombre}`,
+        hi: `Hi <strong>${nombre}</strong>,`,
+        l1: "We received your message and we're glad you're exploring how to improve control over your projects.",
+        l2: 'Our team will review your inquiry and get back to you within the next <strong>24 business hours</strong>.',
+        l3: 'In the meantime, you can book a demo directly:',
+        cta: 'Book a Free Demo',
+        ignore: "If you didn't request this, you can safely ignore this email.",
+      },
+      pt: {
+        tagline: 'Do dado ao relatório que decide',
+        subject: `Recebemos sua mensagem, ${nombre}`,
+        hi: `Olá <strong>${nombre}</strong>,`,
+        l1: 'Recebemos sua mensagem e ficamos felizes que você esteja explorando como melhorar o controle das suas obras.',
+        l2: 'Nossa equipe vai analisar sua solicitação e entrará em contato nas próximas <strong>24 horas úteis</strong>.',
+        l3: 'Enquanto isso, você pode agendar uma demonstração diretamente:',
+        cta: 'Agendar Demo Gratuita',
+        ignore: 'Se você não solicitou isto, pode ignorar este e-mail.',
+      },
+    };
+    const L = LEAD_COPY[idioma] || LEAD_COPY.es;
 
     // 1. Notificación a CCD
     await resend.emails.send({
@@ -60,32 +95,32 @@ module.exports = async function handler(req, res) {
     await resend.emails.send({
       from: 'Construye con Datos <noreply@construyecondatos.com>',
       to: [email],
-      subject: `Recibimos tu mensaje, ${nombre}`,
+      subject: L.subject,
       html: `
         <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto">
           <div style="background:#0B5ED7;padding:24px;border-radius:12px 12px 0 0;text-align:center">
             <h2 style="color:white;margin:0">Construye con Datos</h2>
-            <p style="color:#E1BA10;margin:8px 0 0;font-size:14px;font-weight:bold">Del dato al informe que decide</p>
+            <p style="color:#E1BA10;margin:8px 0 0;font-size:14px;font-weight:bold">${L.tagline}</p>
           </div>
           <div style="padding:32px 24px;background:white;border:1px solid #e5e5e5">
-            <p style="font-size:16px;margin:0 0 16px">Hola <strong>${nombre}</strong>,</p>
+            <p style="font-size:16px;margin:0 0 16px">${L.hi}</p>
             <p style="line-height:1.8;color:#333;margin:0 0 16px">
-              Recibimos tu mensaje y nos encanta que estes explorando como mejorar el control de tus obras.
+              ${L.l1}
             </p>
             <p style="line-height:1.8;color:#333;margin:0 0 16px">
-              Nuestro equipo revisara tu consulta y te contactaremos en las proximas <strong>24 horas habiles</strong>.
+              ${L.l2}
             </p>
             <p style="line-height:1.8;color:#333;margin:0 0 24px">
-              Mientras tanto, puedes agendar una demo directamente:
+              ${L.l3}
             </p>
             <div style="text-align:center;margin:0 0 24px">
               <a href="https://calendar.app.google/2BLVGKbUKmfJHgkK6"
                 style="background:#0B5ED7;color:white;padding:12px 32px;border-radius:8px;text-decoration:none;font-weight:bold;font-size:14px;display:inline-block">
-                Agendar Demo Gratuita
+                ${L.cta}
               </a>
             </div>
             <p style="color:#999;font-size:12px;margin:0">
-              Si no solicitaste esto, puedes ignorar este correo.
+              ${L.ignore}
             </p>
           </div>
           <div style="background:#f8f8f8;padding:16px;border-radius:0 0 12px 12px;text-align:center;border:1px solid #e5e5e5;border-top:0">
