@@ -1481,11 +1481,15 @@ runScene();setInterval(runScene,8000);
 /* ═══ Re-render dynamic content on language change ═══ */
 window._i18nRefreshDynamic=function(){
     renderHero(heroShown);
+    // KPI trend labels: re-apply translated defaults, then the active scene's trend
+    ['flujo','margen','prod','plan'].forEach(function(k){const te=$('t-'+k);if(te)te.textContent=defTrend(k);});
     if(si>=0){
         const ST=simTxt(si),s=scenes[si],slot=$('alert-slot');
         if($('mob-label'))$('mob-label').textContent=ST.label;
         if($('mob-task'))$('mob-task').textContent=ST.task;
         if($('mob-val-lbl'))$('mob-val-lbl').textContent=ST.valLbl;
+        const tEl=$(s.kpi.tId);if(tEl)tEl.textContent=ST.trend;
+        const btn=$('mob-btn');if(btn){btn.textContent=ST.btn;btn.classList.remove('sending');}
         if(slot)slot.innerHTML=`<span class="mdot ${s.alert.dot}"></span><span class="malert-tag ${s.alert.tag}">${ST.tag}</span><span>${ST.html}</span>`;
     }
 };
