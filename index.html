@@ -46,10 +46,12 @@ body{font-family:var(--sans);color:var(--ink);background:var(--canvas);line-heig
 .nav-access:hover{border-color:var(--cobalt);background:rgba(11,94,215,.06);color:var(--cobalt-dark)!important}
 .nav-mobile{display:none;background:none;border:none;color:var(--ink);font-size:20px;cursor:pointer}
 /* ── Language Switcher ── */
-.lang-switch{display:inline-flex;align-items:center;gap:1px;background:rgba(0,0,0,.05);border-radius:8px;padding:3px;margin-left:auto;margin-right:14px}
-.lang-switch button{border:none;background:transparent;font-family:var(--sans);font-size:12px;font-weight:700;color:var(--ink-muted);padding:5px 8px;border-radius:6px;cursor:pointer;transition:all .15s;letter-spacing:.3px;line-height:1}
+.lang-switch{display:inline-flex;align-items:center;gap:2px;background:rgba(0,0,0,.05);border-radius:8px;padding:3px;margin-left:auto;margin-right:14px}
+.lang-switch button{display:inline-flex;align-items:center;gap:6px;border:none;background:transparent;font-family:var(--sans);font-size:12px;font-weight:700;color:var(--ink-muted);padding:5px 9px;border-radius:6px;cursor:pointer;transition:all .15s;letter-spacing:.3px;line-height:1}
+.lang-switch button img,.lang-switch button svg{width:18px;height:13px;border-radius:2px;display:block;box-shadow:0 0 0 1px rgba(0,0,0,.12)}
 .lang-switch button:hover{color:var(--ink)}
 .lang-switch button.active{background:var(--white);color:var(--cobalt);box-shadow:0 1px 2px rgba(0,0,0,.12)}
+@media(max-width:600px){.lang-switch{margin-right:10px}.lang-switch button{padding:5px 6px;gap:0}.lang-switch button span{display:none}}
 
 /* ── Fade Up ── */
 .fade-up{opacity:0;transform:translateY(28px);transition:all .7s cubic-bezier(.16,1,.3,1)}
@@ -520,10 +522,10 @@ footer{background:var(--ink);color:rgba(255,255,255,.5);padding:48px clamp(20px,
 <!-- Nav -->
 <nav class="nav" id="mainNav">
     <div class="nav-logo"><img src="logos/CCD-logo.png" alt="Construye con Datos" style="height:32px;width:auto"></div>
-    <div class="lang-switch" role="group" aria-label="Language / Idioma">
-        <button type="button" data-lang="es" onclick="setLang('es')">ES</button>
-        <button type="button" data-lang="en" onclick="setLang('en')">EN</button>
-        <button type="button" data-lang="pt" onclick="setLang('pt')">PT</button>
+    <div class="lang-switch" role="group" aria-label="Seleccionar idioma / Select language">
+        <button type="button" data-lang="es" onclick="setLang('es')" aria-label="Español" title="Español"><svg viewBox="0 0 3 2" preserveAspectRatio="none" aria-hidden="true"><rect width="3" height="2" fill="#c60b1e"/><rect y=".5" width="3" height="1" fill="#ffc400"/></svg><span>ES</span></button>
+        <button type="button" data-lang="en" onclick="setLang('en')" aria-label="English (US)" title="English (US)"><svg viewBox="0 0 13 10" preserveAspectRatio="none" aria-hidden="true"><rect width="13" height="10" fill="#fff"/><g fill="#b22234"><rect width="13" height=".77" y="0"/><rect width="13" height=".77" y="1.54"/><rect width="13" height=".77" y="3.08"/><rect width="13" height=".77" y="4.62"/><rect width="13" height=".77" y="6.15"/><rect width="13" height=".77" y="7.69"/><rect width="13" height=".77" y="9.23"/></g><rect width="5.2" height="5.38" fill="#3c3b6e"/></svg><span>EN</span></button>
+        <button type="button" data-lang="pt" onclick="setLang('pt')" aria-label="Português (Brasil)" title="Português (Brasil)"><svg viewBox="0 0 14 10" preserveAspectRatio="none" aria-hidden="true"><rect width="14" height="10" fill="#009b3a"/><polygon points="7,1 13,5 7,9 1,5" fill="#fedf00"/><circle cx="7" cy="5" r="2" fill="#002776"/></svg><span>PT</span></button>
     </div>
     <button class="nav-mobile" aria-label="Abrir menú de navegación" onclick="document.querySelector('.nav-links').classList.toggle('show')"><i class="fas fa-bars"></i></button>
     <div class="nav-links">
