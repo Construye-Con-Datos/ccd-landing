@@ -1,0 +1,11 @@
+{
+  "artboards": [
+    { "file": "Main.dc.html", "x": 0, "y": 0, "w": 1440, "h": 5500, "title": "Landing CCD — Agente", "print": "flow" }
+  ],
+  "annotations": [
+    { "id": "concepto", "x": -340, "y": 0, "w": 280, "text": "Concepto: marcar la diferencia vs software común.\n\nEje editorial (lógica Infosys): liderar con una postura, no con features. El agente habla en primera persona en todo el sitio.\n\nTríada: Informa · Analiza · Anticipa + Soporte humano y conexión (WhatsApp / ingeniero asignado)." },
+    { "id": "sketches", "x": -340, "y": 340, "w": 280, "text": "Diagramas estilo sketch (trazo a mano + Caveat) para explicar cómo funciona y los 3 problemas que resolvemos — siempre con cifras reales de la landing actual ($320M, +22%, –35%, 3 semanas).\n\nTono levemente irreverente en las líneas manuscritas — fáciles de suavizar si se pasa de la raya." },
+    { "id": "datos-muestra", "x": -340, "y": 700, "w": 280, "text": "Ojo: los montos del chat y del feed son datos de MUESTRA tomados de la landing actual. El nombre \"Felipe\" en el chat del hero es placeholder del destinatario." }
+  ],
+  "launch": { "view": "canvas" }
+}

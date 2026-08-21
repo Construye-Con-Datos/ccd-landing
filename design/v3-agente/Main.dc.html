@@ -1,0 +1,462 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&amp;family=Roboto+Mono:wght@400;500;700&amp;family=Caveat:wght@500;700&amp;display=swap">
+  <style>
+    body { margin: 0; font-family: 'Roboto', -apple-system, 'Segoe UI', sans-serif; color: #1A1F2E; background: #F5F3EE; }
+    a { color: #0B5ED7; text-decoration: none; }
+    a:hover { color: #0847A8; }
+    * { box-sizing: border-box; }
+  </style>
+</helmet>
+<div style="width: 1440px; background: #F5F3EE; display: flex; flex-direction: column">
+
+  <!-- ═══ NAV ═══ -->
+  <div style="background: #FFFFFF; border-bottom: 1px solid rgba(0,0,0,0.08); display: flex; align-items: center; justify-content: space-between; padding: 0 64px; height: 76px">
+    <img src="ccd-logo.png" alt="Construye con Datos" style="height: 36px; width: auto">
+    <div style="display: flex; align-items: center; gap: 28px; font-size: 14px; font-weight: 500; color: #4B5563">
+      <span>La diferencia</span>
+      <span>Cómo funciona</span>
+      <span>Qué resolvemos</span>
+      <span>El agente</span>
+      <span>Soporte</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 16px">
+      <span style="display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; color: #0B5ED7">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0B5ED7" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"></path></svg>
+        Acceso Clientes
+      </span>
+      <span style="background: #0B5ED7; color: #FFFFFF; font-size: 14px; font-weight: 700; padding: 11px 20px; border-radius: 8px">Diagnóstico Gratis →</span>
+    </div>
+  </div>
+
+  <!-- ═══ HERO — editorial sobre navy ═══ -->
+  <div style="background: #0D1B3E; padding: 88px 64px 96px 64px; display: flex; justify-content: center">
+    <div style="width: 1200px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 72px; align-items: center">
+      <div style="display: flex; flex-direction: column; gap: 24px">
+        <div style="font-family: 'Roboto Mono', monospace; font-size: 12px; font-weight: 500; letter-spacing: 0.08em; color: #E1BA10; text-transform: uppercase">Plataforma + agente de obra</div>
+        <div style="font-size: 52px; font-weight: 900; line-height: 1.12; letter-spacing: -0.02em; color: #FFFFFF">Un software común te muestra lo que pasó.<br><span style="color: #E1BA10">Nuestro agente te avisa lo que viene.</span></div>
+        <div style="font-size: 18px; line-height: 1.55; color: rgba(255,255,255,0.82); max-width: 520px">Cruza tus 8 módulos, tu ERP y tus remuneraciones las 24 horas. Analiza contra <strong style="color: #FFFFFF">tu plan</strong> — no contra el promedio del mercado — y te escribe antes de que el problema cueste plata. ¿El flujo negativo? Te lo dice <strong style="color: #FFFFFF">3 semanas antes</strong>.</div>
+        <div style="display: flex; align-items: center; gap: 16px; margin-top: 8px">
+          <span style="background: #E1BA10; color: #0D1B3E; font-size: 16px; font-weight: 700; padding: 15px 26px; border-radius: 8px">Diagnóstico Gratis →</span>
+          <span style="border: 1.5px solid rgba(255,255,255,0.35); color: #FFFFFF; font-size: 16px; font-weight: 500; padding: 14px 24px; border-radius: 8px">Agendar Reunión</span>
+        </div>
+        <div style="font-family: 'Caveat', cursive; font-size: 21px; color: rgba(255,255,255,0.65); margin-top: 4px">Sí: te va a interrumpir el café. De eso se trata.</div>
+      </div>
+
+      <!-- Chat del agente -->
+      <div style="display: flex; flex-direction: column; gap: 14px">
+        <div style="display: flex; align-items: center; gap: 8px; font-family: 'Roboto Mono', monospace; font-size: 12px; color: rgba(255,255,255,0.55)">
+          <span style="width: 8px; height: 8px; border-radius: 9999px; background: #22C55E"></span>
+          Agente CCD · martes 07:12 · antes de tu primer café
+        </div>
+        <div style="background: #FFFFFF; border-radius: 12px; padding: 22px 24px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.10); display: flex; flex-direction: column; gap: 14px; border-top: 3px solid #E1BA10">
+          <div style="display: flex; align-items: flex-start; gap: 12px">
+            <div style="width: 36px; height: 36px; border-radius: 9999px; background: #0D1B3E; display: flex; align-items: center; justify-content: center; flex-shrink: 0">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E1BA10" stroke-width="2" stroke-linecap="round"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"></path></svg>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 8px; font-size: 14.5px; line-height: 1.5; color: #1A1F2E">
+              <div><strong>Felipe, detecté un problema de flujo.</strong> Si no cobramos nada nuevo, la obra queda en <span style="color: #DC2626; font-weight: 700">–$42M en 3 semanas</span>.</div>
+              <div>Las causas: facturación pendiente por <strong>$320M</strong> y la retención SC de <strong>$85M</strong> que venció el viernes.</div>
+              <div>Te propongo partir por el EDP #4 y la retención — son <strong>$130M cobrables esta semana</strong>. ¿Lo revisamos?</div>
+            </div>
+          </div>
+          <div style="display: flex; gap: 10px; padding-left: 48px">
+            <span style="background: #0B5ED7; color: #FFFFFF; font-size: 13px; font-weight: 700; padding: 9px 16px; border-radius: 8px">Ver análisis completo</span>
+            <span style="border: 1.5px solid #0B5ED7; color: #0B5ED7; font-size: 13px; font-weight: 500; padding: 8px 15px; border-radius: 8px">Hablar con mi ingeniero</span>
+          </div>
+        </div>
+        <div style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; padding: 14px 18px; display: flex; align-items: center; gap: 12px; font-size: 13.5px; color: rgba(255,255,255,0.8)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2" stroke-linecap="round"><path d="M20 6 9 17l-5-5"></path></svg>
+          Ayer: la cuadrilla B rindió 115% del benchmark. +$8M en valor ganado.
+        </div>
+        <div style="font-family: 'Caveat', cursive; font-size: 20px; color: rgba(255,255,255,0.6); align-self: flex-end">te llega por WhatsApp, correo o la app — sin abrir nada ↑</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ PROOF STRIP ═══ -->
+  <div style="background: #FFFFFF; border-bottom: 1px solid rgba(0,0,0,0.06); padding: 22px 64px; display: flex; justify-content: center">
+    <div style="width: 1200px; display: flex; align-items: center; justify-content: space-between; font-family: 'Roboto Mono', monospace; font-size: 13px; color: #6B7280">
+      <span style="font-weight: 500; letter-spacing: 0.05em">160+ PROYECTOS REALES</span>
+      <div style="display: flex; align-items: center; gap: 40px; font-weight: 500">
+        <span>MK INGENIERÍA</span>
+        <span>GRUPO SIIME</span>
+        <span>COSAPI</span>
+        <span>MAGNA</span>
+      </div>
+      <span style="font-weight: 500; letter-spacing: 0.05em">15 CRUCES AUTOMÁTICOS · 8 MÓDULOS</span>
+    </div>
+  </div>
+
+  <!-- ═══ LA DIFERENCIA ═══ -->
+  <div style="padding: 96px 64px 88px 64px; display: flex; justify-content: center">
+    <div style="width: 1120px; display: flex; flex-direction: column; gap: 48px">
+      <div style="display: flex; flex-direction: column; gap: 14px; max-width: 760px">
+        <div style="font-family: 'Roboto Mono', monospace; font-size: 12px; font-weight: 500; letter-spacing: 0.08em; color: #0B5ED7; text-transform: uppercase">La diferencia</div>
+        <div style="font-size: 38px; font-weight: 900; line-height: 1.15; letter-spacing: -0.02em; color: #1A1F2E">Esto no compite con tu planilla Excel. <span style="color: #0B5ED7">La jubila.</span></div>
+        <div style="font-size: 17px; line-height: 1.55; color: #4B5563">Cinco cosas que un software común no hace por ti — y que el agente CCD hace todos los días, sin que se lo pidas.</div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px">
+        <!-- Columna software común -->
+        <div style="background: #EDEAE3; border-radius: 12px; padding: 28px 32px; display: flex; flex-direction: column; gap: 22px">
+          <div style="font-size: 15px; font-weight: 700; color: #6B7280; display: flex; align-items: center; gap: 10px">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="14" rx="2"></rect><path d="M8 21h8"></path></svg>
+            Un software común
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 18px; font-size: 15px; line-height: 1.5; color: #6B7280">
+            <div style="display: flex; gap: 12px"><span style="color: #9CA3AF; font-weight: 700">✕</span><span>Espera que tú le preguntes. Si no lo abres, no existe.</span></div>
+            <div style="display: flex; gap: 12px"><span style="color: #9CA3AF; font-weight: 700">✕</span><span>Te muestra un dashboard bonito. Interpretarlo es tu problema.</span></div>
+            <div style="display: flex; gap: 12px"><span style="color: #9CA3AF; font-weight: 700">✕</span><span>Reporta el viernes lo que pasó el lunes.</span></div>
+            <div style="display: flex; gap: 12px"><span style="color: #9CA3AF; font-weight: 700">✕</span><span>Te compara contra promedios de mercado que no son tu obra.</span></div>
+            <div style="display: flex; gap: 12px"><span style="color: #9CA3AF; font-weight: 700">✕</span><span>¿Soporte? Un ticket, un bot, y suerte.</span></div>
+          </div>
+          <div style="font-family: 'Caveat', cursive; font-size: 20px; color: #9CA3AF; margin-top: 4px">— o sea, otra pestaña que nadie abre</div>
+        </div>
+
+        <!-- Columna agente CCD -->
+        <div style="background: #FFFFFF; border-radius: 12px; border-top: 3px solid #E1BA10; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.10); padding: 28px 32px; display: flex; flex-direction: column; gap: 22px">
+          <div style="font-size: 15px; font-weight: 700; color: #1A1F2E; display: flex; align-items: center; gap: 10px">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0B5ED7" stroke-width="2" stroke-linecap="round"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"></path></svg>
+            El agente CCD
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 18px; font-size: 15px; line-height: 1.5; color: #1A1F2E">
+            <div style="display: flex; gap: 12px; align-items: flex-start"><span style="font-family: 'Roboto Mono', monospace; font-size: 11px; font-weight: 500; letter-spacing: 0.05em; color: #0B5ED7; background: #E8F0FE; padding: 3px 8px; border-radius: 6px; flex-shrink: 0; margin-top: 1px">INFORMA</span><span>Te escribe primero, donde estés: WhatsApp, correo o la app.</span></div>
+            <div style="display: flex; gap: 12px; align-items: flex-start"><span style="font-family: 'Roboto Mono', monospace; font-size: 11px; font-weight: 500; letter-spacing: 0.05em; color: #0B5ED7; background: #E8F0FE; padding: 3px 8px; border-radius: 6px; flex-shrink: 0; margin-top: 1px">ANALIZA</span><span>Cruza 8 módulos + ERP y te dice qué significa y qué hacer.</span></div>
+            <div style="display: flex; gap: 12px; align-items: flex-start"><span style="font-family: 'Roboto Mono', monospace; font-size: 11px; font-weight: 500; letter-spacing: 0.05em; color: #0B5ED7; background: #E8F0FE; padding: 3px 8px; border-radius: 6px; flex-shrink: 0; margin-top: 1px">ANTICIPA</span><span>Proyecta lo que viene: el flujo negativo lo avisa 3 semanas antes.</span></div>
+            <div style="display: flex; gap: 12px; align-items: flex-start"><span style="font-family: 'Roboto Mono', monospace; font-size: 11px; font-weight: 500; letter-spacing: 0.05em; color: #0B5ED7; background: #E8F0FE; padding: 3px 8px; border-radius: 6px; flex-shrink: 0; margin-top: 1px">APRENDE</span><span>Compara contra tus metas y tu historia — no contra el mercado.</span></div>
+            <div style="display: flex; gap: 12px; align-items: flex-start"><span style="font-family: 'Roboto Mono', monospace; font-size: 11px; font-weight: 500; letter-spacing: 0.05em; color: #0B5ED7; background: #E8F0FE; padding: 3px 8px; border-radius: 6px; flex-shrink: 0; margin-top: 1px">ACOMPAÑA</span><span>Detrás hay ingenieros reales que conocen tu obra. Escalas con un toque.</span></div>
+          </div>
+          <div style="font-family: 'Caveat', cursive; font-size: 20px; color: #0B5ED7; margin-top: 4px">— un colega que no duerme. Y no cobra horas extra.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ CÓMO FUNCIONA — diagrama sketch ═══ -->
+  <div style="background: #FFFFFF; padding: 88px 64px; display: flex; justify-content: center">
+    <div style="width: 1120px; display: flex; flex-direction: column; gap: 40px">
+      <div style="display: flex; flex-direction: column; gap: 14px; max-width: 720px">
+        <div style="font-family: 'Roboto Mono', monospace; font-size: 12px; font-weight: 500; letter-spacing: 0.08em; color: #0B5ED7; text-transform: uppercase">Cómo funciona</div>
+        <div style="font-size: 38px; font-weight: 900; line-height: 1.15; letter-spacing: -0.02em; color: #1A1F2E">Así funciona. Sin magia, <span style="color: #0B5ED7">con datos.</span></div>
+      </div>
+
+      <!-- Sketch: terreno → agente → tú -->
+      <div style="background: #F5F3EE; border: 1px solid rgba(0,0,0,0.08); border-radius: 12px; padding: 36px 32px 24px 32px">
+        <svg viewBox="0 0 1056 330" style="width: 100%; height: auto; display: block" font-family="Caveat, cursive">
+          <!-- 1. Teléfono del capataz -->
+          <g stroke="#1A1F2E" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M96 62 C 94 60, 152 58, 154 61 C 157 63, 158 196, 155 199 C 153 202, 97 203, 95 199 C 92 196, 94 65, 96 62 Z"></path>
+            <path d="M108 78 C 122 76, 140 77, 143 79"></path>
+            <path d="M108 100 C 118 98, 138 99, 142 101"></path>
+            <path d="M108 122 C 120 120, 132 121, 136 123"></path>
+            <path d="M106 158 C 106 150, 144 148, 145 157 C 146 166, 108 168, 106 158 Z"></path>
+            <path d="M117 158 L 123 164 L 135 151" stroke="#16A34A" stroke-width="3"></path>
+          </g>
+          <text x="125" y="242" text-anchor="middle" font-size="22" fill="#1A1F2E" font-weight="500">El capataz registra</text>
+          <text x="125" y="268" text-anchor="middle" font-size="22" fill="#1A1F2E" font-weight="500">en 30 segundos.</text>
+          <text x="125" y="294" text-anchor="middle" font-size="20" fill="#6B7280">(con guantes, sin señal, da igual)</text>
+
+          <!-- Flecha 1 -->
+          <g stroke="#1A1F2E" stroke-width="2.5" fill="none" stroke-linecap="round">
+            <path d="M195 130 C 240 118, 280 122, 322 128"></path>
+            <path d="M308 118 C 315 122, 320 126, 322 128 C 318 130, 311 134, 306 138"></path>
+          </g>
+          <text x="258" y="106" text-anchor="middle" font-size="20" fill="#0B5ED7">datos al tiro</text>
+
+          <!-- 2. El agente: hub -->
+          <g stroke="#1A1F2E" stroke-width="2.5" fill="none" stroke-linecap="round">
+            <path d="M528 74 C 566 70, 600 98, 598 132 C 596 168, 564 192, 528 190 C 490 188, 462 162, 464 128 C 466 96, 492 76, 528 74 Z"></path>
+            <path d="M531 70 C 494 74, 460 98, 463 134" opacity="0.45"></path>
+          </g>
+          <text x="531" y="124" text-anchor="middle" font-size="26" font-family="'Roboto Mono', monospace" font-weight="700" fill="#0B5ED7">AGENTE</text>
+          <text x="531" y="152" text-anchor="middle" font-size="20" fill="#1A1F2E">cruza todo</text>
+          <!-- módulos alrededor -->
+          <g stroke="#1A1F2E" stroke-width="2" fill="#FFFFFF" stroke-linecap="round">
+            <circle cx="424" cy="66" r="12"></circle>
+            <circle cx="392" cy="132" r="12"></circle>
+            <circle cx="424" cy="200" r="12"></circle>
+            <circle cx="531" cy="230" r="12"></circle>
+            <circle cx="638" cy="200" r="12"></circle>
+            <circle cx="668" cy="132" r="12"></circle>
+            <circle cx="638" cy="66" r="12"></circle>
+            <circle cx="531" cy="38" r="12"></circle>
+          </g>
+          <g stroke="#9CA3AF" stroke-width="1.5" fill="none" stroke-dasharray="3 4">
+            <path d="M434 74 L 478 96"></path>
+            <path d="M404 132 L 462 132"></path>
+            <path d="M434 192 L 478 168"></path>
+            <path d="M531 218 L 531 192"></path>
+            <path d="M628 192 L 584 168"></path>
+            <path d="M656 132 L 600 132"></path>
+            <path d="M628 74 L 584 96"></path>
+            <path d="M531 50 L 531 72"></path>
+          </g>
+          <text x="531" y="20" text-anchor="middle" font-size="19" fill="#6B7280">8 módulos</text>
+          <!-- ERP y remuneraciones -->
+          <g stroke="#1A1F2E" stroke-width="2" fill="#FFFFFF" stroke-linecap="round">
+            <path d="M348 236 C 347 233, 421 232, 422 235 C 424 238, 424 266, 421 268 C 418 270, 350 270, 349 267 C 347 264, 347 239, 348 236 Z"></path>
+            <path d="M640 236 C 639 233, 723 232, 724 235 C 726 238, 726 266, 723 268 C 720 270, 642 270, 641 267 C 639 264, 639 239, 640 236 Z"></path>
+          </g>
+          <text x="385" y="258" text-anchor="middle" font-size="16" font-family="'Roboto Mono', monospace" font-weight="500" fill="#1A1F2E">TU ERP</text>
+          <text x="682" y="258" text-anchor="middle" font-size="15" font-family="'Roboto Mono', monospace" font-weight="500" fill="#1A1F2E">REMUNER.</text>
+          <g stroke="#9CA3AF" stroke-width="1.5" fill="none" stroke-dasharray="3 4">
+            <path d="M410 232 L 476 178"></path>
+            <path d="M660 232 L 590 178"></path>
+          </g>
+          <text x="531" y="300" text-anchor="middle" font-size="21" fill="#1A1F2E" font-weight="500">24/7 — sin sueldo, sin vacaciones, sin excusas</text>
+
+          <!-- Flecha 2 -->
+          <g stroke="#1A1F2E" stroke-width="2.5" fill="none" stroke-linecap="round">
+            <path d="M712 128 C 754 120, 792 122, 832 130"></path>
+            <path d="M818 120 C 825 124, 830 128, 832 130 C 828 132, 821 136, 816 140"></path>
+          </g>
+          <path d="M760 96 L 768 82 L 764 94 L 772 92 L 762 108" stroke="#E1BA10" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"></path>
+
+          <!-- 3. Tú: burbuja de alerta -->
+          <g stroke="#1A1F2E" stroke-width="2.5" fill="#FFFFFF" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M856 66 C 854 62, 1020 60, 1022 64 C 1025 67, 1026 160, 1022 163 C 1019 166, 920 166, 916 166 L 892 188 L 896 165 C 886 165, 858 166, 856 162 C 853 159, 854 70, 856 66 Z"></path>
+          </g>
+          <text x="939" y="102" text-anchor="middle" font-size="19" fill="#1A1F2E" font-weight="500">"Ojo: el flujo se cae.</text>
+          <text x="939" y="128" text-anchor="middle" font-size="19" fill="#1A1F2E" font-weight="500">Esto es lo que haría yo."</text>
+          <!-- círculo marcador dorado -->
+          <path d="M872 208 C 870 198, 1006 194, 1008 206 C 1010 218, 874 224, 872 210" stroke="#E1BA10" stroke-width="3.5" fill="none" stroke-linecap="round" opacity="0.9"></path>
+          <text x="939" y="215" text-anchor="middle" font-size="21" fill="#1A1F2E" font-weight="700">3 semanas antes</text>
+          <text x="939" y="258" text-anchor="middle" font-size="22" fill="#1A1F2E" font-weight="500">Te escribe a ti.</text>
+          <text x="939" y="284" text-anchor="middle" font-size="20" fill="#6B7280">Antes de que cueste plata.</text>
+        </svg>
+      </div>
+
+      <!-- 3 pasos en texto -->
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px">
+        <div style="display: flex; flex-direction: column; gap: 8px">
+          <div style="font-family: 'Roboto Mono', monospace; font-size: 13px; font-weight: 700; color: #0B5ED7">01 — CAPTURA</div>
+          <div style="font-size: 15px; line-height: 1.5; color: #4B5563">Apps de terreno diseñadas para el capataz: avance, HH, calidad, bodega. Cada dato entra una sola vez, en la fuente.</div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px">
+          <div style="font-family: 'Roboto Mono', monospace; font-size: 13px; font-weight: 700; color: #0B5ED7">02 — CRUCE</div>
+          <div style="font-size: 15px; line-height: 1.5; color: #4B5563">El agente conecta los 8 módulos con tu ERP y remuneraciones: 15 cruces automáticos buscando lo que no cuadra.</div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px">
+          <div style="font-family: 'Roboto Mono', monospace; font-size: 13px; font-weight: 700; color: #0B5ED7">03 — AVISO</div>
+          <div style="font-size: 15px; line-height: 1.5; color: #4B5563">Cuando algo amenaza tu margen, tu plazo o tu flujo, te llega el análisis con una propuesta concreta. Tú decides.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ QUÉ RESOLVEMOS — sketches con datos ═══ -->
+  <div style="padding: 96px 64px 88px 64px; display: flex; justify-content: center">
+    <div style="width: 1120px; display: flex; flex-direction: column; gap: 44px">
+      <div style="display: flex; flex-direction: column; gap: 14px; max-width: 760px">
+        <div style="font-family: 'Roboto Mono', monospace; font-size: 12px; font-weight: 500; letter-spacing: 0.08em; color: #0B5ED7; text-transform: uppercase">Qué resolvemos</div>
+        <div style="font-size: 38px; font-weight: 900; line-height: 1.15; letter-spacing: -0.02em; color: #1A1F2E">Los tres hoyos por donde se va la plata <span style="color: #0B5ED7">de toda obra.</span></div>
+        <div style="font-size: 17px; line-height: 1.55; color: #4B5563">No son teoría: son los cruces que el agente corre todos los días sobre 160+ proyectos reales.</div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px">
+        <!-- Card 1: Flujo -->
+        <div style="background: #FFFFFF; border-radius: 12px; border: 1px solid rgba(0,0,0,0.08); box-shadow: 0 1px 2px rgba(0,0,0,0.05); padding: 26px 26px 24px 26px; display: flex; flex-direction: column; gap: 16px">
+          <div style="font-size: 19px; font-weight: 700; color: #1A1F2E; line-height: 1.3">El flujo que se cae sin avisar</div>
+          <svg viewBox="0 0 300 190" style="width: 100%; height: auto" font-family="Caveat, cursive">
+            <g stroke="#1A1F2E" stroke-width="2" fill="none" stroke-linecap="round">
+              <path d="M24 18 C 23 60, 24 130, 25 168"></path>
+              <path d="M25 168 C 90 166, 220 168, 284 167"></path>
+            </g>
+            <path d="M25 96 C 90 95, 220 97, 284 96" stroke="#9CA3AF" stroke-width="1.5" fill="none" stroke-dasharray="5 5"></path>
+            <text x="282" y="90" text-anchor="end" font-size="16" fill="#6B7280">$0</text>
+            <path d="M30 44 C 80 48, 130 58, 170 78 C 205 96, 235 122, 262 148" stroke="#DC2626" stroke-width="3" fill="none" stroke-linecap="round"></path>
+            <path d="M116 42 C 114 30, 156 28, 158 40 C 160 52, 118 56, 116 44" stroke="#E1BA10" stroke-width="3" fill="none" stroke-linecap="round"></path>
+            <path d="M137 56 C 138 62, 138 66, 139 70" stroke="#E1BA10" stroke-width="2.5" fill="none" stroke-linecap="round"></path>
+            <path d="M134 64 C 137 68, 139 70, 139 70 C 141 68, 143 66, 145 63" stroke="#E1BA10" stroke-width="2.5" fill="none" stroke-linecap="round"></path>
+            <text x="137" y="24" text-anchor="middle" font-size="18" fill="#1A1F2E" font-weight="700">el agente avisa aquí</text>
+            <g stroke="#DC2626" stroke-width="2.5" stroke-linecap="round">
+              <path d="M251 135 L 271 157"></path>
+              <path d="M271 135 L 251 157"></path>
+            </g>
+            <text x="292" y="180" text-anchor="end" font-size="16" fill="#DC2626">tú te enterabas aquí</text>
+            <text x="150" y="128" text-anchor="middle" font-size="16" fill="#6B7280">3 semanas de ventaja</text>
+          </svg>
+          <div style="font-size: 14.5px; line-height: 1.55; color: #4B5563">Facturación pendiente, retenciones vencidas, EDP sin cobrar: el agente los cruza y proyecta la caja. <strong style="color: #1A1F2E">Aviso 3 semanas antes</strong> del flujo negativo — con la lista exacta de qué cobrar primero.</div>
+        </div>
+
+        <!-- Card 2: Margen -->
+        <div style="background: #FFFFFF; border-radius: 12px; border: 1px solid rgba(0,0,0,0.08); box-shadow: 0 1px 2px rgba(0,0,0,0.05); padding: 26px 26px 24px 26px; display: flex; flex-direction: column; gap: 16px">
+          <div style="font-size: 19px; font-weight: 700; color: #1A1F2E; line-height: 1.3">El margen que se escapa de a poco</div>
+          <svg viewBox="0 0 300 190" style="width: 100%; height: auto" font-family="Caveat, cursive">
+            <g stroke="#1A1F2E" stroke-width="2" fill="none" stroke-linecap="round">
+              <path d="M24 18 C 23 60, 24 130, 25 168"></path>
+              <path d="M25 168 C 90 166, 220 168, 284 167"></path>
+            </g>
+            <g stroke="#1A1F2E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M62 168 C 61 140, 62 96, 63 92 C 70 90, 100 90, 104 93 C 106 100, 105 150, 105 168" fill="#E8F0FE"></path>
+              <path d="M160 168 C 159 130, 160 62, 162 58 C 170 56, 198 56, 202 60 C 204 68, 203 140, 203 168" fill="#FEF2F2"></path>
+            </g>
+            <path d="M40 92 C 100 90, 220 92, 286 91" stroke="#16A34A" stroke-width="2" fill="none" stroke-dasharray="5 5"></path>
+            <text x="36" y="82" text-anchor="start" font-size="16" fill="#16A34A">presupuesto</text>
+            <g stroke="#DC2626" stroke-width="2.5" fill="none" stroke-linecap="round">
+              <path d="M226 90 C 232 78, 236 70, 238 62"></path>
+              <path d="M230 64 C 234 62, 237 61, 238 61 C 238 64, 239 68, 240 72"></path>
+            </g>
+            <path d="M216 40 C 214 28, 282 26, 284 38 C 286 50, 218 54, 216 42" stroke="#DC2626" stroke-width="3" fill="none" stroke-linecap="round"></path>
+            <text x="250" y="42" text-anchor="middle" font-size="19" fill="#DC2626" font-weight="700">+22%</text>
+            <text x="83" y="185" text-anchor="middle" font-size="17" fill="#6B7280">plan</text>
+            <text x="181" y="185" text-anchor="middle" font-size="17" fill="#6B7280">proyección real</text>
+          </svg>
+          <div style="font-size: 14.5px; line-height: 1.55; color: #4B5563">Cada OC, factura y EDP actualiza la proyección a término. Hormigón estructural <strong style="color: #DC2626">22% sobre presupuesto</strong> = <strong style="color: #1A1F2E">$48M de sobrecosto proyectado</strong>. Lo ves cuando aún puedes frenarlo, no en el cierre contable.</div>
+        </div>
+
+        <!-- Card 3: Productividad -->
+        <div style="background: #FFFFFF; border-radius: 12px; border: 1px solid rgba(0,0,0,0.08); box-shadow: 0 1px 2px rgba(0,0,0,0.05); padding: 26px 26px 24px 26px; display: flex; flex-direction: column; gap: 16px">
+          <div style="font-size: 19px; font-weight: 700; color: #1A1F2E; line-height: 1.3">La cuadrilla que rinde menos de lo que cuesta</div>
+          <svg viewBox="0 0 300 214" style="width: 100%; height: auto" font-family="Caveat, cursive">
+            <g stroke="#1A1F2E" stroke-width="2" fill="none" stroke-linecap="round">
+              <path d="M24 18 C 23 60, 24 130, 25 168"></path>
+              <path d="M25 168 C 90 166, 220 168, 284 167"></path>
+            </g>
+            <g stroke="#1A1F2E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M58 168 C 57 130, 58 54, 60 50 C 68 48, 96 48, 100 52 C 102 60, 101 140, 101 168" fill="#E8F0FE"></path>
+              <path d="M156 168 C 155 140, 156 102, 158 98 C 166 96, 194 96, 198 100 C 200 108, 199 150, 199 168" fill="#FFF7ED"></path>
+            </g>
+            <g stroke="#DC2626" stroke-width="2" fill="none" stroke-linecap="round">
+              <path d="M210 52 C 240 50, 262 51, 272 52"></path>
+              <path d="M210 98 C 240 96, 262 97, 272 98"></path>
+              <path d="M241 52 C 240 66, 241 84, 241 98"></path>
+            </g>
+            <text x="246" y="80" text-anchor="start" font-size="18" fill="#DC2626" font-weight="700">–35%</text>
+            <text x="79" y="42" text-anchor="middle" font-size="17" fill="#6B7280">HH pagadas</text>
+            <text x="177" y="90" text-anchor="middle" font-size="17" fill="#6B7280">producción</text>
+            <path d="M78 196 C 76 184, 222 182, 224 194 C 226 206, 80 210, 78 198" stroke="#E1BA10" stroke-width="3" fill="none" stroke-linecap="round"></path>
+            <text x="151" y="201" text-anchor="middle" font-size="18" fill="#1A1F2E" font-weight="700">$12M sin producción</text>
+          </svg>
+          <div style="font-size: 14.5px; line-height: 1.55; color: #4B5563">HH de terreno cruzadas con remuneraciones y avance. Cuadrilla <strong style="color: #DC2626">35% bajo benchmark</strong> = <strong style="color: #1A1F2E">$12M en HH sin producción equivalente</strong>. Te enteras antes de pagar la quincena — no después.</div>
+        </div>
+      </div>
+
+      <div style="font-family: 'Caveat', cursive; font-size: 22px; color: #6B7280; align-self: center">— cada sobrecosto que no viste a tiempo fue un aviso que nadie te mandó</div>
+    </div>
+  </div>
+
+  <!-- ═══ EL AGENTE EN VIVO — navy ═══ -->
+  <div style="background: #0D1B3E; padding: 88px 64px; display: flex; justify-content: center">
+    <div style="width: 1120px; display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 64px; align-items: start">
+      <div style="display: flex; flex-direction: column; gap: 24px">
+        <div style="font-family: 'Roboto Mono', monospace; font-size: 12px; font-weight: 500; letter-spacing: 0.08em; color: #E1BA10; text-transform: uppercase">El agente, en vivo</div>
+        <div style="font-size: 38px; font-weight: 900; line-height: 1.15; letter-spacing: -0.02em; color: #FFFFFF">Habla en primera persona. Porque trabaja, <span style="color: #E1BA10">no reporta.</span></div>
+        <div style="font-size: 16.5px; line-height: 1.6; color: rgba(255,255,255,0.78)">Cada alerta llega con el análisis hecho y una propuesta concreta. No te manda un gráfico a las 23:00 — te dice qué encontró, cuánto cuesta y qué haría. Y si quieres discutirlo, respondes el mensaje: el agente entiende tu obra, y tu ingeniero CCD también.</div>
+        <div style="display: flex; flex-direction: column; gap: 14px; margin-top: 4px">
+          <div style="display: flex; align-items: center; gap: 12px; color: rgba(255,255,255,0.9); font-size: 15px">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E1BA10" stroke-width="2" stroke-linecap="round"><path d="M4 12h16"></path><path d="M14 6l6 6-6 6"></path></svg>
+            <span><strong style="color: #FFFFFF">Informativo</strong> — informe vivo, actualizado con cada dato capturado</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px; color: rgba(255,255,255,0.9); font-size: 15px">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E1BA10" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3"></path></svg>
+            <span><strong style="color: #FFFFFF">Analítico</strong> — 15 cruces entre módulos, ERP y remuneraciones</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px; color: rgba(255,255,255,0.9); font-size: 15px">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E1BA10" stroke-width="2" stroke-linecap="round"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"></path></svg>
+            <span><strong style="color: #FFFFFF">Proactivo</strong> — anticipa sobrecostos, atrasos y quiebres de caja</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Feed de alertas -->
+      <div style="display: flex; flex-direction: column; gap: 12px">
+        <div style="display: flex; align-items: center; gap: 8px; font-family: 'Roboto Mono', monospace; font-size: 12px; color: rgba(255,255,255,0.55)">
+          <span style="width: 8px; height: 8px; border-radius: 9999px; background: #22C55E"></span>
+          HOY EN TU OBRA — 4 HALLAZGOS
+        </div>
+        <div style="background: #FFFFFF; border-radius: 12px; padding: 18px 20px; display: flex; gap: 14px; align-items: flex-start; border-left: none">
+          <span style="width: 10px; height: 10px; border-radius: 9999px; background: #DC2626; margin-top: 5px; flex-shrink: 0"></span>
+          <div style="font-size: 14.5px; line-height: 1.5; color: #1A1F2E"><strong>Encontré $45M detenidos.</strong> El EDP #4 de Torres Hnos. está bloqueado: EPP vencido y contrato sin firmar. Ya le avisé a tu jefe de terreno — falta tu OK para retener el pago.</div>
+        </div>
+        <div style="background: #FFFFFF; border-radius: 12px; padding: 18px 20px; display: flex; gap: 14px; align-items: flex-start">
+          <span style="width: 10px; height: 10px; border-radius: 9999px; background: #EA580C; margin-top: 5px; flex-shrink: 0"></span>
+          <div style="font-size: 14.5px; line-height: 1.5; color: #1A1F2E"><strong>La ruta crítica está en riesgo.</strong> Enfierradura 3° piso al 58% vs 72% plan. Dos consultas técnicas la frenan hace 5 días — te preparé el resumen para la reunión con el ITO.</div>
+        </div>
+        <div style="background: #FFFFFF; border-radius: 12px; padding: 18px 20px; display: flex; gap: 14px; align-items: flex-start">
+          <span style="width: 10px; height: 10px; border-radius: 9999px; background: #F59E0B; margin-top: 5px; flex-shrink: 0"></span>
+          <div style="font-size: 14.5px; line-height: 1.5; color: #1A1F2E"><strong>Tu administrador gasta 14 HH semanales armando informes.</strong> Eso es $2.8M/mes en copiar y pegar. Los informes ya se arman solos — que use esas horas en la obra.</div>
+        </div>
+        <div style="background: #FFFFFF; border-radius: 12px; padding: 18px 20px; display: flex; gap: 14px; align-items: flex-start">
+          <span style="width: 10px; height: 10px; border-radius: 9999px; background: #16A34A; margin-top: 5px; flex-shrink: 0"></span>
+          <div style="font-size: 14.5px; line-height: 1.5; color: #1A1F2E"><strong>Buenas noticias también aviso:</strong> factura #892 por $180M cobrada. El flujo proyectado vuelve a positivo en la semana 12. Respira.</div>
+        </div>
+        <div style="font-family: 'Caveat', cursive; font-size: 20px; color: rgba(255,255,255,0.6); align-self: flex-end">las buenas noticias también llegan solas ↑</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SOPORTE Y CONEXIÓN ═══ -->
+  <div style="padding: 96px 64px 88px 64px; display: flex; justify-content: center">
+    <div style="width: 1120px; display: flex; flex-direction: column; gap: 44px">
+      <div style="display: flex; flex-direction: column; gap: 14px; max-width: 760px">
+        <div style="font-family: 'Roboto Mono', monospace; font-size: 12px; font-weight: 500; letter-spacing: 0.08em; color: #0B5ED7; text-transform: uppercase">Soporte y conexión</div>
+        <div style="font-size: 38px; font-weight: 900; line-height: 1.15; letter-spacing: -0.02em; color: #1A1F2E">Detrás del agente hay ingenieros. <span style="color: #0B5ED7">De los de casco, no de call center.</span></div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px">
+        <div style="background: #FFFFFF; border-radius: 12px; border-top: 3px solid #E1BA10; box-shadow: 0 1px 2px rgba(0,0,0,0.05); padding: 30px 32px; display: flex; flex-direction: column; gap: 18px">
+          <div style="font-size: 20px; font-weight: 700; color: #1A1F2E">Te acompañamos hasta que funcione</div>
+          <div style="display: flex; flex-direction: column; gap: 13px; font-size: 15px; line-height: 1.5; color: #4B5563">
+            <div style="display: flex; gap: 10px"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" style="flex-shrink: 0; margin-top: 3px"><path d="M20 6 9 17l-5-5"></path></svg><span>Diagnóstico gratuito de tu operación: te mostramos dónde pierdes plata antes de que pagues un peso.</span></div>
+            <div style="display: flex; gap: 10px"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" style="flex-shrink: 0; margin-top: 3px"><path d="M20 6 9 17l-5-5"></path></svg><span>Implementación en 1–2 semanas, con capacitación a tu equipo en la obra — no por webinar.</span></div>
+            <div style="display: flex; gap: 10px"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" style="flex-shrink: 0; margin-top: 3px"><path d="M20 6 9 17l-5-5"></path></svg><span>Un ingeniero CCD asignado que conoce tu proyecto, tus metas y tu ERP. Con nombre y apellido.</span></div>
+            <div style="display: flex; gap: 10px"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" style="flex-shrink: 0; margin-top: 3px"><path d="M20 6 9 17l-5-5"></path></svg><span>Experiencia de 160+ proyectos reales metida en cada cruce y cada benchmark.</span></div>
+          </div>
+        </div>
+        <div style="background: #FFFFFF; border-radius: 12px; border-top: 3px solid #E1BA10; box-shadow: 0 1px 2px rgba(0,0,0,0.05); padding: 30px 32px; display: flex; flex-direction: column; gap: 18px">
+          <div style="font-size: 20px; font-weight: 700; color: #1A1F2E">Conectado contigo, no con una bandeja de entrada</div>
+          <div style="display: flex; flex-direction: column; gap: 13px; font-size: 15px; line-height: 1.5; color: #4B5563">
+            <div style="display: flex; gap: 10px"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0B5ED7" stroke-width="2.5" stroke-linecap="round" style="flex-shrink: 0; margin-top: 3px"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.6 8.6 0 0 1-3.9-.9L3 20l1-4.9a8.4 8.4 0 1 1 17-3.6z"></path></svg><span>El agente te escribe donde estés: WhatsApp, correo o la app. Sin abrir un dashboard.</span></div>
+            <div style="display: flex; gap: 10px"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0B5ED7" stroke-width="2.5" stroke-linecap="round" style="flex-shrink: 0; margin-top: 3px"><path d="M12 8v5l3 2"></path><circle cx="12" cy="12" r="9"></circle></svg><span>Aprende tu operación: tus metas de margen y plazo, tu historia, tus cuadrillas. Cada semana afina más.</span></div>
+            <div style="display: flex; gap: 10px"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0B5ED7" stroke-width="2.5" stroke-linecap="round" style="flex-shrink: 0; margin-top: 3px"><circle cx="9" cy="8" r="3.5"></circle><path d="M2.5 20c0-3.5 3-5.5 6.5-5.5s6.5 2 6.5 5.5"></path><path d="M16 4.5a3.5 3.5 0 0 1 0 7"></path><path d="M17.5 14.7c2.4.6 4 2.3 4 5.3"></path></svg><span>¿Duda con una alerta? Respondes el mensaje y escalas a tu ingeniero con un toque. Persona, no bot.</span></div>
+            <div style="display: flex; gap: 10px"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0B5ED7" stroke-width="2.5" stroke-linecap="round" style="flex-shrink: 0; margin-top: 3px"><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"></path><circle cx="12" cy="8" r="4"></circle></svg><span>Consultas técnicas con plazo medido: la respuesta promedio baja de 5 días a 1.5 días.</span></div>
+          </div>
+        </div>
+      </div>
+      <div style="font-family: 'Caveat', cursive; font-size: 22px; color: #6B7280; align-self: center">si el agente no sabe, pregunta a un ingeniero. Ojalá tu software actual hiciera lo mismo.</div>
+    </div>
+  </div>
+
+  <!-- ═══ CTA FINAL ═══ -->
+  <div style="background: #FFFFFF; border-top: 1px solid rgba(0,0,0,0.06); padding: 88px 64px; display: flex; justify-content: center">
+    <div style="width: 900px; display: flex; flex-direction: column; align-items: center; gap: 24px; text-align: center">
+      <div style="font-size: 42px; font-weight: 900; line-height: 1.15; letter-spacing: -0.02em; color: #1A1F2E">¿Sigues apagando incendios<br>o ponemos al agente <span style="color: #0B5ED7">a vigilar tu obra?</span></div>
+      <div style="font-size: 17px; line-height: 1.55; color: #4B5563; max-width: 560px">Partimos con un diagnóstico de tu operación: dónde pierdes plata hoy y cuánto puedes recuperar. Sin compromiso.</div>
+      <div style="display: flex; align-items: center; gap: 16px">
+        <span style="background: #0B5ED7; color: #FFFFFF; font-size: 16px; font-weight: 700; padding: 15px 28px; border-radius: 8px">Diagnóstico Gratis →</span>
+        <span style="border: 1.5px solid #0B5ED7; color: #0B5ED7; font-size: 16px; font-weight: 500; padding: 14px 26px; border-radius: 8px">Agendar Reunión</span>
+      </div>
+      <div style="font-family: 'Caveat', cursive; font-size: 21px; color: #6B7280">el diagnóstico es gratis. Seguir perdiendo plata, no.</div>
+    </div>
+  </div>
+
+  <!-- ═══ FOOTER ═══ -->
+  <div style="background: #0D1B3E; padding: 40px 64px; display: flex; justify-content: center">
+    <div style="width: 1120px; display: flex; align-items: center; justify-content: space-between">
+      <div style="display: flex; flex-direction: column; gap: 6px">
+        <div style="font-size: 16px; font-weight: 700; color: #FFFFFF">Construye con <span style="color: #E1BA10">Datos</span></div>
+        <div style="font-size: 13px; color: rgba(255,255,255,0.55)">Control de obra en tiempo real · Chile</div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 28px; font-size: 13.5px; color: rgba(255,255,255,0.7)">
+        <span>La diferencia</span>
+        <span>Cómo funciona</span>
+        <span>El agente</span>
+        <span>Contacto</span>
+        <span style="color: #E1BA10; font-weight: 700">Diagnóstico Gratis →</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>
